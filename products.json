@@ -1,1 +1,13 @@
-[]
+[
+  {
+    "id": "p_1775771139806",
+    "nombre": "jabon",
+    "categoria": "jabones",
+    "descripcion": "sfsdfsd",
+    "precio": "2500",
+    "badge": "nuevo",
+    "imagenURL": "https://res.cloudinary.com/ditz4ufas/image/upload/v1775771140/ser-natural/ti4dftyicrqhmpk5lctw.jpg",
+    "createdAt": "2026-04-09T21:45:39.806Z",
+    "updatedAt": "2026-04-09T21:45:39.806Z"
+  }
+]
