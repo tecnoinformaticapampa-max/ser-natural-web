@@ -280,12 +280,10 @@
 <script>
   // ── CONFIGURACIÓN ──
   const ADMIN_PASSWORD    = 'SN2024admin';
+  const ADMIN_KEY         = 'sn-worker-2024-xK9p';
   const CLOUDINARY_CLOUD  = 'ditz4ufas';
   const CLOUDINARY_PRESET = 'ser_natural_unsigned';
-  const GITHUB_TOKEN      = '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';
-  const GITHUB_USER       = 'tecnoinformaticapampa-max';
-  const GITHUB_REPO       = 'ser-natural-web';
-  const GITHUB_FILE       = 'products.json';
+  const WORKER_URL        = 'https://ser-natural-api.tecnoinformaticapampa-max.workers.dev';
   // ──────────────────
 
   let products     = [];
@@ -321,51 +319,35 @@
   }
   if (sessionStorage.getItem('sn_auth') === '1') showApp();
 
-  // ── CARGAR PRODUCTOS DESDE GITHUB ──
+  // ── CARGAR PRODUCTOS DESDE WORKER ──
   async function loadProducts() {
     try {
-      const res = await fetch(
-        `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${GITHUB_FILE}`,
-        { headers: { Authorization: `token ${GITHUB_TOKEN}`, Accept: 'application/vnd.github.v3+json' } }
-      );
-      if (res.status === 404) {
-        products = []; fileSHA = null;
-      } else {
-        const data = await res.json();
-        fileSHA  = data.sha;
-        products = JSON.parse(atob(data.content.replace(/\n/g,'')));
-      }
+      const res = await fetch(`${WORKER_URL}/products`, { cache: 'no-store' });
+      if (!res.ok) throw new Error('Error al cargar');
+      const data = await res.json();
+      fileSHA  = data.sha;
+      products = data.products || [];
     } catch(e) { products = []; fileSHA = null; }
     renderList();
     updateStats();
   }
 
-  // ── GUARDAR EN GITHUB ──
+  // ── GUARDAR VÍA WORKER ──
   async function saveToGitHub(updated) {
-    const content = btoa(unescape(encodeURIComponent(JSON.stringify(updated, null, 2))));
-    const body = {
-      message: `Catálogo actualizado — ${new Date().toLocaleString('es-AR')}`,
-      content,
-      ...(fileSHA ? { sha: fileSHA } : {})
-    };
-    const res = await fetch(
-      `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${GITHUB_FILE}`,
-      {
-        method: 'PUT',
-        headers: {
-          Authorization: `token ${GITHUB_TOKEN}`,
-          Accept: 'application/vnd.github.v3+json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(body)
-      }
-    );
+    const res = await fetch(`${WORKER_URL}/products`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Admin-Key': ADMIN_KEY,
+      },
+      body: JSON.stringify({ products: updated, sha: fileSHA }),
+    });
     if (!res.ok) {
       const err = await res.json();
-      throw new Error(err.message || 'Error al guardar en GitHub');
+      throw new Error(err.error || 'Error al guardar');
     }
     const data = await res.json();
-    fileSHA  = data.content.sha;
+    fileSHA  = data.sha;
     products = updated;
   }
 
