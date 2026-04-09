@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ser Natural — Productos Naturales</title>
+  <meta name="description" content="Belleza, cosmética y cuidado natural. Jabones artesanales. Productos seleccionados para un estilo de vida consciente." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    :root {
+      --cream:#F7F2EC; --cream2:#EDE7DC; --sage:#7A9E7E; --sage-dk:#4E7255;
+      --bark:#6B4F3A; --bark-lt:#A0785A; --sand:#C9A97A;
+      --white:#FFFFFF; --text:#2E2A24; --text-lt:#6B6459;
+      --wa:#25D366; --wa-dk:#1EB457;
+      --font-display:'Playfair Display',Georgia,serif;
+      --font-body:'DM Sans',sans-serif;
+      --r-sm:8px; --r-md:16px; --r-lg:32px;
+      --shadow-card:0 4px 24px rgba(74,60,43,.10);
+      --shadow-btn:0 4px 16px rgba(74,60,43,.22);
+    }
+    body { font-family:var(--font-body); background:var(--cream); color:var(--text); line-height:1.65; overflow-x:hidden; }
+    .container { max-width:1160px; margin:0 auto; padding:0 24px; }
+    .tag { display:inline-block; font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; font-weight:500; color:var(--sage-dk); background:rgba(122,158,126,.13); border-radius:100px; padding:4px 14px; margin-bottom:14px; }
+    .section-title { font-family:var(--font-display); font-size:clamp(2rem,4vw,3rem); color:var(--bark); line-height:1.15; }
+    .section-sub { font-size:1.05rem; color:var(--text-lt); max-width:560px; margin-top:12px; }
+
+    /* NAV */
+    nav { position:fixed; top:0; left:0; right:0; z-index:100; background:rgba(247,242,236,.93); backdrop-filter:blur(14px); border-bottom:1px solid rgba(201,169,122,.25); transition:box-shadow .3s; }
+    .nav-inner { display:flex; align-items:center; justify-content:space-between; height:68px; max-width:1160px; margin:0 auto; padding:0 24px; }
+    .nav-logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
+    .nav-logo img { width:42px; height:42px; border-radius:50%; object-fit:cover; border:2px solid var(--sage); }
+    .nav-logo-text { font-family:var(--font-display); font-size:1.35rem; color:var(--bark); }
+    .nav-logo-text span { color:var(--sage-dk); }
+    .nav-links { display:flex; gap:28px; list-style:none; }
+    .nav-links a { text-decoration:none; font-size:.88rem; font-weight:500; color:var(--text-lt); transition:color .2s; }
+    .nav-links a:hover { color:var(--sage-dk); }
+    .nav-wa { display:flex; align-items:center; gap:8px; background:var(--wa); color:#fff; border-radius:100px; padding:9px 20px; font-size:.87rem; font-weight:500; text-decoration:none; transition:background .2s,transform .15s; box-shadow:0 3px 10px rgba(37,211,102,.35); }
+    .nav-wa:hover { background:var(--wa-dk); transform:translateY(-1px); }
+    .hamburger { display:none; background:none; border:none; cursor:pointer; padding:6px; }
+    .hamburger span { display:block; width:24px; height:2px; background:var(--bark); border-radius:2px; margin:5px 0; }
+    .nav-drawer { display:none; flex-direction:column; background:var(--cream); border-top:1px solid var(--cream2); padding:8px 0; }
+    .nav-drawer.open { display:flex; }
+    .nav-drawer a { padding:12px 24px; text-decoration:none; color:var(--text); font-size:.95rem; font-weight:500; border-bottom:1px solid var(--cream2); }
+    .nav-drawer .wa-mob { margin:10px 24px 4px; display:inline-flex; align-items:center; gap:8px; background:var(--wa); color:#fff; border-radius:100px; padding:11px 22px; font-weight:500; text-decoration:none; border-bottom:none; }
+
+    /* HERO */
+    .hero { padding-top:140px; padding-bottom:90px; overflow:hidden; position:relative; background:radial-gradient(ellipse 80% 60% at 70% 40%,rgba(122,158,126,.18) 0%,transparent 65%),radial-gradient(ellipse 50% 40% at 10% 80%,rgba(201,169,122,.20) 0%,transparent 60%),var(--cream); }
+    .hero::before { content:''; position:absolute; inset:0; background-image:radial-gradient(circle,rgba(122,158,126,.08) 1px,transparent 1px); background-size:32px 32px; pointer-events:none; }
+    .hero-inner { display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center; }
+    .hero-eyebrow { display:flex; align-items:center; gap:10px; margin-bottom:20px; }
+    .hero-dot { width:8px; height:8px; border-radius:50%; background:var(--sage); }
+    .hero-eyebrow-text { font-size:.8rem; letter-spacing:.15em; text-transform:uppercase; font-weight:500; color:var(--sage-dk); }
+    .hero-title { font-family:var(--font-display); font-size:clamp(2.6rem,5.5vw,4.2rem); line-height:1.08; color:var(--bark); margin-bottom:22px; }
+    .hero-title em { color:var(--sage-dk); font-style:italic; }
+    .hero-desc { font-size:1.08rem; color:var(--text-lt); margin-bottom:36px; max-width:440px; }
+    .hero-actions { display:flex; gap:14px; flex-wrap:wrap; align-items:center; }
+    .btn-primary { display:inline-flex; align-items:center; gap:8px; background:var(--sage-dk); color:#fff; border-radius:100px; padding:14px 30px; font-size:.95rem; font-weight:500; text-decoration:none; transition:background .2s,transform .15s; box-shadow:var(--shadow-btn); }
+    .btn-primary:hover { background:var(--bark); transform:translateY(-2px); }
+    .btn-ghost { display:inline-flex; align-items:center; gap:8px; border:1.5px solid var(--sand); color:var(--bark); border-radius:100px; padding:13px 28px; font-size:.95rem; font-weight:500; text-decoration:none; transition:background .2s; }
+    .btn-ghost:hover { background:var(--cream2); }
+    .hero-badges { display:flex; gap:10px; margin-top:28px; flex-wrap:wrap; }
+    .badge { background:var(--white); border:1px solid var(--cream2); border-radius:var(--r-sm); padding:7px 14px; font-size:.78rem; font-weight:500; color:var(--text-lt); display:flex; align-items:center; gap:6px; box-shadow:var(--shadow-card); }
+    .hero-visual { position:relative; display:flex; justify-content:center; align-items:center; }
+    .hero-blob { width:420px; height:420px; border-radius:60% 40% 55% 45%/50% 55% 45% 50%; background:linear-gradient(135deg,rgba(122,158,126,.22),rgba(201,169,122,.28)); display:flex; align-items:center; justify-content:center; animation:morphBlob 8s ease-in-out infinite; position:relative; }
+    @keyframes morphBlob { 0%,100%{border-radius:60% 40% 55% 45%/50% 55% 45% 50%;} 33%{border-radius:40% 60% 45% 55%/55% 45% 55% 45%;} 66%{border-radius:55% 45% 60% 40%/45% 55% 40% 60%;} }
+    .hero-logo-circle { width:240px; height:240px; border-radius:50%; background:var(--white); border:4px solid rgba(122,158,126,.35); display:flex; align-items:center; justify-content:center; box-shadow:0 12px 48px rgba(74,60,43,.18); overflow:hidden; position:relative; z-index:2; }
+    .hero-logo-circle img { width:100%; height:100%; object-fit:cover; }
+    .float-card { position:absolute; background:var(--white); border-radius:var(--r-md); padding:12px 16px; box-shadow:var(--shadow-card); border:1px solid var(--cream2); font-size:.82rem; font-weight:500; display:flex; align-items:center; gap:8px; white-space:nowrap; animation:floatUp 3s ease-in-out infinite; }
+    .float-card:nth-child(2){animation-delay:1s;} .float-card:nth-child(3){animation-delay:2s;}
+    .float-card.fc1{top:12%;right:-10%;} .float-card.fc2{bottom:18%;left:-12%;} .float-card.fc3{bottom:36%;right:-8%;}
+    @keyframes floatUp{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+
+    section { padding:90px 0; }
+
+    /* CATEGORIES */
+    .categories { background:var(--cream2); }
+    .categories-head { text-align:center; margin-bottom:52px; }
+    .categories-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+    .cat-card { background:var(--white); border-radius:var(--r-lg); padding:44px 32px 36px; text-align:center; border:1.5px solid transparent; transition:border-color .25s,transform .25s,box-shadow .25s; position:relative; overflow:hidden; cursor:pointer; }
+    .cat-card::before { content:''; position:absolute; top:0; left:0; right:0; height:4px; border-radius:var(--r-lg) var(--r-lg) 0 0; }
+    .cat-card.c1::before{background:linear-gradient(90deg,#7A9E7E,#C9A97A);}
+    .cat-card.c2::before{background:linear-gradient(90deg,#A0785A,#7A9E7E);}
+    .cat-card.c3::before{background:linear-gradient(90deg,#C9A97A,#A0785A);}
+    .cat-card:hover{border-color:var(--sage);transform:translateY(-6px);box-shadow:0 16px 40px rgba(74,60,43,.12);}
+    .cat-icon{font-size:3rem;margin-bottom:16px;display:block;}
+    .cat-title{font-family:var(--font-display);font-size:1.3rem;color:var(--bark);margin-bottom:10px;}
+    .cat-desc{font-size:.9rem;color:var(--text-lt);line-height:1.6;}
+
+    /* CATALOG */
+    .catalog { background:var(--cream); }
+    .catalog-head { text-align:center; margin-bottom:16px; }
+    .catalog-filters { display:flex; justify-content:center; gap:10px; flex-wrap:wrap; margin-bottom:44px; }
+    .filter-btn { background:var(--white); border:1.5px solid var(--cream2); color:var(--text-lt); border-radius:100px; padding:8px 22px; font-size:.85rem; font-weight:500; cursor:pointer; transition:all .2s; font-family:var(--font-body); }
+    .filter-btn:hover,.filter-btn.active { background:var(--sage-dk); border-color:var(--sage-dk); color:#fff; }
+    .products-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:24px; min-height:200px; }
+
+    /* skeleton loader */
+    .skel { background:var(--white); border-radius:var(--r-md); border:1px solid var(--cream2); overflow:hidden; }
+    .skel-img { height:200px; background:linear-gradient(90deg,var(--cream2) 25%,var(--cream) 50%,var(--cream2) 75%); background-size:200% 100%; animation:shimmer 1.4s infinite; }
+    .skel-line { height:14px; border-radius:100px; margin:14px 18px 8px; background:linear-gradient(90deg,var(--cream2) 25%,var(--cream) 50%,var(--cream2) 75%); background-size:200% 100%; animation:shimmer 1.4s infinite; }
+    .skel-line.short { width:55%; }
+    @keyframes shimmer { to { background-position:-200% 0; } }
+
+    /* product card */
+    .prod-card { background:var(--white); border-radius:var(--r-md); overflow:hidden; border:1px solid var(--cream2); box-shadow:var(--shadow-card); transition:transform .25s,box-shadow .25s; display:flex; flex-direction:column; }
+    .prod-card:hover { transform:translateY(-5px); box-shadow:0 14px 36px rgba(74,60,43,.13); }
+    .prod-img-wrap { position:relative; overflow:hidden; background:var(--cream2); aspect-ratio:1/1; display:flex; align-items:center; justify-content:center; }
+    .prod-img-wrap img { width:100%; height:100%; object-fit:cover; transition:transform .4s; }
+    .prod-card:hover .prod-img-wrap img { transform:scale(1.06); }
+    .prod-img-placeholder { font-size:3.5rem; color:var(--sage); display:flex; flex-direction:column; align-items:center; gap:6px; }
+    .prod-img-placeholder span { font-size:.72rem; color:var(--text-lt); font-family:var(--font-body); letter-spacing:.1em; text-transform:uppercase; }
+    .prod-badge-tag { position:absolute; top:12px; left:12px; background:var(--sage-dk); color:#fff; font-size:.7rem; font-weight:600; border-radius:100px; padding:3px 10px; letter-spacing:.05em; text-transform:uppercase; }
+    .prod-badge-tag.nuevo { background:var(--sand); color:var(--bark); }
+    .prod-badge-tag.popular { background:var(--sage-dk); color:#fff; }
+    .prod-info { padding:18px 18px 20px; flex:1; display:flex; flex-direction:column; }
+    .prod-cat { font-size:.72rem; color:var(--sage-dk); text-transform:uppercase; letter-spacing:.1em; font-weight:500; margin-bottom:6px; }
+    .prod-name { font-family:var(--font-display); font-size:1rem; color:var(--bark); margin-bottom:6px; line-height:1.3; }
+    .prod-desc { font-size:.82rem; color:var(--text-lt); line-height:1.55; margin-bottom:14px; flex:1; }
+    .prod-footer { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:auto; }
+    .prod-price { font-family:var(--font-display); font-size:1.1rem; color:var(--bark); font-weight:700; }
+    .prod-price .pn { font-family:var(--font-body); font-size:.7rem; color:var(--text-lt); font-weight:400; display:block; }
+    .prod-wa { display:inline-flex; align-items:center; gap:6px; background:var(--wa); color:#fff; border-radius:100px; padding:8px 14px; font-size:.8rem; font-weight:600; text-decoration:none; transition:background .2s; white-space:nowrap; }
+    .prod-wa:hover { background:var(--wa-dk); }
+    .catalog-cta { text-align:center; margin-top:44px; }
+    .catalog-cta p { color:var(--text-lt); margin-bottom:16px; }
+
+    /* empty catalog */
+    .catalog-empty { grid-column:1/-1; text-align:center; padding:64px 24px; color:var(--text-lt); }
+    .catalog-empty .ce-icon { font-size:3rem; margin-bottom:12px; opacity:.45; }
+
+    /* GALLERY */
+    .gallery { background:var(--cream2); }
+    .gallery-head { text-align:center; margin-bottom:44px; }
+    .gallery-grid { display:grid; grid-template-columns:repeat(3,1fr); grid-template-rows:auto auto; gap:16px; }
+    .gallery-item { border-radius:var(--r-md); overflow:hidden; background:var(--cream); position:relative; cursor:pointer; }
+    .gallery-item img { width:100%; height:100%; object-fit:cover; display:block; transition:transform .4s; }
+    .gallery-item:hover img { transform:scale(1.05); }
+    .gallery-item.tall { grid-row:span 2; }
+    .gallery-item.wide { grid-column:span 2; }
+    .gallery-placeholder { aspect-ratio:1/1; background:linear-gradient(135deg,var(--cream2),var(--cream)); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; color:var(--text-lt); }
+    .gallery-placeholder.tall { aspect-ratio:unset; min-height:360px; }
+    .gallery-placeholder.wide { aspect-ratio:2/1; }
+    .gp-icon { font-size:2.5rem; opacity:.45; }
+    .gp-label { font-size:.75rem; opacity:.55; text-transform:uppercase; letter-spacing:.1em; }
+    .gallery-overlay { position:absolute; inset:0; background:rgba(78,114,85,0); transition:background .3s; }
+    .gallery-item:hover .gallery-overlay { background:rgba(78,114,85,.22); }
+    .gallery-note { text-align:center; margin-top:24px; font-size:.87rem; color:var(--text-lt); padding:14px 24px; background:var(--white); border-radius:var(--r-md); border:1px dashed var(--sand); display:inline-block; }
+
+    /* ABOUT */
+    .about-inner { display:grid; grid-template-columns:1fr 1fr; gap:72px; align-items:center; }
+    .about-img-wrap { position:relative; }
+    .about-bg-rect { position:absolute; top:20px; left:20px; right:-20px; bottom:-20px; background:linear-gradient(135deg,rgba(122,158,126,.18),rgba(201,169,122,.18)); border-radius:var(--r-lg); z-index:0; }
+    .about-img-panel { position:relative; z-index:1; background:var(--cream2); border-radius:var(--r-lg); padding:44px 36px; text-align:center; border:1px solid rgba(201,169,122,.3); }
+    .about-img-panel img { width:140px; height:140px; border-radius:50%; object-fit:cover; margin-bottom:20px; border:3px solid var(--sage); }
+    .about-img-panel p { font-family:var(--font-display); font-size:1.1rem; color:var(--bark); font-style:italic; line-height:1.6; }
+    .values-list { margin-top:28px; display:flex; flex-direction:column; gap:16px; }
+    .value-item { display:flex; gap:14px; align-items:flex-start; }
+    .value-icon { flex-shrink:0; width:40px; height:40px; border-radius:50%; background:rgba(122,158,126,.15); display:flex; align-items:center; justify-content:center; font-size:1.1rem; }
+    .value-text strong { display:block; color:var(--bark); font-size:.95rem; }
+    .value-text span { font-size:.88rem; color:var(--text-lt); }
+
+    /* WHY */
+    .why { background:var(--sage-dk); }
+    .why .section-title { color:var(--cream); }
+    .why .section-sub { color:rgba(237,231,220,.7); }
+    .why-head { margin-bottom:52px; }
+    .why-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:24px; }
+    .why-card { background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.14); border-radius:var(--r-md); padding:32px 24px; transition:background .25s; }
+    .why-card:hover { background:rgba(255,255,255,.14); }
+    .why-card-icon { font-size:2rem; margin-bottom:14px; }
+    .why-card-title { font-family:var(--font-display); font-size:1.05rem; color:var(--cream); margin-bottom:8px; }
+    .why-card-desc { font-size:.87rem; color:rgba(237,231,220,.7); line-height:1.6; }
+
+    /* TESTIMONIALS */
+    .testi-head { text-align:center; margin-bottom:52px; }
+    .testi-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+    .testi-card { background:var(--white); border-radius:var(--r-md); padding:32px; border:1px solid var(--cream2); box-shadow:var(--shadow-card); transition:transform .25s,box-shadow .25s; }
+    .testi-card:hover { transform:translateY(-4px); box-shadow:0 12px 36px rgba(74,60,43,.13); }
+    .stars { color:var(--sand); font-size:1rem; margin-bottom:14px; letter-spacing:2px; }
+    .testi-text { font-family:var(--font-display); font-style:italic; font-size:1rem; color:var(--text); line-height:1.7; margin-bottom:20px; }
+    .testi-author { display:flex; align-items:center; gap:10px; }
+    .testi-avatar { width:36px; height:36px; border-radius:50%; background:linear-gradient(135deg,var(--sage),var(--sand)); display:flex; align-items:center; justify-content:center; font-size:1rem; color:#fff; font-weight:700; }
+    .testi-name { font-size:.88rem; font-weight:500; color:var(--bark); }
+    .testi-loc { font-size:.78rem; color:var(--text-lt); }
+
+    /* SHIPPING */
+    .shipping { background:var(--cream2); }
+    .shipping-inner { display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center; }
+    .shipping-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+    .ship-card { background:var(--white); border-radius:var(--r-md); padding:24px 20px; border:1px solid var(--cream2); box-shadow:var(--shadow-card); }
+    .ship-icon { font-size:1.8rem; margin-bottom:10px; }
+    .ship-title { font-size:.95rem; font-weight:600; color:var(--bark); margin-bottom:6px; }
+    .ship-desc { font-size:.83rem; color:var(--text-lt); line-height:1.55; }
+    .disclaimer { margin-top:28px; background:rgba(201,169,122,.15); border:1px solid rgba(201,169,122,.35); border-left:4px solid var(--sand); border-radius:var(--r-sm); padding:16px 20px; font-size:.84rem; color:var(--text-lt); line-height:1.6; }
+    .disclaimer strong { color:var(--bark); }
+
+    /* CONTACT */
+    .contact-inner { display:grid; grid-template-columns:1fr 1fr; gap:72px; align-items:start; }
+    .contact-detail { display:flex; gap:14px; align-items:flex-start; margin-bottom:20px; }
+    .cd-icon { flex-shrink:0; width:44px; height:44px; border-radius:50%; background:rgba(122,158,126,.12); display:flex; align-items:center; justify-content:center; font-size:1.2rem; }
+    .cd-text strong { display:block; font-size:.9rem; color:var(--bark); margin-bottom:2px; }
+    .cd-text a { font-size:.87rem; color:var(--text-lt); text-decoration:none; }
+    .cd-text a:hover { color:var(--sage-dk); }
+    .contact-form { background:var(--white); border-radius:var(--r-lg); padding:40px 36px; border:1px solid var(--cream2); box-shadow:var(--shadow-card); }
+    .form-title { font-family:var(--font-display); font-size:1.5rem; color:var(--bark); margin-bottom:6px; }
+    .form-sub { font-size:.88rem; color:var(--text-lt); margin-bottom:28px; }
+    .form-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+    .form-group { margin-bottom:18px; }
+    .form-group label { display:block; font-size:.83rem; font-weight:500; color:var(--bark); margin-bottom:7px; }
+    .form-group input,.form-group select,.form-group textarea { width:100%; border:1.5px solid var(--cream2); background:var(--cream); border-radius:var(--r-sm); padding:12px 16px; font-size:.9rem; font-family:var(--font-body); color:var(--text); outline:none; transition:border-color .2s,background .2s; }
+    .form-group input:focus,.form-group select:focus,.form-group textarea:focus { border-color:var(--sage); background:var(--white); }
+    .form-group textarea { resize:vertical; min-height:110px; }
+    .form-submit { width:100%; background:var(--sage-dk); color:#fff; border:none; border-radius:100px; padding:15px 32px; font-size:.95rem; font-weight:600; cursor:pointer; font-family:var(--font-body); transition:background .2s,transform .15s; box-shadow:var(--shadow-btn); }
+    .form-submit:hover { background:var(--bark); transform:translateY(-2px); }
+    .form-note { font-size:.78rem; color:var(--text-lt); text-align:center; margin-top:12px; }
+    .form-note a { color:var(--sage-dk); text-decoration:none; }
+    #form-success { display:none; text-align:center; padding:24px; background:rgba(122,158,126,.1); border-radius:var(--r-md); border:1px solid var(--sage); margin-top:16px; font-size:.95rem; color:var(--sage-dk); }
+    #form-success .si { font-size:2.5rem; display:block; margin-bottom:8px; }
+
+    /* CTA */
+    .cta { background:linear-gradient(135deg,var(--bark) 0%,#3d2c1e 100%); text-align:center; padding:100px 0; position:relative; overflow:hidden; }
+    .cta::before { content:''; position:absolute; inset:0; background-image:radial-gradient(circle,rgba(201,169,122,.07) 1px,transparent 1px); background-size:28px 28px; pointer-events:none; }
+    .cta h2 { font-family:var(--font-display); font-size:clamp(2rem,4vw,3.2rem); color:var(--cream); margin-bottom:16px; }
+    .cta .cta-p { color:rgba(237,231,220,.75); font-size:1.05rem; margin-bottom:40px; }
+    .cta-buttons { display:flex; gap:16px; justify-content:center; flex-wrap:wrap; }
+    .btn-wa { display:inline-flex; align-items:center; gap:10px; background:var(--wa); color:#fff; border-radius:100px; padding:16px 36px; font-size:1rem; font-weight:600; text-decoration:none; transition:background .2s,transform .15s; box-shadow:0 6px 24px rgba(37,211,102,.40); }
+    .btn-wa:hover { background:var(--wa-dk); transform:translateY(-2px); }
+    .btn-ol { display:inline-flex; align-items:center; gap:10px; border:1.5px solid rgba(201,169,122,.45); color:var(--cream); border-radius:100px; padding:15px 34px; font-size:1rem; font-weight:500; text-decoration:none; transition:background .2s; }
+    .btn-ol:hover { background:rgba(201,169,122,.12); }
+
+    /* SOCIAL */
+    .social { background:var(--cream2); }
+    .social-head { text-align:center; margin-bottom:48px; }
+    .social-links { display:flex; justify-content:center; gap:20px; flex-wrap:wrap; }
+    .social-pill { display:inline-flex; align-items:center; gap:12px; border-radius:100px; padding:14px 28px; font-size:.92rem; font-weight:500; text-decoration:none; transition:transform .2s,box-shadow .2s; }
+    .social-pill:hover { transform:translateY(-3px); box-shadow:0 8px 20px rgba(0,0,0,.15); }
+    .sp-ig{background:linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);color:#fff;}
+    .sp-fb{background:#1877F2;color:#fff;}
+    .sp-wa{background:var(--wa);color:#fff;}
+
+    /* FOOTER */
+    footer { background:#1e1610; color:rgba(237,231,220,.65); padding:52px 0 28px; font-size:.88rem; }
+    .footer-inner { display:grid; grid-template-columns:2fr 1fr 1fr; gap:48px; margin-bottom:36px; }
+    .footer-logo { display:flex; align-items:center; gap:10px; margin-bottom:14px; }
+    .footer-logo img { width:38px; height:38px; border-radius:50%; object-fit:cover; border:2px solid var(--sage); }
+    .footer-brand-name { font-family:var(--font-display); font-size:1.4rem; color:var(--cream); }
+    .footer-brand-name span { color:var(--sage); }
+    .footer-brand-desc { line-height:1.7; margin-bottom:16px; color:rgba(237,231,220,.55); }
+    .footer-col h4 { font-size:.8rem; letter-spacing:.12em; text-transform:uppercase; color:var(--sand); margin-bottom:16px; }
+    .footer-col ul { list-style:none; }
+    .footer-col ul li { margin-bottom:8px; }
+    .footer-col ul li a { color:rgba(237,231,220,.6); text-decoration:none; transition:color .2s; }
+    .footer-col ul li a:hover { color:var(--cream); }
+    .footer-bottom { border-top:1px solid rgba(237,231,220,.08); padding-top:24px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; }
+    .footer-bottom p { color:rgba(237,231,220,.35); font-size:.8rem; }
+
+    /* WA FLOAT */
+    .wa-float { position:fixed; bottom:28px; right:28px; z-index:200; width:58px; height:58px; border-radius:50%; background:var(--wa); display:flex; align-items:center; justify-content:center; box-shadow:0 6px 24px rgba(37,211,102,.55); text-decoration:none; transition:transform .2s; animation:pulsePop 2.5s ease-in-out infinite; }
+    .wa-float:hover { transform:scale(1.1); }
+    @keyframes pulsePop{0%,100%{box-shadow:0 6px 24px rgba(37,211,102,.55);}50%{box-shadow:0 6px 36px rgba(37,211,102,.80);}}
+    .wa-float svg { width:28px; height:28px; fill:#fff; }
+
+    /* FADE */
+    .fade-in { opacity:0; transform:translateY(24px); transition:opacity .65s ease,transform .65s ease; }
+    .fade-in.visible { opacity:1; transform:translateY(0); }
+
+    /* RESPONSIVE */
+    @media(max-width:1060px){.products-grid{grid-template-columns:repeat(3,1fr);}}
+    @media(max-width:960px){
+      .nav-links{display:none;} .hamburger{display:block;}
+      .hero-inner{grid-template-columns:1fr;gap:48px;}
+      .hero-visual{order:-1;} .hero-blob{width:280px;height:280px;}
+      .hero-logo-circle{width:170px;height:170px;} .float-card{display:none;}
+      .categories-grid{grid-template-columns:1fr 1fr;}
+      .about-inner,.shipping-inner,.contact-inner{grid-template-columns:1fr;gap:40px;}
+      .why-grid{grid-template-columns:1fr 1fr;} .testi-grid{grid-template-columns:1fr;}
+      .footer-inner{grid-template-columns:1fr 1fr;}
+      .gallery-grid{grid-template-columns:1fr 1fr;}
+      .gallery-item.tall{grid-row:span 1;} .gallery-item.wide{grid-column:span 2;}
+    }
+    @media(max-width:720px){.products-grid{grid-template-columns:1fr 1fr;}.form-row{grid-template-columns:1fr;}}
+    @media(max-width:560px){
+      .categories-grid,.why-grid,.shipping-grid,.products-grid{grid-template-columns:1fr;}
+      .footer-inner{grid-template-columns:1fr;} .footer-bottom{flex-direction:column;text-align:center;}
+      .nav-wa{display:none;}
+      .gallery-grid{grid-template-columns:1fr;} .gallery-item.wide{grid-column:span 1;aspect-ratio:1/1;}
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <a href="#inicio" class="nav-logo">
+      <img src="https://i.postimg.cc/W16Cb2t6/395740464-122094653600094688-9024125943526889344-n.jpg" alt="Ser Natural logo" />
+      <span class="nav-logo-text">Ser <span>Natural</span></span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#catalogo">Productos</a></li>
+      <li><a href="#galeria">Galería</a></li>
+      <li><a href="#nosotros">Nosotros</a></li>
+      <li><a href="#testimonios">Opiniones</a></li>
+      <li><a href="#contacto-form">Contacto</a></li>
+    </ul>
+    <a href="https://wa.me/message/SPJ4JO72GEPOB1" target="_blank" rel="noopener" class="nav-wa">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.122 1.532 5.849L.057 23.97l6.277-1.448A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.885 0-3.645-.517-5.152-1.415l-.369-.219-3.825.881.908-3.729-.24-.382A9.961 9.961 0 012 12C2 6.486 6.486 2 12 2s10 4.486 10 10-4.486 10-10 10z"/></svg>
+      Consultar
+    </a>
+    <button class="hamburger" id="ham" aria-label="Menú" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+  </div>
+  <div class="nav-drawer" id="drawer">
+    <a href="#catalogo"      onclick="toggleMenu()">Productos</a>
+    <a href="#galeria"       onclick="toggleMenu()">Galería</a>
+    <a href="#nosotros"      onclick="toggleMenu()">Nosotros</a>
+    <a href="#testimonios"   onclick="toggleMenu()">Opiniones</a>
+    <a href="#contacto-form" onclick="toggleMenu()">Contacto</a>
+    <a href="https://wa.me/message/SPJ4JO72GEPOB1" target="_blank" rel="noopener" class="wa-mob">💬 Escribinos por WhatsApp</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="inicio">
+  <div class="container hero-inner">
+    <div class="fade-in">
+      <div class="hero-eyebrow"><div class="hero-dot"></div><span class="hero-eyebrow-text">100% Natural · Hecho con amor</span></div>
+      <h1 class="hero-title">Lo natural<br>es una forma<br>de <em>vivir</em></h1>
+      <p class="hero-desc">Belleza, cosmética y cuidado natural. Jabones artesanales y productos seleccionados para acompañarte en un estilo de vida más consciente y saludable.</p>
+      <div class="hero-actions">
+        <a href="#catalogo" class="btn-primary">🌿 Ver productos</a>
+        <a href="#nosotros" class="btn-ghost">Conocernos</a>
+      </div>
+      <div class="hero-badges">
+        <span class="badge">🌱 Ingredientes naturales</span>
+        <span class="badge">🧼 Jabones artesanales</span>
+        <span class="badge">💚 Cuidado consciente</span>
+      </div>
+    </div>
+    <div class="hero-visual fade-in" style="transition-delay:.2s">
+      <div class="hero-blob">
+        <div class="hero-logo-circle">
+          <img src="https://i.postimg.cc/W16Cb2t6/395740464-122094653600094688-9024125943526889344-n.jpg" alt="Ser Natural" />
+        </div>
+      </div>
+      <div class="float-card fc1">🧴 Cosmética natural</div>
+      <div class="float-card fc2">🧼 Jabones artesanales</div>
+      <div class="float-card fc3">✨ Cuidado personal</div>
+    </div>
+  </div>
+</section>
+
+<!-- CATEGORIES -->
+<section class="categories" id="categorias">
+  <div class="container">
+    <div class="categories-head fade-in">
+      <span class="tag">Nuestras categorías</span>
+      <h2 class="section-title">Lo que encontrás<br>en Ser Natural</h2>
+      <p class="section-sub" style="margin:12px auto 0">Productos cuidadosamente seleccionados para tu bienestar integral.</p>
+    </div>
+    <div class="categories-grid">
+      <div class="cat-card c1 fade-in" onclick="filterCatalog('jabones',null);document.getElementById('catalogo').scrollIntoView({behavior:'smooth'})">
+        <span class="cat-icon">🧼</span>
+        <h3 class="cat-title">Jabones Artesanales<br>y Naturales</h3>
+        <p class="cat-desc">Elaborados a mano con aceites vegetales, mantecas naturales y esencias. Sin sulfatos, sin parabenos, con puro cuidado.</p>
+      </div>
+      <div class="cat-card c2 fade-in" style="transition-delay:.1s" onclick="filterCatalog('cosmetica',null);document.getElementById('catalogo').scrollIntoView({behavior:'smooth'})">
+        <span class="cat-icon">🌸</span>
+        <h3 class="cat-title">Belleza & Cosmética<br>Natural</h3>
+        <p class="cat-desc">Productos formulados con ingredientes de origen natural para nutrir, hidratar y respetar tu piel de adentro hacia afuera.</p>
+      </div>
+      <div class="cat-card c3 fade-in" style="transition-delay:.2s" onclick="filterCatalog('bienestar',null);document.getElementById('catalogo').scrollIntoView({behavior:'smooth'})">
+        <span class="cat-icon">💚</span>
+        <h3 class="cat-title">Bienestar<br>Integral</h3>
+        <p class="cat-desc">Alternativas naturales para acompañar tu energía, descanso y digestión. Pequeños pasos hacia una vida más saludable.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CATALOG — populated by Firebase -->
+<section class="catalog" id="catalogo">
+  <div class="container">
+    <div class="catalog-head fade-in">
+      <span class="tag">Catálogo</span>
+      <h2 class="section-title">Nuestros productos</h2>
+      <p class="section-sub" style="margin:10px auto 24px">Consultanos por WhatsApp para disponibilidad y precios actualizados.</p>
+    </div>
+    <div class="catalog-filters fade-in">
+      <button class="filter-btn active" id="fbtn-todos"     onclick="filterCatalog('todos',this)">Todos</button>
+      <button class="filter-btn"        id="fbtn-jabones"   onclick="filterCatalog('jabones',this)">Jabones artesanales</button>
+      <button class="filter-btn"        id="fbtn-cosmetica" onclick="filterCatalog('cosmetica',this)">Cosmética natural</button>
+      <button class="filter-btn"        id="fbtn-bienestar" onclick="filterCatalog('bienestar',this)">Bienestar</button>
+    </div>
+    <!-- skeleton while loading -->
+    <div class="products-grid" id="products-grid">
+      <div class="skel"><div class="skel-img"></div><div class="skel-line"></div><div class="skel-line short"></div></div>
+      <div class="skel"><div class="skel-img"></div><div class="skel-line"></div><div class="skel-line short"></div></div>
+      <div class="skel"><div class="skel-img"></div><div class="skel-line"></div><div class="skel-line short"></div></div>
+      <div class="skel"><div class="skel-img"></div><div class="skel-line"></div><div class="skel-line short"></div></div>
+    </div>
+    <div class="catalog-cta fade-in">
+      <p>¿No encontrás lo que buscás? Tenemos más productos disponibles.</p>
+      <a href="https://wa.me/message/SPJ4JO72GEPOB1" target="_blank" rel="noopener" class="btn-wa" style="display:inline-flex">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.122 1.532 5.849L.057 23.97l6.277-1.448A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.885 0-3.645-.517-5.152-1.415l-.369-.219-3.825.881.908-3.729-.24-.382A9.961 9.961 0 012 12C2 6.486 6.486 2 12 2s10 4.486 10 10-4.486 10-10 10z"/></svg>
+        Ver catálogo completo por WhatsApp
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="gallery" id="galeria">
+  <div class="container">
+    <div class="gallery-head fade-in">
+      <span class="tag">Galería</span>
+      <h2 class="section-title">Nuestros productos<br>en detalle</h2>
+      <p class="section-sub" style="margin:10px auto 0">Subí tus fotos a Postimages y reemplazamos los placeholders con tus imágenes reales.</p>
+    </div>
+    <div class="gallery-grid fade-in">
+      <div class="gallery-item tall"><div class="gallery-placeholder tall"><span class="gp-icon">📸</span><span class="gp-label">Foto destacada</span></div><div class="gallery-overlay"></div></div>
+      <div class="gallery-item"><div class="gallery-placeholder"><span class="gp-icon">📸</span><span class="gp-label">Foto producto 2</span></div><div class="gallery-overlay"></div></div>
+      <div class="gallery-item"><div class="gallery-placeholder"><span class="gp-icon">📸</span><span class="gp-label">Foto producto 3</span></div><div class="gallery-overlay"></div></div>
+      <div class="gallery-item wide"><div class="gallery-placeholder wide"><span class="gp-icon">📸</span><span class="gp-label">Foto banner / proceso artesanal</span></div><div class="gallery-overlay"></div></div>
+      <div class="gallery-item"><div class="gallery-placeholder"><span class="gp-icon">📸</span><span class="gp-label">Foto producto 5</span></div><div class="gallery-overlay"></div></div>
+    </div>
+    <div style="text-align:center;margin-top:24px">
+      <span class="gallery-note">📷 Compartí los links de tus fotos y los aplicamos al instante.</span>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="nosotros">
+  <div class="container about-inner">
+    <div class="about-img-wrap fade-in">
+      <div class="about-bg-rect"></div>
+      <div class="about-img-panel">
+        <img src="https://i.postimg.cc/W16Cb2t6/395740464-122094653600094688-9024125943526889344-n.jpg" alt="Ser Natural" />
+        <p>"Creemos que lo natural no es una moda,<br>sino una forma de vivir."</p>
+      </div>
+    </div>
+    <div class="about-content fade-in" style="transition-delay:.15s">
+      <span class="tag">Quiénes somos</span>
+      <h2 class="section-title">Un emprendimiento<br>con propósito</h2>
+      <p class="section-sub">En Ser Natural creemos que el bienestar comienza con lo que elegimos para nuestro cuerpo y nuestra vida diaria. Seleccionamos productos naturales pensados para acompañarte hacia un estilo de vida más saludable, consciente y equilibrado.</p>
+      <div class="values-list">
+        <div class="value-item"><div class="value-icon">🌿</div><div class="value-text"><strong>Lo simple y natural</strong><span>Ingredientes de origen natural, sin aditivos innecesarios.</span></div></div>
+        <div class="value-item"><div class="value-icon">💚</div><div class="value-text"><strong>Equilibrio cuerpo–mente</strong><span>Promovemos el cuidado integral de la persona.</span></div></div>
+        <div class="value-item"><div class="value-icon">🌎</div><div class="value-text"><strong>Respeto por el entorno</strong><span>Productos que cuidan a las personas y al planeta.</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY -->
+<section class="why">
+  <div class="container">
+    <div class="why-head fade-in">
+      <span class="tag" style="color:var(--sand)!important;background:rgba(201,169,122,.15)!important">Por qué elegirnos</span>
+      <h2 class="section-title">No solo vendemos<br>productos</h2>
+      <p class="section-sub">Buscamos generar una experiencia de bienestar real, con atención personalizada y acompañamiento en cada paso.</p>
+    </div>
+    <div class="why-grid">
+      <div class="why-card fade-in"><div class="why-card-icon">✔️</div><h3 class="why-card-title">Selección cuidadosa</h3><p class="why-card-desc">Cada producto pasa por un proceso riguroso para garantizar calidad y pureza.</p></div>
+      <div class="why-card fade-in" style="transition-delay:.1s"><div class="why-card-icon">🫂</div><h3 class="why-card-title">Atención personalizada</h3><p class="why-card-desc">Te asesoramos antes y después de la compra, adaptándonos a tus necesidades reales.</p></div>
+      <div class="why-card fade-in" style="transition-delay:.2s"><div class="why-card-icon">🌱</div><h3 class="why-card-title">Bienestar integral</h3><p class="why-card-desc">Enfoque en el cuidado completo: piel, cuerpo, mente y estilo de vida consciente.</p></div>
+      <div class="why-card fade-in" style="transition-delay:.3s"><div class="why-card-icon">🤝</div><h3 class="why-card-title">Comunidad real</h3><p class="why-card-desc">Ser Natural es más que una tienda: es una comunidad que busca mejorar su calidad de vida.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonios">
+  <div class="container">
+    <div class="testi-head fade-in">
+      <span class="tag">Opiniones reales</span>
+      <h2 class="section-title">Lo que dicen<br>nuestros clientes</h2>
+      <p class="section-sub" style="margin:12px auto 0">Experiencias genuinas de personas que eligieron lo natural.</p>
+    </div>
+    <div class="testi-grid">
+      <div class="testi-card fade-in"><div class="stars">★★★★★</div><p class="testi-text">"Los jabones artesanales son increíbles. Mi piel nunca estuvo tan hidratada y suave. ¡Y el olor es hermoso!"</p><div class="testi-author"><div class="testi-avatar">M</div><div><div class="testi-name">Mariana G.</div><div class="testi-loc">Clienta satisfecha</div></div></div></div>
+      <div class="testi-card fade-in" style="transition-delay:.1s"><div class="stars">★★★★★</div><p class="testi-text">"Excelente atención, me asesoraron muy bien para elegir los productos según mi rutina. Los recomiendo 100%."</p><div class="testi-author"><div class="testi-avatar">L</div><div><div class="testi-name">Laura P.</div><div class="testi-loc">Clienta habitual</div></div></div></div>
+      <div class="testi-card fade-in" style="transition-delay:.2s"><div class="stars">★★★★★</div><p class="testi-text">"Me encanta que todo es natural y que se nota la calidad en cada producto. Muy feliz con mi compra."</p><div class="testi-author"><div class="testi-avatar">V</div><div><div class="testi-name">Valentina R.</div><div class="testi-loc">Nueva clienta</div></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SHIPPING -->
+<section class="shipping" id="envios">
+  <div class="container shipping-inner">
+    <div class="fade-in">
+      <span class="tag">Envíos y entrega</span>
+      <h2 class="section-title">Llevamos lo natural<br>hasta vos</h2>
+      <p class="section-sub">Consultanos por WhatsApp para conocer las opciones de envío disponibles para tu zona.</p>
+      <div class="disclaimer"><strong>⚠️ Aviso importante:</strong> Los productos de Ser Natural no reemplazan la consulta médica o profesional. Ante dudas de salud, consultá siempre con un profesional.</div>
+    </div>
+    <div class="shipping-grid fade-in" style="transition-delay:.15s">
+      <div class="ship-card"><div class="ship-icon">📦</div><div class="ship-title">Envío a domicilio</div><div class="ship-desc">Despachamos a todo el país. Consultá costos y tiempos para tu localidad.</div></div>
+      <div class="ship-card"><div class="ship-icon">🏪</div><div class="ship-title">Retiro en persona</div><div class="ship-desc">Coordinamos punto de encuentro o retiro. Consultanos por WhatsApp.</div></div>
+      <div class="ship-card"><div class="ship-icon">💳</div><div class="ship-title">Medios de pago</div><div class="ship-desc">Efectivo, transferencia y más. Consultanos para conocer todas las opciones.</div></div>
+      <div class="ship-card"><div class="ship-icon">🔒</div><div class="ship-title">Compra segura</div><div class="ship-desc">Empaque cuidadoso y seguimiento de tu pedido hasta que llegue a tus manos.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contacto-form">
+  <div class="container contact-inner">
+    <div class="contact-info fade-in">
+      <span class="tag">Contacto</span>
+      <h2 class="section-title">Hablemos</h2>
+      <p class="section-sub">¿Tenés una consulta, querés hacer un pedido especial o simplemente conocer más? Escribinos.</p>
+      <div style="margin-top:32px">
+        <div class="contact-detail"><div class="cd-icon">💬</div><div class="cd-text"><strong>WhatsApp (preferido)</strong><a href="https://wa.me/message/SPJ4JO72GEPOB1" target="_blank" rel="noopener">Escribinos directo →</a></div></div>
+        <div class="contact-detail"><div class="cd-icon">📸</div><div class="cd-text"><strong>Instagram</strong><a href="https://www.instagram.com/sernatural_eg" target="_blank" rel="noopener">@sernatural_eg</a></div></div>
+        <div class="contact-detail"><div class="cd-icon">📘</div><div class="cd-text"><strong>Facebook</strong><a href="https://www.facebook.com/SerNatural.Eg/" target="_blank" rel="noopener">SerNatural.Eg</a></div></div>
+      </div>
+    </div>
+    <div class="contact-form fade-in" style="transition-delay:.15s">
+      <div class="form-title">Envianos tu consulta</div>
+      <div class="form-sub">Te respondemos a la brevedad 🌿</div>
+      <div id="form-body">
+        <div class="form-row">
+          <div class="form-group"><label for="f-name">Tu nombre</label><input type="text" id="f-name" placeholder="María González" /></div>
+          <div class="form-group"><label for="f-phone">WhatsApp / Teléfono</label><input type="tel" id="f-phone" placeholder="+54 9 11 0000 0000" /></div>
+        </div>
+        <div class="form-group"><label for="f-email">Email (opcional)</label><input type="email" id="f-email" placeholder="tu@email.com" /></div>
+        <div class="form-group">
+          <label for="f-topic">¿Sobre qué querés consultar?</label>
+          <select id="f-topic">
+            <option value="">Seleccioná un tema…</option>
+            <option>Jabones artesanales</option>
+            <option>Cosmética natural</option>
+            <option>Bienestar y suplementos</option>
+            <option>Envíos y precios</option>
+            <option>Pedido personalizado</option>
+            <option>Otro</option>
+          </select>
+        </div>
+        <div class="form-group"><label for="f-msg">Tu mensaje</label><textarea id="f-msg" placeholder="Contanos qué necesitás…"></textarea></div>
+        <button class="form-submit" onclick="submitForm()">Enviar consulta 🌿</button>
+        <p class="form-note">También podés escribirnos directo por <a href="https://wa.me/message/SPJ4JO72GEPOB1">WhatsApp</a>.</p>
+      </div>
+      <div id="form-success"><span class="si">🌿</span><strong>¡Gracias por tu consulta!</strong><br>Te respondemos a la brevedad.</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <div class="container" style="position:relative;z-index:1">
+    <span class="tag" style="color:var(--sand)!important;background:rgba(201,169,122,.15)!important">Contacto directo</span>
+    <h2>¿Querés más info<br>o hacer un pedido?</h2>
+    <p class="cta-p">Escribinos por WhatsApp y te respondemos a la brevedad.<br>Atención personalizada, sin vueltas.</p>
+    <div class="cta-buttons">
+      <a href="https://wa.me/message/SPJ4JO72GEPOB1" target="_blank" rel="noopener" class="btn-wa">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.122 1.532 5.849L.057 23.97l6.277-1.448A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.885 0-3.645-.517-5.152-1.415l-.369-.219-3.825.881.908-3.729-.24-.382A9.961 9.961 0 012 12C2 6.486 6.486 2 12 2s10 4.486 10 10-4.486 10-10 10z"/></svg>
+        Escribinos por WhatsApp
+      </a>
+      <a href="https://www.instagram.com/sernatural_eg" target="_blank" rel="noopener" class="btn-ol">📸 Seguinos en Instagram</a>
+    </div>
+  </div>
+</section>
+
+<!-- SOCIAL -->
+<section class="social">
+  <div class="container">
+    <div class="social-head fade-in"><span class="tag">Redes sociales</span><h2 class="section-title">Encontranos también<br>en redes</h2></div>
+    <div class="social-links fade-in">
+      <a href="https://www.instagram.com/sernatural_eg?igsh=YnE0b3Q3MG8wbmRj" target="_blank" rel="noopener" class="social-pill sp-ig">📸 Instagram @sernatural_eg</a>
+      <a href="https://www.facebook.com/SerNatural.Eg/" target="_blank" rel="noopener" class="social-pill sp-fb">📘 Facebook SerNatural</a>
+      <a href="https://wa.me/message/SPJ4JO72GEPOB1" target="_blank" rel="noopener" class="social-pill sp-wa">💬 WhatsApp directo</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-logo"><img src="https://i.postimg.cc/W16Cb2t6/395740464-122094653600094688-9024125943526889344-n.jpg" alt="Ser Natural" /><span class="footer-brand-name">Ser <span>Natural</span></span></div>
+        <p class="footer-brand-desc">Belleza, cosmética y cuidado natural. Jabones artesanales y productos seleccionados para un estilo de vida más consciente.</p>
+        <p style="font-size:.78rem;color:rgba(237,231,220,.35)">⚠️ Los productos no reemplazan consulta médica.</p>
+      </div>
+      <div class="footer-col"><h4>Secciones</h4><ul><li><a href="#catalogo">Catálogo</a></li><li><a href="#galeria">Galería</a></li><li><a href="#nosotros">Nosotros</a></li><li><a href="#testimonios">Opiniones</a></li><li><a href="#envios">Envíos</a></li></ul></div>
+      <div class="footer-col"><h4>Contacto</h4><ul><li><a href="https://wa.me/message/SPJ4JO72GEPOB1" target="_blank" rel="noopener">WhatsApp</a></li><li><a href="https://www.instagram.com/sernatural_eg" target="_blank" rel="noopener">Instagram</a></li><li><a href="https://www.facebook.com/SerNatural.Eg/" target="_blank" rel="noopener">Facebook</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><p>© 2025 Ser Natural. Todos los derechos reservados.</p><p>Hecho con 💚 para un mundo más natural</p></div>
+  </div>
+</footer>
+
+<a href="https://wa.me/message/SPJ4JO72GEPOB1" target="_blank" rel="noopener" class="wa-float" aria-label="WhatsApp">
+  <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.122 1.532 5.849L.057 23.97l6.277-1.448A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.885 0-3.645-.517-5.152-1.415l-.369-.219-3.825.881.908-3.729-.24-.382A9.961 9.961 0 012 12C2 6.486 6.486 2 12 2s10 4.486 10 10-4.486 10-10 10z"/></svg>
+</a>
+
+<!-- ── CATÁLOGO DINÁMICO — lee products.json desde GitHub ── -->
+<script>
+  const GITHUB_RAW = 'https://raw.githubusercontent.com/tecnoinformaticapampa-max/ser-natural-web/main/products.json';
+
+  let allProducts  = [];
+  let activeFilter = 'todos';
+
+  const catLabels = { jabones:'Jabones artesanales', cosmetica:'Cosmética natural', bienestar:'Bienestar' };
+  const catEmoji  = { jabones:'🧼', cosmetica:'🌿', bienestar:'🍃' };
+
+  async function loadCatalog() {
+    const grid = document.getElementById('products-grid');
+    try {
+      // Cache-busting para que Cloudflare no sirva versión vieja
+      const res = await fetch(GITHUB_RAW + '?t=' + Date.now());
+      if (!res.ok) throw new Error('sin datos');
+      allProducts = await res.json();
+    } catch(e) {
+      allProducts = [];
+    }
+    renderProducts();
+  }
+
+  function renderProducts() {
+    const grid = document.getElementById('products-grid');
+    const filtered = activeFilter === 'todos'
+      ? allProducts
+      : allProducts.filter(p => p.categoria === activeFilter);
+
+    if (!filtered.length) {
+      grid.innerHTML = `<div class="catalog-empty"><div class="ce-icon">${activeFilter === 'todos' ? '🌿' : (catEmoji[activeFilter]||'📦')}</div><p>Próximamente nuevos productos en esta categoría.<br>Consultanos por WhatsApp.</p></div>`;
+      return;
+    }
+
+    grid.innerHTML = filtered.map(p => {
+      const imgEl = p.imagenURL
+        ? `<img src="${p.imagenURL}" alt="${p.nombre}" loading="lazy" />`
+        : `<div class="prod-img-placeholder">${catEmoji[p.categoria]||'📦'}<span class="ph-label">${catLabels[p.categoria]||''}</span></div>`;
+
+      const badgeEl = p.badge && p.badge !== ''
+        ? `<span class="prod-badge-tag ${p.badge}">${p.badge === 'nuevo' ? 'Nuevo' : 'Popular'}</span>`
+        : '';
+
+      const priceDisplay = p.precio === 'consultar'
+        ? `$ Consultar<span class="pn">Precio actualizado por WA</span>`
+        : `$ ${p.precio}`;
+
+      const waMsg = encodeURIComponent(`Hola! Me interesa el producto: *${p.nombre}* 🌿`);
+
+      return `
+        <div class="prod-card">
+          <div class="prod-img-wrap">
+            ${imgEl}
+            ${badgeEl}
+          </div>
+          <div class="prod-info">
+            <div class="prod-cat">${catLabels[p.categoria]||p.categoria}</div>
+            <div class="prod-name">${p.nombre}</div>
+            <div class="prod-desc">${p.descripcion}</div>
+            <div class="prod-footer">
+              <div class="prod-price">${priceDisplay}</div>
+              <a href="https://wa.me/message/SPJ4JO72GEPOB1?text=${waMsg}" target="_blank" rel="noopener" class="prod-wa">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.122 1.532 5.849L.057 23.97l6.277-1.448A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.885 0-3.645-.517-5.152-1.415l-.369-.219-3.825.881.908-3.729-.24-.382A9.961 9.961 0 012 12C2 6.486 6.486 2 12 2s10 4.486 10 10-4.486 10-10 10z"/></svg>
+                Pedir
+              </a>
+            </div>
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  window.filterCatalog = (cat, btn) => {
+    activeFilter = cat;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+    else {
+      const map = { todos:'fbtn-todos', jabones:'fbtn-jabones', cosmetica:'fbtn-cosmetica', bienestar:'fbtn-bienestar' };
+      const el = document.getElementById(map[cat]);
+      if (el) el.classList.add('active');
+    }
+    renderProducts();
+  };
+
+  loadCatalog();
+</script>
+
+<!-- JS general del sitio -->
+<script>
+  function toggleMenu(){ document.getElementById('drawer').classList.toggle('open'); }
+  window.addEventListener('scroll', () => {
+    document.getElementById('navbar').style.boxShadow = window.scrollY > 10 ? '0 2px 20px rgba(74,60,43,.10)' : 'none';
+  });
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); obs.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+
+  function submitForm() {
+    const name  = document.getElementById('f-name').value.trim();
+    const phone = document.getElementById('f-phone').value.trim();
+    const topic = document.getElementById('f-topic').value;
+    const msg   = document.getElementById('f-msg').value.trim();
+    if (!name) { alert('Por favor ingresá tu nombre.'); return; }
+    if (!msg)  { alert('Por favor escribí tu consulta.'); return; }
+    const waMsg = encodeURIComponent('Hola! Me contacto desde la web 🌿\n*Nombre:* '+name+'\n'+(phone?'*Teléfono:* '+phone+'\n':'')+(topic?'*Consulta sobre:* '+topic+'\n':'')+'*Mensaje:* '+msg);
+    window.open('https://wa.me/message/SPJ4JO72GEPOB1?text='+waMsg,'_blank');
+    document.getElementById('form-body').style.display = 'none';
+    document.getElementById('form-success').style.display = 'block';
+  }
+</script>
+</body>
+</html>

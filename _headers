@@ -1,0 +1,7 @@
+/products.json
+  Cache-Control: no-cache, no-store, must-revalidate
+  Access-Control-Allow-Origin: *
+
+/admin.html
+  X-Robots-Tag: noindex
+  Cache-Control: no-cache
