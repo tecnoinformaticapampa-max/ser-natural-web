@@ -289,6 +289,58 @@
       .nav-wa{display:none;}
       .gallery-grid{grid-template-columns:1fr;} .gallery-item.wide{grid-column:span 1;aspect-ratio:1/1;}
     }
+
+    /* ── QUANTITY SELECTOR ── */
+    .qty-row { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-top:10px; }
+    .qty-ctrl { display:flex; align-items:center; gap:0; border:1.5px solid var(--cream2); border-radius:100px; overflow:hidden; background:var(--cream); }
+    .qty-btn { background:none; border:none; width:30px; height:30px; font-size:1.1rem; cursor:pointer; color:var(--bark); font-weight:700; transition:background .15s; display:flex; align-items:center; justify-content:center; }
+    .qty-btn:hover { background:var(--cream2); }
+    .qty-num { font-size:.88rem; font-weight:600; color:var(--bark); min-width:22px; text-align:center; }
+    .btn-add-cart { display:inline-flex; align-items:center; gap:6px; background:var(--sage-dk); color:#fff; border:none; border-radius:100px; padding:8px 16px; font-size:.8rem; font-weight:600; cursor:pointer; font-family:var(--font-body); transition:background .2s,transform .15s; white-space:nowrap; }
+    .btn-add-cart:hover { background:var(--bark); transform:translateY(-1px); }
+    .btn-add-cart:disabled { opacity:.5; cursor:not-allowed; transform:none; }
+    .prod-footer-top { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-top:auto; }
+
+    /* ── CART BADGE on nav ── */
+    .cart-nav-btn { position:relative; background:none; border:1.5px solid var(--cream2); border-radius:100px; padding:7px 16px; font-size:.84rem; font-weight:500; cursor:pointer; font-family:var(--font-body); color:var(--bark); display:flex; align-items:center; gap:6px; transition:all .2s; }
+    .cart-nav-btn:hover { border-color:var(--sage); color:var(--sage-dk); }
+    .cart-badge { position:absolute; top:-6px; right:-6px; background:var(--sage-dk); color:#fff; border-radius:50%; width:18px; height:18px; font-size:.65rem; font-weight:700; display:flex; align-items:center; justify-content:center; display:none; }
+    .cart-badge.visible { display:flex; }
+
+    /* ── CART DRAWER ── */
+    .cart-overlay { position:fixed; inset:0; background:rgba(46,42,36,.45); z-index:300; opacity:0; pointer-events:none; transition:opacity .3s; }
+    .cart-overlay.open { opacity:1; pointer-events:all; }
+    .cart-drawer { position:fixed; top:0; right:0; bottom:0; width:min(420px,100vw); background:var(--white); z-index:301; transform:translateX(100%); transition:transform .35s cubic-bezier(.4,0,.2,1); display:flex; flex-direction:column; box-shadow:-8px 0 40px rgba(46,42,36,.18); }
+    .cart-drawer.open { transform:translateX(0); }
+    .cart-header { display:flex; align-items:center; justify-content:space-between; padding:20px 24px; border-bottom:1px solid var(--cream2); }
+    .cart-header h3 { font-family:var(--font-display); font-size:1.3rem; color:var(--bark); }
+    .cart-close { background:none; border:none; font-size:1.4rem; cursor:pointer; color:var(--text-lt); width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; transition:background .15s; }
+    .cart-close:hover { background:var(--cream2); }
+    .cart-items { flex:1; overflow-y:auto; padding:16px 24px; }
+    .cart-empty { text-align:center; padding:60px 24px; color:var(--text-lt); }
+    .cart-empty-icon { font-size:3rem; opacity:.4; margin-bottom:12px; }
+    .cart-item { display:grid; grid-template-columns:64px 1fr auto; gap:12px; align-items:center; padding:14px 0; border-bottom:1px solid var(--cream2); }
+    .cart-item:last-child { border-bottom:none; }
+    .cart-item-img { width:64px; height:64px; border-radius:10px; object-fit:cover; background:var(--cream2); display:flex; align-items:center; justify-content:center; font-size:1.6rem; overflow:hidden; }
+    .cart-item-img img { width:100%; height:100%; object-fit:cover; }
+    .cart-item-name { font-weight:500; font-size:.9rem; color:var(--bark); margin-bottom:4px; line-height:1.3; }
+    .cart-item-price { font-size:.82rem; color:var(--text-lt); }
+    .cart-item-price.consultar { font-size:.78rem; color:var(--sage-dk); font-style:italic; }
+    .cart-item-qty { display:flex; align-items:center; gap:0; border:1.5px solid var(--cream2); border-radius:100px; overflow:hidden; }
+    .cq-btn { background:none; border:none; width:28px; height:28px; font-size:1rem; cursor:pointer; color:var(--bark); font-weight:700; display:flex; align-items:center; justify-content:center; transition:background .15s; }
+    .cq-btn:hover { background:var(--cream2); }
+    .cq-num { font-size:.82rem; font-weight:600; color:var(--bark); min-width:20px; text-align:center; }
+    .cart-footer { padding:16px 24px 24px; border-top:1px solid var(--cream2); }
+    .cart-total-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; }
+    .cart-total-label { font-size:.88rem; color:var(--text-lt); }
+    .cart-total-amount { font-family:var(--font-display); font-size:1.4rem; color:var(--bark); font-weight:700; }
+    .cart-total-note { font-size:.75rem; color:var(--text-lt); margin-bottom:16px; }
+    .btn-checkout { width:100%; display:flex; align-items:center; justify-content:center; gap:10px; background:var(--wa); color:#fff; border:none; border-radius:100px; padding:16px 24px; font-size:1rem; font-weight:600; cursor:pointer; font-family:var(--font-body); transition:background .2s,transform .15s; box-shadow:0 4px 16px rgba(37,211,102,.35); margin-bottom:10px; }
+    .btn-checkout:hover { background:var(--wa-dk); transform:translateY(-2px); }
+    .btn-clear-cart { width:100%; background:none; border:1.5px solid var(--cream2); color:var(--text-lt); border-radius:100px; padding:11px; font-size:.85rem; font-weight:500; cursor:pointer; font-family:var(--font-body); transition:all .2s; }
+    .btn-clear-cart:hover { border-color:var(--bark-lt); color:var(--bark); }
+    .consultar-warning { background:rgba(201,169,122,.15); border:1px solid rgba(201,169,122,.4); border-radius:var(--r-sm); padding:10px 14px; font-size:.78rem; color:var(--bark); margin-bottom:14px; line-height:1.5; display:none; }
+    .consultar-warning.show { display:block; }
   </style>
 </head>
 <body>
@@ -311,6 +363,10 @@
       <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.122 1.532 5.849L.057 23.97l6.277-1.448A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.885 0-3.645-.517-5.152-1.415l-.369-.219-3.825.881.908-3.729-.24-.382A9.961 9.961 0 012 12C2 6.486 6.486 2 12 2s10 4.486 10 10-4.486 10-10 10z"/></svg>
       Consultar
     </a>
+    <button class="cart-nav-btn" onclick="openCart()" aria-label="Carrito">
+      🛒 Carrito
+      <span class="cart-badge" id="cart-badge">0</span>
+    </button>
     <button class="hamburger" id="ham" aria-label="Menú" onclick="toggleMenu()"><span></span><span></span><span></span></button>
   </div>
   <div class="nav-drawer" id="drawer">
@@ -412,26 +468,6 @@
   </div>
 </section>
 
-<!-- GALLERY -->
-<section class="gallery" id="galeria">
-  <div class="container">
-    <div class="gallery-head fade-in">
-      <span class="tag">Galería</span>
-      <h2 class="section-title">Nuestros productos<br>en detalle</h2>
-      <p class="section-sub" style="margin:10px auto 0">Subí tus fotos a Postimages y reemplazamos los placeholders con tus imágenes reales.</p>
-    </div>
-    <div class="gallery-grid fade-in">
-      <div class="gallery-item tall"><div class="gallery-placeholder tall"><span class="gp-icon">📸</span><span class="gp-label">Foto destacada</span></div><div class="gallery-overlay"></div></div>
-      <div class="gallery-item"><div class="gallery-placeholder"><span class="gp-icon">📸</span><span class="gp-label">Foto producto 2</span></div><div class="gallery-overlay"></div></div>
-      <div class="gallery-item"><div class="gallery-placeholder"><span class="gp-icon">📸</span><span class="gp-label">Foto producto 3</span></div><div class="gallery-overlay"></div></div>
-      <div class="gallery-item wide"><div class="gallery-placeholder wide"><span class="gp-icon">📸</span><span class="gp-label">Foto banner / proceso artesanal</span></div><div class="gallery-overlay"></div></div>
-      <div class="gallery-item"><div class="gallery-placeholder"><span class="gp-icon">📸</span><span class="gp-label">Foto producto 5</span></div><div class="gallery-overlay"></div></div>
-    </div>
-    <div style="text-align:center;margin-top:24px">
-      <span class="gallery-note">📷 Compartí los links de tus fotos y los aplicamos al instante.</span>
-    </div>
-  </div>
-</section>
 
 <!-- ABOUT -->
 <section id="nosotros">
@@ -452,6 +488,27 @@
         <div class="value-item"><div class="value-icon">💚</div><div class="value-text"><strong>Equilibrio cuerpo–mente</strong><span>Promovemos el cuidado integral de la persona.</span></div></div>
         <div class="value-item"><div class="value-icon">🌎</div><div class="value-text"><strong>Respeto por el entorno</strong><span>Productos que cuidan a las personas y al planeta.</span></div></div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="gallery" id="galeria">
+  <div class="container">
+    <div class="gallery-head fade-in">
+      <span class="tag">Galería</span>
+      <h2 class="section-title">Nuestros productos<br>en detalle</h2>
+      <p class="section-sub" style="margin:10px auto 0">Subí tus fotos a Postimages y reemplazamos los placeholders con tus imágenes reales.</p>
+    </div>
+    <div class="gallery-grid fade-in">
+      <div class="gallery-item tall"><div class="gallery-placeholder tall"><span class="gp-icon">📸</span><span class="gp-label">Foto destacada</span></div><div class="gallery-overlay"></div></div>
+      <div class="gallery-item"><div class="gallery-placeholder"><span class="gp-icon">📸</span><span class="gp-label">Foto producto 2</span></div><div class="gallery-overlay"></div></div>
+      <div class="gallery-item"><div class="gallery-placeholder"><span class="gp-icon">📸</span><span class="gp-label">Foto producto 3</span></div><div class="gallery-overlay"></div></div>
+      <div class="gallery-item wide"><div class="gallery-placeholder wide"><span class="gp-icon">📸</span><span class="gp-label">Foto banner / proceso artesanal</span></div><div class="gallery-overlay"></div></div>
+      <div class="gallery-item"><div class="gallery-placeholder"><span class="gp-icon">📸</span><span class="gp-label">Foto producto 5</span></div><div class="gallery-overlay"></div></div>
+    </div>
+    <div style="text-align:center;margin-top:24px">
+      <span class="gallery-note">📷 Compartí los links de tus fotos y los aplicamos al instante.</span>
     </div>
   </div>
 </section>
@@ -598,26 +655,25 @@
   <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.122 1.532 5.849L.057 23.97l6.277-1.448A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.885 0-3.645-.517-5.152-1.415l-.369-.219-3.825.881.908-3.729-.24-.382A9.961 9.961 0 012 12C2 6.486 6.486 2 12 2s10 4.486 10 10-4.486 10-10 10z"/></svg>
 </a>
 
-<!-- ── CATÁLOGO DINÁMICO — lee products.json desde GitHub ── -->
+<!-- ── CATÁLOGO + CARRITO ── -->
 <script>
   const GITHUB_RAW = 'https://raw.githubusercontent.com/tecnoinformaticapampa-max/ser-natural-web/main/products.json';
+  const WA_NUMBER  = 'SPJ4JO72GEPOB1'; // link de wa.me
 
   let allProducts  = [];
   let activeFilter = 'todos';
+  let cart         = {}; // { productId: { product, qty } }
 
   const catLabels = { jabones:'Jabones artesanales', cosmetica:'Cosmética natural', bienestar:'Bienestar' };
   const catEmoji  = { jabones:'🧼', cosmetica:'🌿', bienestar:'🍃' };
 
+  // ── CATALOG LOAD ──
   async function loadCatalog() {
-    const grid = document.getElementById('products-grid');
     try {
-      // Cache-busting para que Cloudflare no sirva versión vieja
       const res = await fetch(GITHUB_RAW + '?t=' + Date.now());
       if (!res.ok) throw new Error('sin datos');
       allProducts = await res.json();
-    } catch(e) {
-      allProducts = [];
-    }
+    } catch(e) { allProducts = []; }
     renderProducts();
   }
 
@@ -642,13 +698,14 @@
         : '';
 
       const priceDisplay = p.precio === 'consultar'
-        ? `$ Consultar<span class="pn">Precio actualizado por WA</span>`
-        : `$ ${p.precio}`;
+        ? `<span style="font-size:.88rem;color:var(--sage-dk);font-weight:600">$ Consultar</span>`
+        : `$ ${Number(p.precio).toLocaleString('es-AR')}`;
 
-      const waMsg = encodeURIComponent(`Hola! Me interesa el producto: *${p.nombre}* 🌿`);
+      const inCart = cart[p.id];
+      const qty    = inCart ? inCart.qty : 1;
 
       return `
-        <div class="prod-card">
+        <div class="prod-card" id="card-${p.id}">
           <div class="prod-img-wrap">
             ${imgEl}
             ${badgeEl}
@@ -657,18 +714,169 @@
             <div class="prod-cat">${catLabels[p.categoria]||p.categoria}</div>
             <div class="prod-name">${p.nombre}</div>
             <div class="prod-desc">${p.descripcion}</div>
-            <div class="prod-footer">
+            <div class="prod-footer-top">
               <div class="prod-price">${priceDisplay}</div>
-              <a href="https://wa.me/message/SPJ4JO72GEPOB1?text=${waMsg}" target="_blank" rel="noopener" class="prod-wa">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.122 1.532 5.849L.057 23.97l6.277-1.448A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.885 0-3.645-.517-5.152-1.415l-.369-.219-3.825.881.908-3.729-.24-.382A9.961 9.961 0 012 12C2 6.486 6.486 2 12 2s10 4.486 10 10-4.486 10-10 10z"/></svg>
-                Pedir
-              </a>
+            </div>
+            <div class="qty-row">
+              <div class="qty-ctrl">
+                <button class="qty-btn" onclick="changeQty('${p.id}',-1)">−</button>
+                <span class="qty-num" id="qty-${p.id}">${qty}</span>
+                <button class="qty-btn" onclick="changeQty('${p.id}',1)">+</button>
+              </div>
+              <button class="btn-add-cart" id="addbtn-${p.id}" onclick="addToCart('${p.id}')">
+                🛒 ${inCart ? 'En carrito' : 'Agregar'}
+              </button>
             </div>
           </div>
         </div>`;
     }).join('');
   }
 
+  // ── QUANTITY ON CARD ──
+  const cardQty = {}; // local qty before adding to cart
+  window.changeQty = (id, delta) => {
+    if (!cardQty[id]) cardQty[id] = 1;
+    cardQty[id] = Math.max(1, cardQty[id] + delta);
+    const el = document.getElementById('qty-' + id);
+    if (el) el.textContent = cardQty[id];
+  };
+
+  // ── ADD TO CART ──
+  window.addToCart = (id) => {
+    const p   = allProducts.find(x => x.id === id);
+    if (!p) return;
+    const qty = cardQty[id] || 1;
+    if (cart[id]) {
+      cart[id].qty += qty;
+    } else {
+      cart[id] = { product: p, qty };
+    }
+    cardQty[id] = 1;
+    const el = document.getElementById('qty-' + id);
+    if (el) el.textContent = 1;
+    const btn = document.getElementById('addbtn-' + id);
+    if (btn) { btn.textContent = '✓ En carrito'; btn.style.background = 'var(--sage)'; }
+    updateCartUI();
+    // Brief shake animation on cart button
+    const cb = document.getElementById('cart-badge');
+    cb.style.transform = 'scale(1.4)';
+    setTimeout(() => cb.style.transform = '', 200);
+  };
+
+  // ── CART UI ──
+  function updateCartUI() {
+    const items   = Object.values(cart);
+    const total   = items.reduce((s, i) => i.product.precio !== 'consultar' ? s + Number(i.product.precio) * i.qty : s, 0);
+    const hasConsultar = items.some(i => i.product.precio === 'consultar');
+    const count   = items.reduce((s, i) => s + i.qty, 0);
+
+    // badge
+    const badge = document.getElementById('cart-badge');
+    badge.textContent = count;
+    badge.classList.toggle('visible', count > 0);
+
+    // footer
+    document.getElementById('cart-footer').style.display = items.length ? 'block' : 'none';
+
+    // total
+    document.getElementById('cart-total').textContent = total > 0
+      ? '$ ' + total.toLocaleString('es-AR')
+      : hasConsultar ? 'A confirmar' : '$ 0';
+
+    // consultar warning
+    document.getElementById('consultar-warn').classList.toggle('show', hasConsultar);
+
+    // items list
+    const el = document.getElementById('cart-items');
+    if (!items.length) {
+      el.innerHTML = '<div class="cart-empty"><div class="cart-empty-icon">🛒</div><p>Tu carrito está vacío.<br>Agregá productos del catálogo.</p></div>';
+      return;
+    }
+    el.innerHTML = items.map(({ product: p, qty }) => {
+      const imgEl = p.imagenURL
+        ? `<div class="cart-item-img"><img src="${p.imagenURL}" alt="${p.nombre}" /></div>`
+        : `<div class="cart-item-img">${catEmoji[p.categoria]||'📦'}</div>`;
+      const priceEl = p.precio === 'consultar'
+        ? `<div class="cart-item-price consultar">Precio a consultar</div>`
+        : `<div class="cart-item-price">$ ${(Number(p.precio) * qty).toLocaleString('es-AR')} (${qty} × $ ${Number(p.precio).toLocaleString('es-AR')})</div>`;
+      return `
+        <div class="cart-item">
+          ${imgEl}
+          <div>
+            <div class="cart-item-name">${p.nombre}</div>
+            ${priceEl}
+          </div>
+          <div class="cart-item-qty">
+            <button class="cq-btn" onclick="cartChangeQty('${p.id}',-1)">−</button>
+            <span class="cq-num">${qty}</span>
+            <button class="cq-btn" onclick="cartChangeQty('${p.id}',1)">+</button>
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  window.cartChangeQty = (id, delta) => {
+    if (!cart[id]) return;
+    cart[id].qty = Math.max(0, cart[id].qty + delta);
+    if (cart[id].qty === 0) {
+      delete cart[id];
+      // reset card button
+      const btn = document.getElementById('addbtn-' + id);
+      if (btn) { btn.textContent = '🛒 Agregar'; btn.style.background = ''; }
+    }
+    updateCartUI();
+  };
+
+  window.clearCart = () => {
+    cart = {};
+    // reset all add buttons
+    allProducts.forEach(p => {
+      const btn = document.getElementById('addbtn-' + p.id);
+      if (btn) { btn.textContent = '🛒 Agregar'; btn.style.background = ''; }
+      const qel = document.getElementById('qty-' + p.id);
+      if (qel) qel.textContent = 1;
+    });
+    cardQty = {};
+    updateCartUI();
+  };
+
+  // ── WHATSAPP CHECKOUT ──
+  window.sendToWhatsApp = () => {
+    const items = Object.values(cart);
+    if (!items.length) return;
+    const total = items.reduce((s, i) => i.product.precio !== 'consultar' ? s + Number(i.product.precio) * i.qty : s, 0);
+    const hasConsultar = items.some(i => i.product.precio === 'consultar');
+
+    let msg = '¡Hola! Quiero hacer el siguiente pedido 🌿\n\n';
+    items.forEach(({ product: p, qty }) => {
+      if (p.precio === 'consultar') {
+        msg += `• ${p.nombre} x${qty} — Precio a consultar\n`;
+      } else {
+        msg += `• ${p.nombre} x${qty} — $ ${(Number(p.precio) * qty).toLocaleString('es-AR')}\n`;
+      }
+    });
+    msg += '\n';
+    if (total > 0) msg += `Total estimado: $ ${total.toLocaleString('es-AR')}\n`;
+    if (hasConsultar) msg += '(Algunos precios quedan a confirmar)\n';
+    msg += '\nPor favor confirmame disponibilidad y forma de pago. ¡Gracias!';
+
+    window.open('https://wa.me/message/' + WA_NUMBER + '?text=' + encodeURIComponent(msg), '_blank');
+  };
+
+  // ── CART OPEN/CLOSE ──
+  window.openCart = () => {
+    document.getElementById('cart-drawer').classList.add('open');
+    document.getElementById('cart-overlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+    updateCartUI();
+  };
+  window.closeCart = () => {
+    document.getElementById('cart-drawer').classList.remove('open');
+    document.getElementById('cart-overlay').classList.remove('open');
+    document.body.style.overflow = '';
+  };
+
+  // ── FILTER ──
   window.filterCatalog = (cat, btn) => {
     activeFilter = cat;
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -708,5 +916,38 @@
     document.getElementById('form-success').style.display = 'block';
   }
 </script>
+
+<!-- CART OVERLAY -->
+<div class="cart-overlay" id="cart-overlay" onclick="closeCart()"></div>
+
+<!-- CART DRAWER -->
+<div class="cart-drawer" id="cart-drawer">
+  <div class="cart-header">
+    <h3>🛒 Tu carrito</h3>
+    <button class="cart-close" onclick="closeCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cart-items">
+    <div class="cart-empty">
+      <div class="cart-empty-icon">🛒</div>
+      <p>Tu carrito está vacío.<br>Agregá productos del catálogo.</p>
+    </div>
+  </div>
+  <div class="cart-footer" id="cart-footer" style="display:none">
+    <div class="cart-total-row">
+      <span class="cart-total-label">Total estimado</span>
+      <span class="cart-total-amount" id="cart-total">$ 0</span>
+    </div>
+    <p class="cart-total-note" id="cart-note">* Los precios pueden actualizarse. Confirmamos al recibir tu pedido.</p>
+    <div class="consultar-warning" id="consultar-warn">
+      ⚠️ Algunos productos tienen precio a consultar. Te lo confirmamos por WhatsApp al recibir el pedido.
+    </div>
+    <button class="btn-checkout" onclick="sendToWhatsApp()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.122 1.532 5.849L.057 23.97l6.277-1.448A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.885 0-3.645-.517-5.152-1.415l-.369-.219-3.825.881.908-3.729-.24-.382A9.961 9.961 0 012 12C2 6.486 6.486 2 12 2s10 4.486 10 10-4.486 10-10 10z"/></svg>
+      Hacer pedido por WhatsApp
+    </button>
+    <button class="btn-clear-cart" onclick="clearCart()">Vaciar carrito</button>
+  </div>
+</div>
+
 </body>
 </html>
