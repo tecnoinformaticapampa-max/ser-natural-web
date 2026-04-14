@@ -1,1 +1,13 @@
-[]
+[
+  {
+    "id": "p_1776130169696",
+    "nombre": "Jabón de Lavanda y Avena",
+    "categoria": "jabones",
+    "descripcion": "Jabón artesanal elaborado con aceite de lavanda y avena colloidal. Hidrata y suaviza la piel.",
+    "precio": "2500",
+    "badge": "nuevo",
+    "imagenURL": "https://res.cloudinary.com/ditz4ufas/image/upload/v1776130170/ser-natural/vipp828zrjoi4aidy4an.jpg",
+    "createdAt": "2026-04-14T01:29:29.696Z",
+    "updatedAt": "2026-04-14T01:29:29.696Z"
+  }
+]
