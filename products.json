@@ -9,16 +9,5 @@
     "imagenURL": "https://res.cloudinary.com/ditz4ufas/image/upload/v1776518495/ser-natural/ewzwiatbq4gjqjb7fh2k.jpg",
     "createdAt": "2026-04-18T13:21:36.206Z",
     "updatedAt": "2026-04-18T13:21:36.206Z"
-  },
-  {
-    "id": "p_1776130169696",
-    "nombre": "JabÃÂ³n de Lavanda y Avena",
-    "categoria": "jabones",
-    "descripcion": "JabÃÂ³n artesanal elaborado con aceite de lavanda y avena colloidal. Hidrata y suaviza la piel.",
-    "precio": "2500",
-    "badge": "nuevo",
-    "imagenURL": "https://res.cloudinary.com/ditz4ufas/image/upload/v1776130170/ser-natural/vipp828zrjoi4aidy4an.jpg",
-    "createdAt": "2026-04-14T01:29:29.696Z",
-    "updatedAt": "2026-04-14T01:29:29.696Z"
   }
 ]
