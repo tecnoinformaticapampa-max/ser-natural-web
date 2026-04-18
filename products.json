@@ -1,20 +1,9 @@
 [
   {
-    "id": "p_1776130325205",
-    "nombre": "Te de Hierbas Relajante",
-    "categoria": "bienestar",
-    "descripcion": "Blend de hierbas naturales con manzanilla, melisa y lavanda. Ideal para el descanso nocturno.",
-    "precio": "consultar",
-    "badge": "",
-    "imagenURL": "https://res.cloudinary.com/ditz4ufas/image/upload/v1776130325/ser-natural/fpdscckxje9ghfkkjtsh.jpg",
-    "createdAt": "2026-04-14T01:32:05.204Z",
-    "updatedAt": "2026-04-14T01:32:05.204Z"
-  },
-  {
     "id": "p_1776130235110",
     "nombre": "Crema Hidratante Natural",
     "categoria": "cosmetica",
-    "descripcion": "Crema nutritiva con manteca de karité y aceite de rosa mosqueta. Para piel seca y sensible.",
+    "descripcion": "Crema nutritiva con manteca de karitÃ© y aceite de rosa mosqueta. Para piel seca y sensible.",
     "precio": "3800",
     "badge": "popular",
     "imagenURL": "https://res.cloudinary.com/ditz4ufas/image/upload/v1776130235/ser-natural/q492kuecd9qvt1x5edja.jpg",
@@ -23,9 +12,9 @@
   },
   {
     "id": "p_1776130169696",
-    "nombre": "Jabón de Lavanda y Avena",
+    "nombre": "JabÃ³n de Lavanda y Avena",
     "categoria": "jabones",
-    "descripcion": "Jabón artesanal elaborado con aceite de lavanda y avena colloidal. Hidrata y suaviza la piel.",
+    "descripcion": "JabÃ³n artesanal elaborado con aceite de lavanda y avena colloidal. Hidrata y suaviza la piel.",
     "precio": "2500",
     "badge": "nuevo",
     "imagenURL": "https://res.cloudinary.com/ditz4ufas/image/upload/v1776130170/ser-natural/vipp828zrjoi4aidy4an.jpg",
