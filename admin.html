@@ -161,6 +161,38 @@
       main { padding: 20px 16px; }
       header { padding: 0 16px; }
     }
+
+    /* ── GALERÍA ADMIN ── */
+    .section-divider { border:none; border-top:2px solid var(--cream2); margin:48px 0 36px; }
+    .gallery-admin-tabs { display:flex; gap:8px; margin-bottom:28px; flex-wrap:wrap; }
+    .gtab-btn {
+      padding:8px 20px; border-radius:100px; font-size:.82rem; font-weight:500;
+      cursor:pointer; border:1.5px solid var(--cream2); background:var(--white);
+      font-family:var(--font-body); transition:all .2s; color:var(--text-lt);
+    }
+    .gtab-btn.active { background:var(--sage-dk); border-color:var(--sage-dk); color:#fff; }
+    .gallery-upload-area {
+      border:2px dashed var(--cream2); border-radius:12px; padding:24px;
+      text-align:center; cursor:pointer; transition:border-color .2s, background .2s;
+      position:relative; margin-bottom:16px;
+    }
+    .gallery-upload-area:hover { border-color:var(--sage); background:rgba(122,158,126,.05); }
+    .gallery-upload-area input[type=file] { position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%; }
+    #gal-img-preview { display:none; width:100%; max-height:180px; object-fit:cover; border-radius:10px; margin-top:10px; }
+    .gallery-grid-admin { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:24px; }
+    .gallery-admin-item { position:relative; border-radius:10px; overflow:hidden; background:var(--cream2); aspect-ratio:1/1; }
+    .gallery-admin-item img { width:100%; height:100%; object-fit:cover; }
+    .gallery-admin-caption { font-size:.75rem; color:var(--text-lt); padding:6px 8px; background:var(--white); border-top:1px solid var(--cream2); line-height:1.4; }
+    .gallery-admin-del {
+      position:absolute; top:6px; right:6px;
+      background:rgba(224,82,82,.9); color:#fff; border:none;
+      border-radius:50%; width:26px; height:26px; cursor:pointer;
+      font-size:.85rem; display:flex; align-items:center; justify-content:center;
+      transition:background .2s;
+    }
+    .gallery-admin-del:hover { background:var(--red); }
+    .gallery-empty-admin { grid-column:1/-1; text-align:center; padding:40px 24px; color:var(--text-lt); font-size:.88rem; }
+    @media(max-width:768px){ .gallery-grid-admin{ grid-template-columns:1fr 1fr; } }
   </style>
 </head>
 <body>
@@ -170,7 +202,7 @@
   <div class="login-card">
     <img src="https://i.postimg.cc/W16Cb2t6/395740464-122094653600094688-9024125943526889344-n.jpg" alt="logo" class="login-logo" />
     <div class="login-title">Panel Admin</div>
-    <div class="login-sub">Ser Natural — Gestión de productos</div>
+    <div class="login-sub">SerNatural — Gestión de productos</div>
     <input type="password" id="login-pass" placeholder="Contraseña" onkeydown="if(event.key==='Enter')doLogin()" />
     <button class="login-btn" onclick="doLogin()">Ingresar</button>
     <div class="login-error" id="login-err"></div>
@@ -182,7 +214,7 @@
   <header>
     <div class="header-left">
       <img src="https://i.postimg.cc/W16Cb2t6/395740464-122094653600094688-9024125943526889344-n.jpg" alt="logo" class="header-logo" />
-      <span class="header-title">Ser <span>Natural</span></span>
+      <span class="header-title">Ser<span>Natural</span></span>
       <span class="header-badge">Panel Admin</span>
     </div>
     <button class="logout-btn" onclick="doLogout()">Cerrar sesión</button>
@@ -272,7 +304,58 @@
         </div>
       </div>
     </div>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- SECCIÓN GALERÍA                              -->
+    <!-- ═══════════════════════════════════════════ -->
+    <hr class="section-divider" />
+
+    <div class="section-header">
+      <h2>📸 Nuestra Historia — Galería</h2>
+    </div>
+
+    <!-- Pestañas de categoría -->
+    <div class="gallery-admin-tabs">
+      <button class="gtab-btn active" onclick="setGalleryTab('inicio', this)">🌱 Inicio</button>
+      <button class="gtab-btn" onclick="setGalleryTab('proceso', this)">⚗️ El Proceso</button>
+      <button class="gtab-btn" onclick="setGalleryTab('final', this)">🎁 El Producto Final</button>
+    </div>
+
+    <!-- Formulario de carga -->
+    <div class="form-card">
+      <div class="form-grid">
+        <div class="form-group full">
+          <label>Imagen para <span id="gal-tab-label" style="color:var(--sage-dk)">Inicio</span></label>
+          <div class="gallery-upload-area" id="gal-drop-area">
+            <input type="file" id="gal-img" accept="image/*" onchange="galPreviewImage(this)" />
+            <div id="gal-upload-icon" style="font-size:2rem;margin-bottom:6px">📷</div>
+            <div id="gal-upload-text" style="font-size:.85rem;color:var(--text-lt)">
+              <strong style="color:var(--sage-dk)">Hacé clic o arrastrá</strong> una imagen aquí<br>
+              <span style="font-size:.75rem">JPG, PNG, WEBP — máx. 5MB</span>
+            </div>
+            <img id="gal-img-preview" alt="preview" />
+          </div>
+        </div>
+        <div class="form-group full">
+          <label>Descripción / Texto de la foto <span style="color:var(--text-lt);font-weight:400;font-size:.75rem">(opcional — aparece al pasar el mouse)</span></label>
+          <input type="text" id="gal-caption" placeholder="Ej: Seleccionando los mejores ingredientes naturales…" maxlength="120" />
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="btn-save" id="gal-btn-save" onclick="saveGalleryPhoto()">Guardar foto</button>
+      </div>
+    </div>
+
+    <!-- Grid de fotos existentes -->
+    <div class="section-header" style="margin-top:8px">
+      <h2>Fotos cargadas — <span id="gal-count-label" style="color:var(--sage-dk)">Inicio</span> (<span id="gal-count">0</span>)</h2>
+    </div>
+    <div class="gallery-grid-admin" id="gallery-admin-grid">
+      <div class="gallery-empty-admin">No hay fotos en esta categoría. ¡Subí la primera!</div>
+    </div>
+
   </main>
+
 </div>
 
 <div id="toast"></div>
@@ -556,6 +639,131 @@
     clearTimeout(toastTimer);
     toastTimer = setTimeout(()=>{ t.className=''; }, 3500);
   }
+
+
+  // ── GALERÍA ADMIN ─────────────────────────────────────────
+  let galleryData      = { inicio: [], proceso: [], final: [] };
+  let activeGalleryTab = 'inicio';
+  let galFileSHA       = null;
+  let galSelectedFile  = null;
+
+  const tabLabels = { inicio: 'Inicio', proceso: 'El Proceso', final: 'El Producto Final' };
+
+  async function loadGalleryAdmin() {
+    try {
+      const res = await fetch(`${WORKER_URL}/gallery`, { cache: 'no-store' });
+      if (!res.ok) throw new Error('sin datos');
+      const data = await res.json();
+      galFileSHA  = data.sha;
+      galleryData = data.gallery || { inicio: [], proceso: [], final: [] };
+      if (!galleryData.inicio)  galleryData.inicio  = [];
+      if (!galleryData.proceso) galleryData.proceso = [];
+      if (!galleryData.final)   galleryData.final   = [];
+    } catch(e) {
+      galleryData = { inicio: [], proceso: [], final: [] };
+    }
+    renderGalleryAdmin(activeGalleryTab);
+  }
+
+  window.setGalleryTab = (tab, btn) => {
+    activeGalleryTab = tab;
+    document.querySelectorAll('.gtab-btn').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+    document.getElementById('gal-tab-label').textContent   = tabLabels[tab];
+    document.getElementById('gal-count-label').textContent = tabLabels[tab];
+    galResetForm();
+    renderGalleryAdmin(tab);
+  };
+
+  function renderGalleryAdmin(tab) {
+    const grid  = document.getElementById('gallery-admin-grid');
+    const items = galleryData[tab] || [];
+    document.getElementById('gal-count').textContent = items.length;
+    if (!items.length) {
+      grid.innerHTML = '<div class="gallery-empty-admin">No hay fotos en esta categoría. ¡Subí la primera!</div>';
+      return;
+    }
+    grid.innerHTML = items.map((item, idx) => `
+      <div class="gallery-admin-item">
+        <img src="${item.url}" alt="${item.caption || ''}" />
+        <button class="gallery-admin-del" onclick="deleteGalleryPhoto('${tab}',${idx})" title="Eliminar">✕</button>
+        ${item.caption ? `<div class="gallery-admin-caption">${item.caption}</div>` : ''}
+      </div>`).join('');
+  }
+
+  window.galPreviewImage = (input) => {
+    const file = input.files[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) { showToast('La imagen no puede superar 5MB', true); input.value=''; return; }
+    galSelectedFile = file;
+    const reader = new FileReader();
+    reader.onload = e => {
+      const prev = document.getElementById('gal-img-preview');
+      prev.src = e.target.result; prev.style.display = 'block';
+      document.getElementById('gal-upload-icon').style.display = 'none';
+      document.getElementById('gal-upload-text').style.display = 'none';
+    };
+    reader.readAsDataURL(file);
+  };
+
+  window.saveGalleryPhoto = async () => {
+    if (!galSelectedFile) { showToast('Seleccioná una imagen primero.', true); return; }
+    const caption = document.getElementById('gal-caption').value.trim();
+    const btn     = document.getElementById('gal-btn-save');
+    btn.disabled  = true;
+    btn.innerHTML = '<span class="spinner"></span>Guardando…';
+    try {
+      const imageURL = await uploadToCloudinary(galSelectedFile);
+      galleryData[activeGalleryTab].push({ url: imageURL, caption, addedAt: new Date().toISOString() });
+      await saveGalleryToWorker();
+      renderGalleryAdmin(activeGalleryTab);
+      galResetForm();
+      showToast('✅ Foto agregada a la galería');
+    } catch(e) {
+      showToast('Error: ' + e.message, true);
+    } finally {
+      btn.disabled  = false;
+      btn.innerHTML = 'Guardar foto';
+    }
+  };
+
+  window.deleteGalleryPhoto = async (tab, idx) => {
+    if (!confirm('¿Eliminar esta foto de la galería?')) return;
+    galleryData[tab].splice(idx, 1);
+    try {
+      await saveGalleryToWorker();
+      renderGalleryAdmin(tab);
+      showToast('🗑 Foto eliminada');
+    } catch(e) { showToast('Error al eliminar: ' + e.message, true); }
+  };
+
+  async function saveGalleryToWorker() {
+    const res = await fetch(`${WORKER_URL}/gallery`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'X-Admin-Key': ADMIN_KEY },
+      body: JSON.stringify({ gallery: galleryData, sha: galFileSHA }),
+    });
+    if (!res.ok) { const e = await res.json(); throw new Error(e.error || 'Error al guardar'); }
+    const data = await res.json();
+    galFileSHA  = data.sha;
+  }
+
+  function galResetForm() {
+    galSelectedFile = null;
+    const fi = document.getElementById('gal-img');
+    if (fi) fi.value = '';
+    const cap = document.getElementById('gal-caption');
+    if (cap) cap.value = '';
+    const prev = document.getElementById('gal-img-preview');
+    if (prev) { prev.src = ''; prev.style.display = 'none'; }
+    const icon = document.getElementById('gal-upload-icon');
+    const txt  = document.getElementById('gal-upload-text');
+    if (icon) icon.style.display = 'block';
+    if (txt)  txt.style.display  = 'block';
+  }
+
+  loadGalleryAdmin();
+  // ────────────────────────────────────────────────────────────
 
   // Drag & drop
   const dropArea = document.getElementById('drop-area');
