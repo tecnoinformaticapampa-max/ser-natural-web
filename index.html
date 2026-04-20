@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ser Natural — Productos Naturales</title>
-  <meta name="description" content="Belleza, cosmética y cuidado natural. Jabones artesanales. Productos seleccionados para un estilo de vida consciente." />
+  <title>SerNatural — Productos Naturales</title>
+  <meta name="description" content="SerNatural — Cosmética artesanal y productos naturales. Jabones artesanales. Productos seleccionados para un estilo de vida consciente." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
@@ -132,23 +132,37 @@
     .catalog-empty { grid-column:1/-1; text-align:center; padding:64px 24px; color:var(--text-lt); }
     .catalog-empty .ce-icon { font-size:3rem; margin-bottom:12px; opacity:.45; }
 
-    /* GALLERY */
+
+    /* ── GALLERY DINÁMICA ── */
     .gallery { background:var(--cream2); }
     .gallery-head { text-align:center; margin-bottom:44px; }
-    .gallery-grid { display:grid; grid-template-columns:repeat(3,1fr); grid-template-rows:auto auto; gap:16px; }
-    .gallery-item { border-radius:var(--r-md); overflow:hidden; background:var(--cream); position:relative; cursor:pointer; }
-    .gallery-item img { width:100%; height:100%; object-fit:cover; display:block; transition:transform .4s; }
-    .gallery-item:hover img { transform:scale(1.05); }
-    .gallery-item.tall { grid-row:span 2; }
-    .gallery-item.wide { grid-column:span 2; }
-    .gallery-placeholder { aspect-ratio:1/1; background:linear-gradient(135deg,var(--cream2),var(--cream)); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; color:var(--text-lt); }
-    .gallery-placeholder.tall { aspect-ratio:unset; min-height:360px; }
-    .gallery-placeholder.wide { aspect-ratio:2/1; }
-    .gp-icon { font-size:2.5rem; opacity:.45; }
-    .gp-label { font-size:.75rem; opacity:.55; text-transform:uppercase; letter-spacing:.1em; }
-    .gallery-overlay { position:absolute; inset:0; background:rgba(78,114,85,0); transition:background .3s; }
-    .gallery-item:hover .gallery-overlay { background:rgba(78,114,85,.22); }
-    .gallery-note { text-align:center; margin-top:24px; font-size:.87rem; color:var(--text-lt); padding:14px 24px; background:var(--white); border-radius:var(--r-md); border:1px dashed var(--sand); display:inline-block; }
+    .gallery-tabs { display:flex; justify-content:center; gap:0; margin-bottom:44px; flex-wrap:wrap; }
+    .gallery-tab {
+      background:var(--white); border:1.5px solid var(--cream2);
+      padding:10px 28px; font-size:.82rem; font-weight:500; cursor:pointer;
+      font-family:var(--font-body); color:var(--text-lt);
+      transition:all .2s; margin:0;
+    }
+    .gallery-tab:first-child { border-radius:var(--r-sm) 0 0 var(--r-sm); }
+    .gallery-tab:last-child  { border-radius:0 var(--r-sm) var(--r-sm) 0; }
+    .gallery-tab.active { background:var(--sage-dk); border-color:var(--sage-dk); color:#fff; }
+    .gallery-tab:not(:first-child) { border-left:none; }
+    .gallery-tab.active + .gallery-tab { border-left:1.5px solid var(--cream2); }
+    .gallery-tab-intro { text-align:center; margin-bottom:36px; min-height:64px; }
+    .gallery-tab-intro p { font-size:.95rem; color:var(--text-lt); line-height:1.7; max-width:640px; margin:0 auto; font-style:italic; }
+    .gallery-dynamic-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; min-height:220px; transition:opacity .3s; }
+    .gallery-dynamic-grid.loading { opacity:.4; }
+    .gallery-dyn-item { border-radius:var(--r-md); overflow:hidden; background:var(--cream); position:relative; cursor:pointer; aspect-ratio:1/1; }
+    .gallery-dyn-item img { width:100%; height:100%; object-fit:cover; display:block; transition:transform .4s; }
+    .gallery-dyn-item:hover img { transform:scale(1.05); }
+    .gallery-dyn-overlay { position:absolute; inset:0; background:rgba(78,114,85,0); transition:background .3s; display:flex; align-items:flex-end; }
+    .gallery-dyn-item:hover .gallery-dyn-overlay { background:rgba(78,114,85,.28); }
+    .gallery-dyn-caption { padding:12px 14px; color:#fff; font-size:.8rem; font-weight:500; line-height:1.4; opacity:0; transform:translateY(6px); transition:all .3s; width:100%; }
+    .gallery-dyn-item:hover .gallery-dyn-caption { opacity:1; transform:translateY(0); }
+    .gallery-placeholder-dyn { aspect-ratio:1/1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; color:var(--text-lt); background:linear-gradient(135deg,var(--cream2),var(--cream)); border-radius:var(--r-md); }
+    .gallery-empty-state { grid-column:1/-1; text-align:center; padding:60px 24px; color:var(--text-lt); }
+    .gallery-empty-state .ge-icon { font-size:2.5rem; opacity:.35; margin-bottom:10px; }
+    .gallery-empty-state p { font-size:.88rem; }
 
     /* ABOUT */
     .about-inner { display:grid; grid-template-columns:1fr 1fr; gap:72px; align-items:center; }
@@ -279,15 +293,14 @@
       .about-inner,.shipping-inner,.contact-inner{grid-template-columns:1fr;gap:40px;}
       .why-grid{grid-template-columns:1fr 1fr;} .testi-grid{grid-template-columns:1fr;}
       .footer-inner{grid-template-columns:1fr 1fr;}
-      .gallery-grid{grid-template-columns:1fr 1fr;}
-      .gallery-item.tall{grid-row:span 1;} .gallery-item.wide{grid-column:span 2;}
+      .gallery-dynamic-grid{grid-template-columns:1fr 1fr;}
     }
     @media(max-width:720px){.products-grid{grid-template-columns:1fr 1fr;}.form-row{grid-template-columns:1fr;}}
     @media(max-width:560px){
       .categories-grid,.why-grid,.shipping-grid,.products-grid{grid-template-columns:1fr;}
       .footer-inner{grid-template-columns:1fr;} .footer-bottom{flex-direction:column;text-align:center;}
       .nav-wa{display:none;}
-      .gallery-grid{grid-template-columns:1fr;} .gallery-item.wide{grid-column:span 1;aspect-ratio:1/1;}
+      .gallery-dynamic-grid{grid-template-columns:1fr;}
     }
 
     /* ── QUANTITY SELECTOR ── */
@@ -396,8 +409,8 @@
 <nav id="navbar">
   <div class="nav-inner">
     <a href="#inicio" class="nav-logo">
-      <img src="https://i.postimg.cc/W16Cb2t6/395740464-122094653600094688-9024125943526889344-n.jpg" alt="Ser Natural logo" />
-      <span class="nav-logo-text">Ser <span>Natural</span></span>
+      <img src="https://i.postimg.cc/W16Cb2t6/395740464-122094653600094688-9024125943526889344-n.jpg" alt="SerNatural logo" />
+      <span class="nav-logo-text">Ser<span>Natural</span></span>
     </a>
     <ul class="nav-links">
       <li><a href="#catalogo">Productos</a></li>
@@ -446,7 +459,7 @@
     <div class="hero-visual fade-in" style="transition-delay:.2s">
       <div class="hero-blob">
         <div class="hero-logo-circle">
-          <img src="https://i.postimg.cc/W16Cb2t6/395740464-122094653600094688-9024125943526889344-n.jpg" alt="Ser Natural" />
+          <img src="https://i.postimg.cc/W16Cb2t6/395740464-122094653600094688-9024125943526889344-n.jpg" alt="SerNatural" />
         </div>
       </div>
       <div class="float-card fc1">🧴 Cosmética natural</div>
@@ -461,7 +474,7 @@
   <div class="container">
     <div class="categories-head fade-in">
       <span class="tag">Nuestras categorías</span>
-      <h2 class="section-title">Lo que encontrás<br>en Ser Natural</h2>
+      <h2 class="section-title">Lo que encontrás<br>en SerNatural</h2>
       <p class="section-sub" style="margin:12px auto 0">Productos cuidadosamente seleccionados para tu bienestar integral.</p>
     </div>
     <div class="categories-grid">
@@ -522,40 +535,19 @@
     <div class="about-img-wrap fade-in">
       <div class="about-bg-rect"></div>
       <div class="about-img-panel">
-        <img src="https://i.postimg.cc/W16Cb2t6/395740464-122094653600094688-9024125943526889344-n.jpg" alt="Ser Natural" />
+        <img src="https://i.postimg.cc/W16Cb2t6/395740464-122094653600094688-9024125943526889344-n.jpg" alt="SerNatural" />
         <p>"Creemos que lo natural no es una moda,<br>sino una forma de vivir."</p>
       </div>
     </div>
     <div class="about-content fade-in" style="transition-delay:.15s">
       <span class="tag">Quiénes somos</span>
       <h2 class="section-title">Un emprendimiento<br>con propósito</h2>
-      <p class="section-sub">En Ser Natural creemos que el bienestar comienza con lo que elegimos para nuestro cuerpo y nuestra vida diaria. Seleccionamos productos naturales pensados para acompañarte hacia un estilo de vida más saludable, consciente y equilibrado.</p>
+      <p class="section-sub">En SerNatural creemos que el bienestar comienza con lo que elegimos para nuestro cuerpo y nuestra vida diaria. Seleccionamos productos naturales pensados para acompañarte hacia un estilo de vida más saludable, consciente y equilibrado.</p>
       <div class="values-list">
         <div class="value-item"><div class="value-icon">🌿</div><div class="value-text"><strong>Lo simple y natural</strong><span>Ingredientes de origen natural, sin aditivos innecesarios.</span></div></div>
         <div class="value-item"><div class="value-icon">💚</div><div class="value-text"><strong>Equilibrio cuerpo–mente</strong><span>Promovemos el cuidado integral de la persona.</span></div></div>
         <div class="value-item"><div class="value-icon">🌎</div><div class="value-text"><strong>Respeto por el entorno</strong><span>Productos que cuidan a las personas y al planeta.</span></div></div>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- GALLERY -->
-<section class="gallery" id="galeria">
-  <div class="container">
-    <div class="gallery-head fade-in">
-      <span class="tag">Galería</span>
-      <h2 class="section-title">Nuestros productos<br>en detalle</h2>
-      <p class="section-sub" style="margin:10px auto 0">Subí tus fotos a Postimages y reemplazamos los placeholders con tus imágenes reales.</p>
-    </div>
-    <div class="gallery-grid fade-in">
-      <div class="gallery-item tall"><div class="gallery-placeholder tall"><span class="gp-icon">📸</span><span class="gp-label">Foto destacada</span></div><div class="gallery-overlay"></div></div>
-      <div class="gallery-item"><div class="gallery-placeholder"><span class="gp-icon">📸</span><span class="gp-label">Foto producto 2</span></div><div class="gallery-overlay"></div></div>
-      <div class="gallery-item"><div class="gallery-placeholder"><span class="gp-icon">📸</span><span class="gp-label">Foto producto 3</span></div><div class="gallery-overlay"></div></div>
-      <div class="gallery-item wide"><div class="gallery-placeholder wide"><span class="gp-icon">📸</span><span class="gp-label">Foto banner / proceso artesanal</span></div><div class="gallery-overlay"></div></div>
-      <div class="gallery-item"><div class="gallery-placeholder"><span class="gp-icon">📸</span><span class="gp-label">Foto producto 5</span></div><div class="gallery-overlay"></div></div>
-    </div>
-    <div style="text-align:center;margin-top:24px">
-      <span class="gallery-note">📷 Compartí los links de tus fotos y los aplicamos al instante.</span>
     </div>
   </div>
 </section>
@@ -572,7 +564,31 @@
       <div class="why-card fade-in"><div class="why-card-icon">✔️</div><h3 class="why-card-title">Selección cuidadosa</h3><p class="why-card-desc">Cada producto pasa por un proceso riguroso para garantizar calidad y pureza.</p></div>
       <div class="why-card fade-in" style="transition-delay:.1s"><div class="why-card-icon">🫂</div><h3 class="why-card-title">Atención personalizada</h3><p class="why-card-desc">Te asesoramos antes y después de la compra, adaptándonos a tus necesidades reales.</p></div>
       <div class="why-card fade-in" style="transition-delay:.2s"><div class="why-card-icon">🌱</div><h3 class="why-card-title">Bienestar integral</h3><p class="why-card-desc">Enfoque en el cuidado completo: piel, cuerpo, mente y estilo de vida consciente.</p></div>
-      <div class="why-card fade-in" style="transition-delay:.3s"><div class="why-card-icon">🤝</div><h3 class="why-card-title">Comunidad real</h3><p class="why-card-desc">Ser Natural es más que una tienda: es una comunidad que busca mejorar su calidad de vida.</p></div>
+      <div class="why-card fade-in" style="transition-delay:.3s"><div class="why-card-icon">🤝</div><h3 class="why-card-title">Comunidad real</h3><p class="why-card-desc">SerNatural es más que una tienda: es una comunidad que busca mejorar su calidad de vida.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="gallery" id="galeria">
+  <div class="container">
+    <div class="gallery-head fade-in">
+      <span class="tag">Nuestra historia</span>
+      <h2 class="section-title">El amor detrás<br>de cada producto</h2>
+    </div>
+    <div class="gallery-tabs fade-in">
+      <button class="gallery-tab active" onclick="switchGalleryTab('inicio', this)">Inicio</button>
+      <button class="gallery-tab" onclick="switchGalleryTab('proceso', this)">El Proceso</button>
+      <button class="gallery-tab" onclick="switchGalleryTab('final', this)">El Producto Final</button>
+    </div>
+    <div class="gallery-tab-intro fade-in">
+      <p id="gallery-intro-text">Todo comienza con una escucha atenta. Antes de preparar cada pedido, nos tomamos el tiempo de conocerte: tus necesidades, tu piel, tus preferencias. Porque lo que te entregamos no es un producto genérico, es algo pensado especialmente para vos.</p>
+    </div>
+    <div class="gallery-dynamic-grid fade-in" id="gallery-grid">
+      <div class="gallery-empty-state">
+        <div class="ge-icon">📸</div>
+        <p>Las fotos de esta sección se cargan desde el panel admin.</p>
+      </div>
     </div>
   </div>
 </section>
@@ -600,7 +616,7 @@
       <span class="tag">Envíos y entrega</span>
       <h2 class="section-title">Llevamos lo natural<br>hasta vos</h2>
       <p class="section-sub">Consultanos por WhatsApp para conocer las opciones de envío disponibles para tu zona.</p>
-      <div class="disclaimer"><strong>⚠️ Aviso importante:</strong> Los productos de Ser Natural no reemplazan la consulta médica o profesional. Ante dudas de salud, consultá siempre con un profesional.</div>
+      <div class="disclaimer"><strong>⚠️ Aviso importante:</strong> Los productos de SerNatural no reemplazan la consulta médica o profesional. Ante dudas de salud, consultá siempre con un profesional.</div>
     </div>
     <div class="shipping-grid fade-in" style="transition-delay:.15s">
       <div class="ship-card"><div class="ship-icon">📦</div><div class="ship-title">Envío a domicilio</div><div class="ship-desc">Despachamos a todo el país. Consultá costos y tiempos para tu localidad.</div></div>
@@ -687,14 +703,14 @@
   <div class="container">
     <div class="footer-inner">
       <div>
-        <div class="footer-logo"><img src="https://i.postimg.cc/W16Cb2t6/395740464-122094653600094688-9024125943526889344-n.jpg" alt="Ser Natural" /><span class="footer-brand-name">Ser <span>Natural</span></span></div>
-        <p class="footer-brand-desc">Belleza, cosmética y cuidado natural. Jabones artesanales y productos seleccionados para un estilo de vida más consciente.</p>
+        <div class="footer-logo"><img src="https://i.postimg.cc/W16Cb2t6/395740464-122094653600094688-9024125943526889344-n.jpg" alt="SerNatural" /><span class="footer-brand-name">Ser<span>Natural</span></span></div>
+        <p class="footer-brand-desc">Cosmética artesanal y productos naturales pensados para acompañarte hacia un estilo de vida más consciente.</p>
         <p style="font-size:.78rem;color:rgba(237,231,220,.35)">⚠️ Los productos no reemplazan consulta médica.</p>
       </div>
       <div class="footer-col"><h4>Secciones</h4><ul><li><a href="#catalogo">Catálogo</a></li><li><a href="#galeria">Galería</a></li><li><a href="#nosotros">Nosotros</a></li><li><a href="#testimonios">Opiniones</a></li><li><a href="#envios">Envíos</a></li></ul></div>
       <div class="footer-col"><h4>Contacto</h4><ul><li><a href="https://wa.me/5491139014518" target="_blank" rel="noopener">WhatsApp</a></li><li><a href="https://www.instagram.com/sernatural_eg" target="_blank" rel="noopener">Instagram</a></li><li><a href="https://www.facebook.com/SerNatural.Eg/" target="_blank" rel="noopener">Facebook</a></li></ul></div>
     </div>
-    <div class="footer-bottom"><p>© 2025 Ser Natural. Todos los derechos reservados.</p><p>Hecho con 💚 para un mundo más natural</p></div>
+    <div class="footer-bottom"><p>© 2025 SerNatural. Todos los derechos reservados.</p><p>Hecho con 💚 para un mundo más natural</p></div>
   </div>
 </footer>
 
@@ -951,7 +967,7 @@
     const total = items.reduce((s,i) => i.product.precio !== 'consultar' ? s + Number(i.product.precio)*i.qty : s, 0);
     const hasConsultar = items.some(i => i.product.precio === 'consultar');
 
-    let msg = 'Hola Ser Natural! Quiero hacer el siguiente pedido\n';
+    let msg = 'Hola SerNatural! Quiero hacer el siguiente pedido\n';
     msg += '━━━━━━━━━━━━━━━━━━━━━━\n';
     msg += '\n DATOS DEL CLIENTE\n';
     msg += `Nombre: ${nombre}\n`;
@@ -1002,6 +1018,68 @@
     }
     renderProducts();
   };
+
+
+  // ── GALERÍA DINÁMICA ──────────────────────────────────────
+  const GALLERY_RAW = 'https://raw.githubusercontent.com/tecnoinformaticapampa-max/ser-natural-web/main/gallery.json';
+
+  const galleryIntros = {
+    inicio:  'Todo comienza con una escucha atenta. Antes de preparar cada pedido, nos tomamos el tiempo de conocerte: tus necesidades, tu piel, tus preferencias. Porque lo que te entregamos no es un producto genérico, es algo pensado especialmente para vos.',
+    proceso: 'Seleccionamos cada materia prima con criterio y cuidado. Trabajamos con ingredientes naturales de calidad, prestando especial atención a cada detalle: si sos alérgico a algo, si buscás algo suave o intenso, si es para vos o para regalar. Cada pedido pasa por nuestras manos con dedicación real.',
+    final:   'Así llega tu pedido: armado con cariño, protegido para el viaje, listo para abrirlo con la misma emoción con la que lo preparamos. Porque para nosotros, el packaging no es un detalle — es parte de la experiencia SerNatural.'
+  };
+
+  let galleryData     = {};
+  let activeGalleryTab = 'inicio';
+
+  async function loadGallery() {
+    try {
+      const res = await fetch(GALLERY_RAW + '?t=' + Date.now());
+      if (!res.ok) throw new Error('sin datos');
+      galleryData = await res.json();
+    } catch(e) {
+      galleryData = { inicio: [], proceso: [], final: [] };
+    }
+    renderGallery('inicio');
+  }
+
+  function renderGallery(tab) {
+    activeGalleryTab = tab;
+    const grid = document.getElementById('gallery-grid');
+    const intro = document.getElementById('gallery-intro-text');
+    if (!grid || !intro) return;
+
+    intro.textContent = galleryIntros[tab] || '';
+
+    const items = (galleryData[tab] || []);
+    if (!items.length) {
+      grid.innerHTML = '<div class="gallery-empty-state"><div class="ge-icon">📸</div><p>Próximamente subimos fotos de esta sección.</p></div>';
+      return;
+    }
+
+    grid.innerHTML = items.map(item => `
+      <div class="gallery-dyn-item">
+        <img src="${item.url}" alt="${item.caption || ''}" loading="lazy" />
+        <div class="gallery-dyn-overlay">
+          ${item.caption ? `<div class="gallery-dyn-caption">${item.caption}</div>` : ''}
+        </div>
+      </div>
+    `).join('');
+  }
+
+  window.switchGalleryTab = (tab, btn) => {
+    document.querySelectorAll('.gallery-tab').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+    const grid = document.getElementById('gallery-grid');
+    grid.classList.add('loading');
+    setTimeout(() => {
+      renderGallery(tab);
+      grid.classList.remove('loading');
+    }, 200);
+  };
+
+  loadGallery();
+  // ────────────────────────────────────────────────────────────
 
   loadCatalog();
 </script>
