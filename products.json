@@ -1,5 +1,16 @@
 [
   {
+    "id": "p_1779192808029",
+    "nombre": "JABON DE ROSA MOSQUETA  COCO",
+    "categoria": "jabones",
+    "descripcion": "Beneficios\nRegenera, unifica el  tono de la piel , atenúa manchas y líneas finas. \nHidrata sin dejar sensación grasosa.\nRico en vitamina A y C. \nAyuda a reparar la piel ;cicatrices, dejando la piel luminosa y suave.\n\nModo de uso: Masajea 30-60 seg, hasta lograr espuma,enjuaga. 1 vez al día.",
+    "precio": "consultar",
+    "badge": "nuevo",
+    "imagenURL": "https://res.cloudinary.com/ditz4ufas/image/upload/v1779192807/ser-natural/h3esrff91dppgx05socd.jpg",
+    "createdAt": "2026-05-19T12:13:28.028Z",
+    "updatedAt": "2026-05-19T12:13:28.028Z"
+  },
+  {
     "id": "p_1779186002510",
     "nombre": "JABON DE LAVANDA",
     "categoria": "jabones",
