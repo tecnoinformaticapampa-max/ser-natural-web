@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Panel Admin — Ser Natural</title>
+  <title>Panel Admin — SerNatural</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <style>
@@ -162,20 +162,51 @@
       header { padding: 0 16px; }
     }
 
-    /* ── GALERÍA ADMIN ── */
-    .section-divider { border:none; border-top:2px solid var(--cream2); margin:48px 0 36px; }
+    /* TABS NAV */
+    .admin-tabs { display:flex; gap:4px; margin-bottom:32px; border-bottom:2px solid var(--cream2); padding-bottom:0; flex-wrap:wrap; }
+    .admin-tab-btn { background:none; border:none; border-bottom:3px solid transparent; margin-bottom:-2px; padding:10px 20px; font-size:.88rem; font-weight:500; cursor:pointer; font-family:var(--font-body); color:var(--text-lt); transition:all .2s; border-radius:8px 8px 0 0; }
+    .admin-tab-btn:hover { color:var(--bark); background:var(--cream2); }
+    .admin-tab-btn.active { color:var(--sage-dk); border-bottom-color:var(--sage-dk); background:rgba(122,158,126,.07); }
+    .admin-tab-btn.superadmin-only { color:var(--sand); }
+    .admin-tab-btn.superadmin-only.active { color:var(--bark); border-bottom-color:var(--bark); }
+    .tab-panel { display:none; }
+    .tab-panel.active { display:block; }
+
+    /* CONFIG (superadmin) */
+    .config-section { background:var(--white); border-radius:20px; padding:28px 32px; border:1px solid var(--cream2); box-shadow:var(--shadow); margin-bottom:28px; }
+    .config-section h3 { font-family:var(--font-display); font-size:1.1rem; color:var(--bark); margin-bottom:18px; }
+    .tag-list { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px; min-height:32px; }
+    .tag-item { display:inline-flex; align-items:center; gap:8px; background:var(--cream2); border-radius:100px; padding:5px 14px; font-size:.82rem; font-weight:500; color:var(--bark); }
+    .tag-item .tag-del { background:none; border:none; cursor:pointer; color:var(--text-lt); font-size:.9rem; line-height:1; padding:0; transition:color .15s; }
+    .tag-item .tag-del:hover { color:var(--red); }
+    .tag-add-row { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+    .tag-add-row input { flex:1; min-width:160px; border:1.5px solid var(--cream2); background:var(--cream); border-radius:10px; padding:9px 14px; font-size:.88rem; font-family:var(--font-body); color:var(--text); outline:none; transition:border-color .2s; }
+    .tag-add-row input:focus { border-color:var(--sage); }
+    .btn-add-tag { background:var(--sage-dk); color:#fff; border:none; border-radius:100px; padding:9px 20px; font-size:.82rem; font-weight:600; cursor:pointer; font-family:var(--font-body); transition:background .2s; white-space:nowrap; }
+    .btn-add-tag:hover { background:var(--bark); }
+
+    /* USERS (superadmin) */
+    .users-table { background:var(--white); border-radius:20px; border:1px solid var(--cream2); overflow:hidden; box-shadow:var(--shadow); }
+    .user-row { display:grid; grid-template-columns:1fr 120px auto; gap:12px; padding:14px 20px; border-top:1px solid var(--cream2); align-items:center; }
+    .user-row:first-child { border-top:none; }
+    .user-name { font-weight:500; font-size:.9rem; color:var(--bark); }
+    .user-role { font-size:.72rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; border-radius:100px; padding:3px 12px; }
+    .role-superadmin { background:rgba(201,169,122,.3); color:var(--bark); }
+    .role-cliente { background:rgba(122,158,126,.15); color:var(--sage-dk); }
+    .reset-info { background:rgba(201,169,122,.1); border:1px solid var(--sand); border-radius:12px; padding:14px 18px; font-size:.82rem; color:var(--bark); line-height:1.6; margin-top:16px; }
+    .reset-info strong { display:block; margin-bottom:4px; }
+
+    /* SUPERADMIN badge in header */
+    .role-badge { font-size:.68rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; border-radius:100px; padding:2px 10px; }
+    .role-badge.superadmin { background:rgba(201,169,122,.3); color:var(--bark); }
+    .role-badge.cliente { background:rgba(122,158,126,.15); color:var(--sage-dk); }
+
+    /* GALLERY ADMIN */
+    .section-divider { border:none; border-top:2px solid var(--cream2); margin:36px 0 28px; }
     .gallery-admin-tabs { display:flex; gap:8px; margin-bottom:28px; flex-wrap:wrap; }
-    .gtab-btn {
-      padding:8px 20px; border-radius:100px; font-size:.82rem; font-weight:500;
-      cursor:pointer; border:1.5px solid var(--cream2); background:var(--white);
-      font-family:var(--font-body); transition:all .2s; color:var(--text-lt);
-    }
+    .gtab-btn { padding:8px 20px; border-radius:100px; font-size:.82rem; font-weight:500; cursor:pointer; border:1.5px solid var(--cream2); background:var(--white); font-family:var(--font-body); transition:all .2s; color:var(--text-lt); }
     .gtab-btn.active { background:var(--sage-dk); border-color:var(--sage-dk); color:#fff; }
-    .gallery-upload-area {
-      border:2px dashed var(--cream2); border-radius:12px; padding:24px;
-      text-align:center; cursor:pointer; transition:border-color .2s, background .2s;
-      position:relative; margin-bottom:16px;
-    }
+    .gallery-upload-area { border:2px dashed var(--cream2); border-radius:12px; padding:24px; text-align:center; cursor:pointer; transition:border-color .2s, background .2s; position:relative; margin-bottom:16px; }
     .gallery-upload-area:hover { border-color:var(--sage); background:rgba(122,158,126,.05); }
     .gallery-upload-area input[type=file] { position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%; }
     #gal-img-preview { display:none; width:100%; max-height:180px; object-fit:cover; border-radius:10px; margin-top:10px; }
@@ -183,13 +214,7 @@
     .gallery-admin-item { position:relative; border-radius:10px; overflow:hidden; background:var(--cream2); aspect-ratio:1/1; }
     .gallery-admin-item img { width:100%; height:100%; object-fit:cover; }
     .gallery-admin-caption { font-size:.75rem; color:var(--text-lt); padding:6px 8px; background:var(--white); border-top:1px solid var(--cream2); line-height:1.4; }
-    .gallery-admin-del {
-      position:absolute; top:6px; right:6px;
-      background:rgba(224,82,82,.9); color:#fff; border:none;
-      border-radius:50%; width:26px; height:26px; cursor:pointer;
-      font-size:.85rem; display:flex; align-items:center; justify-content:center;
-      transition:background .2s;
-    }
+    .gallery-admin-del { position:absolute; top:6px; right:6px; background:rgba(224,82,82,.9); color:#fff; border:none; border-radius:50%; width:26px; height:26px; cursor:pointer; font-size:.85rem; display:flex; align-items:center; justify-content:center; transition:background .2s; }
     .gallery-admin-del:hover { background:var(--red); }
     .gallery-empty-admin { grid-column:1/-1; text-align:center; padding:40px 24px; color:var(--text-lt); font-size:.88rem; }
     @media(max-width:768px){ .gallery-grid-admin{ grid-template-columns:1fr 1fr; } }
@@ -203,8 +228,9 @@
     <img src="https://i.postimg.cc/W16Cb2t6/395740464-122094653600094688-9024125943526889344-n.jpg" alt="logo" class="login-logo" />
     <div class="login-title">Panel Admin</div>
     <div class="login-sub">SerNatural — Gestión de productos</div>
-    <input type="password" id="login-pass" placeholder="Contraseña" onkeydown="if(event.key==='Enter')doLogin()" />
-    <button class="login-btn" onclick="doLogin()">Ingresar</button>
+    <input type="text" id="login-user" placeholder="Usuario" autocomplete="username" onkeydown="if(event.key==='Enter')doLogin()" />
+    <input type="password" id="login-pass" placeholder="Contraseña" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()" />
+    <button class="login-btn" id="login-btn" onclick="doLogin()">Ingresar</button>
     <div class="login-error" id="login-err"></div>
   </div>
 </div>
@@ -214,13 +240,27 @@
   <header>
     <div class="header-left">
       <img src="https://i.postimg.cc/W16Cb2t6/395740464-122094653600094688-9024125943526889344-n.jpg" alt="logo" class="header-logo" />
-      <span class="header-title">Ser<span>Natural</span></span>
+      <span class="header-title">Ser <span>Natural</span></span>
       <span class="header-badge">Panel Admin</span>
     </div>
-    <button class="logout-btn" onclick="doLogout()">Cerrar sesión</button>
+    <div style="display:flex;align-items:center;gap:12px">
+      <span class="role-badge" id="header-role-badge"></span>
+      <span id="header-username" style="font-size:.82rem;color:var(--text-lt)"></span>
+      <button class="logout-btn" onclick="doLogout()">Cerrar sesión</button>
+    </div>
   </header>
 
   <main>
+    <!-- NAV TABS -->
+    <div class="admin-tabs" id="admin-tabs">
+      <button class="admin-tab-btn active" onclick="switchTab('productos')" data-tab="productos">📦 Productos</button>
+      <button class="admin-tab-btn" onclick="switchTab('galeria')" data-tab="galeria">📸 Galería</button>
+      <button class="admin-tab-btn superadmin-only" onclick="switchTab('config')" data-tab="config" id="tab-config" style="display:none">⚙️ Configuración</button>
+      <button class="admin-tab-btn superadmin-only" onclick="switchTab('usuarios')" data-tab="usuarios" id="tab-usuarios" style="display:none">👥 Usuarios</button>
+    </div>
+
+    <!-- TAB: PRODUCTOS -->
+    <div class="tab-panel active" id="panel-productos">
     <div class="stats-bar">
       <div class="stat-card"><div class="stat-num" id="stat-total">0</div><div class="stat-label">Productos totales</div></div>
       <div class="stat-card"><div class="stat-num" id="stat-jabones">0</div><div class="stat-label">Jabones artesanales</div></div>
@@ -260,10 +300,10 @@
         </div>
         <div class="form-group">
           <label>Etiqueta</label>
-          <div class="badge-selector">
-            <button class="badge-opt" id="badge-ninguna" onclick="setBadge('')">Sin etiqueta</button>
-            <button class="badge-opt active" id="badge-nuevo" onclick="setBadge('nuevo')">🟡 Nuevo</button>
-            <button class="badge-opt popular" id="badge-popular" onclick="setBadge('popular')">🟢 Popular</button>
+          <div class="badge-selector" id="badge-selector-wrap">
+            <button class="badge-opt active" id="badge-ninguna" onclick="setBadge('')">Sin etiqueta</button>
+            <button class="badge-opt" id="badge-nuevo" onclick="setBadge('nuevo')">Nuevo</button>
+            <button class="badge-opt" id="badge-popular" onclick="setBadge('popular')">Popular</button>
           </div>
         </div>
         <div class="form-group full">
@@ -304,232 +344,380 @@
         </div>
       </div>
     </div>
+    </div><!-- end panel-productos -->
 
-    <!-- ═══════════════════════════════════════════ -->
-    <!-- SECCIÓN GALERÍA                              -->
-    <!-- ═══════════════════════════════════════════ -->
-    <hr class="section-divider" />
-
-    <div class="section-header">
-      <h2>📸 Nuestra Historia — Galería</h2>
-    </div>
-
-    <!-- Pestañas de categoría -->
-    <div class="gallery-admin-tabs">
-      <button class="gtab-btn active" onclick="setGalleryTab('inicio', this)">🌱 Inicio</button>
-      <button class="gtab-btn" onclick="setGalleryTab('proceso', this)">⚗️ El Proceso</button>
-      <button class="gtab-btn" onclick="setGalleryTab('final', this)">🎁 El Producto Final</button>
-    </div>
-
-    <!-- Formulario de carga -->
-    <div class="form-card">
-      <div class="form-grid">
-        <div class="form-group full">
-          <label>Imagen para <span id="gal-tab-label" style="color:var(--sage-dk)">Inicio</span></label>
-          <div class="gallery-upload-area" id="gal-drop-area">
-            <input type="file" id="gal-img" accept="image/*" onchange="galPreviewImage(this)" />
-            <div id="gal-upload-icon" style="font-size:2rem;margin-bottom:6px">📷</div>
-            <div id="gal-upload-text" style="font-size:.85rem;color:var(--text-lt)">
-              <strong style="color:var(--sage-dk)">Hacé clic o arrastrá</strong> una imagen aquí<br>
-              <span style="font-size:.75rem">JPG, PNG, WEBP — máx. 5MB</span>
+    <!-- TAB: GALERÍA -->
+    <div class="tab-panel" id="panel-galeria">
+      <div class="section-header">
+        <h2>📸 Nuestra Historia — Galería</h2>
+      </div>
+      <div class="gallery-admin-tabs">
+        <button class="gtab-btn active" onclick="setGalleryTab('inicio', this)">🌱 Inicio</button>
+        <button class="gtab-btn" onclick="setGalleryTab('proceso', this)">⚗️ El Proceso</button>
+        <button class="gtab-btn" onclick="setGalleryTab('final', this)">🎁 El Producto Final</button>
+      </div>
+      <div class="form-card">
+        <div class="form-grid">
+          <div class="form-group full">
+            <label>Imagen para <span id="gal-tab-label" style="color:var(--sage-dk)">Inicio</span></label>
+            <div class="gallery-upload-area" id="gal-drop-area">
+              <input type="file" id="gal-img" accept="image/*" onchange="galPreviewImage(this)" />
+              <div id="gal-upload-icon" style="font-size:2rem;margin-bottom:6px">📷</div>
+              <div id="gal-upload-text" style="font-size:.85rem;color:var(--text-lt)">
+                <strong style="color:var(--sage-dk)">Hacé clic o arrastrá</strong> una imagen aquí
+              </div>
+              <img id="gal-img-preview" alt="preview" />
             </div>
-            <img id="gal-img-preview" alt="preview" />
+          </div>
+          <div class="form-group full">
+            <label>Descripción <span style="color:var(--text-lt);font-weight:400;font-size:.75rem">(opcional)</span></label>
+            <input type="text" id="gal-caption" placeholder="Ej: Seleccionando los mejores ingredientes…" maxlength="120" />
           </div>
         </div>
-        <div class="form-group full">
-          <label>Descripción / Texto de la foto <span style="color:var(--text-lt);font-weight:400;font-size:.75rem">(opcional — aparece al pasar el mouse)</span></label>
-          <input type="text" id="gal-caption" placeholder="Ej: Seleccionando los mejores ingredientes naturales…" maxlength="120" />
+        <div class="form-actions">
+          <button class="btn-save" id="gal-btn-save" onclick="saveGalleryPhoto()">Guardar foto</button>
         </div>
       </div>
-      <div class="form-actions">
-        <button class="btn-save" id="gal-btn-save" onclick="saveGalleryPhoto()">Guardar foto</button>
+      <div class="section-header">
+        <h2>Fotos cargadas — <span id="gal-count-label" style="color:var(--sage-dk)">Inicio</span> (<span id="gal-count">0</span>)</h2>
       </div>
-    </div>
+      <div class="gallery-grid-admin" id="gallery-admin-grid">
+        <div class="gallery-empty-admin">No hay fotos aún. ¡Subí la primera!</div>
+      </div>
+    </div><!-- end panel-galeria -->
 
-    <!-- Grid de fotos existentes -->
-    <div class="section-header" style="margin-top:8px">
-      <h2>Fotos cargadas — <span id="gal-count-label" style="color:var(--sage-dk)">Inicio</span> (<span id="gal-count">0</span>)</h2>
-    </div>
-    <div class="gallery-grid-admin" id="gallery-admin-grid">
-      <div class="gallery-empty-admin">No hay fotos en esta categoría. ¡Subí la primera!</div>
-    </div>
+    <!-- TAB: CONFIGURACIÓN (superadmin) -->
+    <div class="tab-panel" id="panel-config">
+      <div class="config-section">
+        <h3>📂 Categorías de Productos</h3>
+        <div class="tag-list" id="cats-list"></div>
+        <div class="tag-add-row">
+          <input type="text" id="new-cat-label" placeholder="Nombre de la nueva categoría…" maxlength="40" />
+          <button class="btn-add-tag" onclick="addCategoria()">+ Agregar</button>
+        </div>
+      </div>
+      <div class="config-section">
+        <h3>🏷️ Etiquetas de Productos</h3>
+        <div class="tag-list" id="etiq-list"></div>
+        <div class="tag-add-row">
+          <input type="text" id="new-etiq-label" placeholder="Nombre de la nueva etiqueta…" maxlength="30" />
+          <button class="btn-add-tag" onclick="addEtiqueta()">+ Agregar</button>
+        </div>
+      </div>
+    </div><!-- end panel-config -->
+
+    <!-- TAB: USUARIOS (superadmin) -->
+    <div class="tab-panel" id="panel-usuarios">
+      <div class="config-section">
+        <h3>👥 Usuarios del Panel</h3>
+        <div class="users-table" id="users-table"></div>
+        <div class="reset-info">
+          <strong>¿Cómo cambiar una contraseña?</strong>
+          Para cambiar la contraseña de cualquier usuario: ir a <strong>Cloudflare Dashboard → Workers & Pages → ser-natural-api → Settings → Variables</strong> y editar la variable <code>USERS_JSON</code> con el nuevo valor.
+        </div>
+      </div>
+    </div><!-- end panel-usuarios -->
 
   </main>
-
 </div>
 
 <div id="toast"></div>
 
 <script>
-  // ── CONFIGURACIÓN ──
-  const ADMIN_PASSWORD    = 'SN2024admin';
-  const ADMIN_KEY         = 'sn-worker-2024-xK9p';
+  // ── CONFIG ──────────────────────────────────────────────────
   const CLOUDINARY_CLOUD  = 'ditz4ufas';
   const CLOUDINARY_PRESET = 'ser_natural_unsigned';
   const WORKER_URL        = 'https://ser-natural-api.tecnoinformaticapampa.workers.dev';
-  // ──────────────────
+  // ────────────────────────────────────────────────────────────
 
-  let products     = [];
-  let editingId    = null;
-  let editingOldImg= null;
-  let pricePill    = 'consultar';
-  let badgeVal     = 'nuevo';
-  let selectedFile = null;
-  let fileSHA      = null;
+  // ── STATE ──
+  let sessionToken  = null;
+  let sessionRole   = null;
+  let sessionUser   = null;
 
-  // ── LOGIN ──
-  function doLogin() {
+  let products      = [];
+  let editingId     = null;
+  let editingOldImg = null;
+  let pricePill     = 'consultar';
+  let badgeVal      = '';
+  let selectedFile  = null;
+  let fileSHA       = null;
+
+  let siteConfig    = { categorias: [], etiquetas: [] };
+  let configSHA     = null;
+
+  let galleryData      = { inicio: [], proceso: [], final: [] };
+  let galFileSHA       = null;
+  let activeGalleryTab = 'inicio';
+  let galSelectedFile  = null;
+
+  const tabLabels = { inicio: 'Inicio', proceso: 'El Proceso', final: 'El Producto Final' };
+
+  // ── AUTH ────────────────────────────────────────────────────
+  async function doLogin() {
+    const user = document.getElementById('login-user').value.trim();
     const pass = document.getElementById('login-pass').value;
-    if (pass === ADMIN_PASSWORD) {
-      sessionStorage.setItem('sn_auth','1');
+    const err  = document.getElementById('login-err');
+    const btn  = document.getElementById('login-btn');
+    if (!user || !pass) { err.textContent = 'Ingresá usuario y contraseña.'; return; }
+    btn.disabled = true; btn.textContent = 'Verificando…';
+    try {
+      const res  = await fetch(`${WORKER_URL}/auth`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ user, pass }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Error');
+      sessionToken = data.token;
+      sessionRole  = data.role;
+      sessionUser  = data.user;
+      sessionStorage.setItem('sn_token', sessionToken);
+      sessionStorage.setItem('sn_role',  sessionRole);
+      sessionStorage.setItem('sn_user',  sessionUser);
       showApp();
-    } else {
-      document.getElementById('login-err').textContent = 'Contraseña incorrecta.';
+    } catch(e) {
+      err.textContent = e.message || 'Usuario o contraseña incorrectos.';
       document.getElementById('login-pass').value = '';
+    } finally {
+      btn.disabled = false; btn.textContent = 'Ingresar';
     }
   }
+
   function doLogout() {
-    sessionStorage.removeItem('sn_auth');
+    sessionStorage.removeItem('sn_token');
+    sessionStorage.removeItem('sn_role');
+    sessionStorage.removeItem('sn_user');
+    sessionToken = null; sessionRole = null; sessionUser = null;
     document.getElementById('app').style.display = 'none';
     document.getElementById('login-screen').style.display = 'flex';
+    document.getElementById('login-user').value = '';
     document.getElementById('login-pass').value = '';
     document.getElementById('login-err').textContent = '';
   }
+
   function showApp() {
     document.getElementById('login-screen').style.display = 'none';
     document.getElementById('app').style.display = 'block';
+    // Set header info
+    const roleBadge = document.getElementById('header-role-badge');
+    const userSpan  = document.getElementById('header-username');
+    if (roleBadge) { roleBadge.textContent = sessionRole === 'superadmin' ? 'Super Admin' : 'Admin'; roleBadge.className = `role-badge ${sessionRole}`; }
+    if (userSpan)  userSpan.textContent = sessionUser;
+    // Show superadmin tabs
+    if (sessionRole === 'superadmin') {
+      document.getElementById('tab-config').style.display   = 'block';
+      document.getElementById('tab-usuarios').style.display = 'block';
+    }
+    loadConfig();
     loadProducts();
+    loadGalleryAdmin();
+    if (sessionRole === 'superadmin') loadUsers();
   }
-  if (sessionStorage.getItem('sn_auth') === '1') showApp();
 
-  // ── CARGAR PRODUCTOS DESDE WORKER ──
+  // Auto-restore session
+  const savedToken = sessionStorage.getItem('sn_token');
+  if (savedToken) {
+    sessionToken = savedToken;
+    sessionRole  = sessionStorage.getItem('sn_role');
+    sessionUser  = sessionStorage.getItem('sn_user');
+    showApp();
+  }
+
+  // ── TABS ────────────────────────────────────────────────────
+  window.switchTab = (tab) => {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.admin-tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('panel-' + tab).classList.add('active');
+    document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
+  };
+
+  // ── AUTH HEADERS ────────────────────────────────────────────
+  function authHeaders(extra = {}) {
+    return { 'Content-Type': 'application/json', 'X-Session-Token': sessionToken, ...extra };
+  }
+
+  // ── CONFIG (categorías + etiquetas) ─────────────────────────
+  async function loadConfig() {
+    try {
+      const res  = await fetch(`${WORKER_URL}/config`, { headers: authHeaders(), cache: 'no-store' });
+      const data = await res.json();
+      siteConfig = data.config;
+      configSHA  = data.sha;
+    } catch(e) {
+      siteConfig = { categorias: [
+        { id:'jabones', label:'Jabones artesanales' },
+        { id:'cosmetica', label:'Cosmética natural' },
+        { id:'bienestar', label:'Bienestar' },
+      ], etiquetas: [
+        { id:'nuevo', label:'Nuevo' },
+        { id:'popular', label:'Popular' },
+      ]};
+    }
+    renderCatSelect();
+    renderBadgeSelector();
+    if (sessionRole === 'superadmin') { renderCatList(); renderEtiqList(); }
+  }
+
+  async function saveConfig() {
+    const res = await fetch(`${WORKER_URL}/config`, {
+      method: 'PUT', headers: authHeaders(),
+      body: JSON.stringify({ config: siteConfig, sha: configSHA }),
+    });
+    if (!res.ok) { const e = await res.json(); throw new Error(e.error || 'Error'); }
+    const data = await res.json();
+    configSHA  = data.sha;
+  }
+
+  function renderCatSelect() {
+    const sel = document.getElementById('f-cat');
+    if (!sel) return;
+    const curr = sel.value;
+    sel.innerHTML = '<option value="">Seleccioná…</option>' +
+      siteConfig.categorias.map(c => `<option value="${c.id}" ${c.id === curr ? 'selected' : ''}>${c.label}</option>`).join('');
+  }
+
+  function renderBadgeSelector() {
+    const wrap = document.getElementById('badge-selector-wrap');
+    if (!wrap) return;
+    wrap.innerHTML =
+      '<button class="badge-opt" id="badge-ninguna" onclick="setBadge('')">Sin etiqueta</button>' +
+      siteConfig.etiquetas.map(e =>
+        `<button class="badge-opt" id="badge-${e.id}" onclick="setBadge('${e.id}')">${e.label}</button>`
+      ).join('');
+    if (badgeVal) setBadge(badgeVal);
+    else document.getElementById('badge-ninguna').classList.add('active');
+  }
+
+  // Config UI (superadmin)
+  function renderCatList() {
+    const el = document.getElementById('cats-list');
+    if (!el) return;
+    el.innerHTML = siteConfig.categorias.map((c,i) =>
+      `<span class="tag-item">${c.label}<button class="tag-del" onclick="deleteCat(${i})" title="Eliminar">✕</button></span>`
+    ).join('') || '<span style="color:var(--text-lt);font-size:.82rem">Sin categorías</span>';
+  }
+
+  function renderEtiqList() {
+    const el = document.getElementById('etiq-list');
+    if (!el) return;
+    el.innerHTML = siteConfig.etiquetas.map((e,i) =>
+      `<span class="tag-item">${e.label}<button class="tag-del" onclick="deleteEtiq(${i})" title="Eliminar">✕</button></span>`
+    ).join('') || '<span style="color:var(--text-lt);font-size:.82rem">Sin etiquetas</span>';
+  }
+
+  window.addCategoria = async () => {
+    const input = document.getElementById('new-cat-label');
+    const label = input.value.trim();
+    if (!label) return;
+    const id = label.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'');
+    if (siteConfig.categorias.find(c => c.id === id)) { showToast('Ya existe esa categoría', true); return; }
+    siteConfig.categorias.push({ id, label });
+    try { await saveConfig(); renderCatList(); renderCatSelect(); input.value = ''; showToast('✅ Categoría agregada'); }
+    catch(e) { showToast('Error: ' + e.message, true); siteConfig.categorias.pop(); }
+  };
+
+  window.deleteCat = async (idx) => {
+    if (!confirm('¿Eliminar esta categoría?')) return;
+    const removed = siteConfig.categorias.splice(idx, 1);
+    try { await saveConfig(); renderCatList(); renderCatSelect(); showToast('🗑 Categoría eliminada'); }
+    catch(e) { showToast('Error: ' + e.message, true); siteConfig.categorias.splice(idx, 0, ...removed); }
+  };
+
+  window.addEtiqueta = async () => {
+    const input = document.getElementById('new-etiq-label');
+    const label = input.value.trim();
+    if (!label) return;
+    const id = label.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'');
+    if (siteConfig.etiquetas.find(e => e.id === id)) { showToast('Ya existe esa etiqueta', true); return; }
+    siteConfig.etiquetas.push({ id, label });
+    try { await saveConfig(); renderEtiqList(); renderBadgeSelector(); input.value = ''; showToast('✅ Etiqueta agregada'); }
+    catch(e) { showToast('Error: ' + e.message, true); siteConfig.etiquetas.pop(); }
+  };
+
+  window.deleteEtiq = async (idx) => {
+    if (!confirm('¿Eliminar esta etiqueta?')) return;
+    const removed = siteConfig.etiquetas.splice(idx, 1);
+    try { await saveConfig(); renderEtiqList(); renderBadgeSelector(); showToast('🗑 Etiqueta eliminada'); }
+    catch(e) { showToast('Error: ' + e.message, true); siteConfig.etiquetas.splice(idx, 0, ...removed); }
+  };
+
+  // ── USERS (superadmin) ───────────────────────────────────────
+  async function loadUsers() {
+    try {
+      const res  = await fetch(`${WORKER_URL}/users`, { headers: authHeaders() });
+      const data = await res.json();
+      const el   = document.getElementById('users-table');
+      if (!el) return;
+      el.innerHTML = data.users.map(u => `
+        <div class="user-row">
+          <div class="user-name">${u.user}</div>
+          <div><span class="user-role role-${u.role}">${u.role === 'superadmin' ? 'Super Admin' : 'Cliente'}</span></div>
+          <div style="font-size:.78rem;color:var(--text-lt)">—</div>
+        </div>`).join('');
+    } catch(e) { console.error('loadUsers:', e); }
+  }
+
+  // ── PRODUCTS ─────────────────────────────────────────────────
   async function loadProducts() {
     try {
-      const res = await fetch(`${WORKER_URL}/products`, { cache: 'no-store' });
-      if (!res.ok) throw new Error('Error al cargar');
+      const res  = await fetch(`${WORKER_URL}/products`, { headers: authHeaders(), cache: 'no-store' });
+      if (!res.ok) throw new Error('Error');
       const data = await res.json();
-      fileSHA  = data.sha;
-      products = data.products || [];
+      fileSHA    = data.sha;
+      products   = data.products || [];
     } catch(e) { products = []; fileSHA = null; }
     renderList();
     updateStats();
   }
 
-  // ── GUARDAR VÍA WORKER ──
-  async function saveToGitHub(updated) {
+  async function saveToWorker(updated) {
     const res = await fetch(`${WORKER_URL}/products`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Admin-Key': ADMIN_KEY,
-      },
+      method: 'PUT', headers: authHeaders(),
       body: JSON.stringify({ products: updated, sha: fileSHA }),
     });
-    if (!res.ok) {
-      const err = await res.json();
-      throw new Error(err.error || 'Error al guardar');
-    }
+    if (!res.ok) { const e = await res.json(); throw new Error(e.error || 'Error'); }
     const data = await res.json();
-    fileSHA  = data.sha;
-    products = updated;
+    fileSHA    = data.sha;
+    products   = updated;
   }
 
-  // ── SUBIR IMAGEN A CLOUDINARY ──
-  function uploadToCloudinary(file) {
-    return new Promise((resolve, reject) => {
-      const fd = new FormData();
-      fd.append('file', file);
-      fd.append('upload_preset', CLOUDINARY_PRESET);
-      fd.append('folder', 'ser-natural');
-
-      const xhr = new XMLHttpRequest();
-      xhr.open('POST', `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`);
-
-      const wrap  = document.getElementById('progress-wrap');
-      const fill  = document.getElementById('progress-fill');
-      const label = document.getElementById('progress-label');
-      wrap.style.display = 'block';
-
-      xhr.upload.onprogress = e => {
-        if (e.lengthComputable) {
-          const pct = Math.round(e.loaded / e.total * 100);
-          fill.style.width = pct + '%';
-          label.textContent = `Subiendo imagen… ${pct}%`;
-        }
-      };
-      xhr.onload = () => {
-        wrap.style.display = 'none';
-        fill.style.width = '0';
-        if (xhr.status === 200) resolve(JSON.parse(xhr.responseText).secure_url);
-        else reject(new Error('Error Cloudinary: ' + xhr.responseText));
-      };
-      xhr.onerror = () => { wrap.style.display = 'none'; reject(new Error('Error de red al subir imagen')); };
-      xhr.send(fd);
-    });
-  }
-
-  // ── GUARDAR PRODUCTO ──
   window.saveProduct = async () => {
     const nombre = document.getElementById('f-nombre').value.trim();
     const cat    = document.getElementById('f-cat').value;
     const desc   = document.getElementById('f-desc').value.trim();
-    const precio = pricePill === 'consultar'
-      ? 'consultar'
-      : (document.getElementById('f-precio').value.trim() || 'consultar');
-
+    const precio = pricePill === 'consultar' ? 'consultar' : (document.getElementById('f-precio').value.trim() || 'consultar');
     if (!nombre || !cat || !desc) { showToast('Completá nombre, categoría y descripción.', true); return; }
-
     const btn = document.getElementById('btn-save');
-    btn.disabled = true;
-    btn.innerHTML = '<span class="spinner"></span>Guardando…';
-
+    btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Guardando…';
     try {
       let imagenURL = editingOldImg || '';
       if (selectedFile) imagenURL = await uploadToCloudinary(selectedFile);
-
       const now = new Date().toISOString();
       let updated;
-
       if (editingId) {
-        updated = products.map(p => p.id === editingId
-          ? { ...p, nombre, categoria: cat, descripcion: desc, precio, badge: badgeVal, imagenURL, updatedAt: now }
-          : p
-        );
+        updated = products.map(p => p.id === editingId ? { ...p, nombre, categoria:cat, descripcion:desc, precio, badge:badgeVal, imagenURL, updatedAt:now } : p);
         showToast('✅ Producto actualizado');
       } else {
-        const nuevo = { id: 'p_' + Date.now(), nombre, categoria: cat, descripcion: desc, precio, badge: badgeVal, imagenURL, createdAt: now, updatedAt: now };
-        updated = [nuevo, ...products];
-        showToast('✅ Producto agregado al catálogo');
+        updated = [{ id:'p_'+Date.now(), nombre, categoria:cat, descripcion:desc, precio, badge:badgeVal, imagenURL, createdAt:now, updatedAt:now }, ...products];
+        showToast('✅ Producto agregado');
       }
-
-      await saveToGitHub(updated);
-      renderList();
-      updateStats();
-      resetForm();
-
-    } catch(e) {
-      console.error(e);
-      showToast('Error: ' + e.message, true);
-    } finally {
-      btn.disabled = false;
-      btn.innerHTML = editingId ? 'Actualizar producto' : 'Guardar producto';
-    }
+      await saveToWorker(updated);
+      renderList(); updateStats(); resetForm();
+    } catch(e) { showToast('Error: ' + e.message, true); }
+    finally { btn.disabled = false; btn.innerHTML = editingId ? 'Actualizar producto' : 'Guardar producto'; }
   };
 
-  // ── ELIMINAR ──
   window.deleteProduct = async (id) => {
-    if (!confirm('¿Eliminar este producto? No se puede deshacer.')) return;
+    if (!confirm('¿Eliminar este producto?')) return;
     try {
-      await saveToGitHub(products.filter(p => p.id !== id));
-      renderList(); updateStats();
-      showToast('🗑 Producto eliminado');
+      await saveToWorker(products.filter(p => p.id !== id));
+      renderList(); updateStats(); showToast('🗑 Producto eliminado');
     } catch(e) { showToast('Error al eliminar: ' + e.message, true); }
   };
 
-  // ── EDITAR ──
   window.editProduct = (id) => {
-    const p = products.find(x => x.id === id);
-    if (!p) return;
+    const p = products.find(x => x.id === id); if (!p) return;
     editingId = id; editingOldImg = p.imagenURL || '';
     document.getElementById('f-nombre').value = p.nombre || '';
     document.getElementById('f-cat').value    = p.categoria || '';
@@ -547,46 +735,77 @@
     document.getElementById('btn-save').textContent     = 'Actualizar producto';
     document.getElementById('btn-cancel').style.display = 'inline-block';
     document.getElementById('form-title').scrollIntoView({ behavior:'smooth', block:'center' });
+    switchTab('productos');
   };
 
   window.cancelEdit = resetForm;
 
-  // ── RENDER ──
   function renderList() {
     const el = document.getElementById('products-list');
     document.getElementById('count-label').textContent = products.length;
     if (!products.length) {
-      el.innerHTML = `<div class="empty-state"><div class="empty-icon">🌿</div><div class="empty-text">Todavía no hay productos. ¡Agregá el primero!</div></div>`;
+      el.innerHTML = '<div class="empty-state"><div class="empty-icon">🌿</div><div class="empty-text">Todavía no hay productos.</div></div>';
       return;
     }
-    const catLabel = { jabones:'Jabones', cosmetica:'Cosmética', bienestar:'Bienestar' };
-    const catEmoji = { jabones:'🧼', cosmetica:'🌿', bienestar:'🍃' };
-    el.innerHTML = products.map(p => `
-      <div class="prod-row">
-        <div class="prod-row-img">${p.imagenURL ? `<img src="${p.imagenURL}" alt="${p.nombre}" />` : (catEmoji[p.categoria]||'📦')}</div>
+    el.innerHTML = products.map(p => {
+      const catLabel = (siteConfig.categorias.find(c => c.id === p.categoria) || {}).label || p.categoria;
+      const imgEl    = p.imagenURL ? `<div class="prod-row-img"><img src="${p.imagenURL}" alt="${p.nombre}" /></div>` : `<div class="prod-row-img">📦</div>`;
+      const etqLabel = (siteConfig.etiquetas.find(e => e.id === p.badge) || {}).label;
+      const badgeEl  = etqLabel ? `<span class="row-badge rb-${p.badge}">${etqLabel}</span>` : '—';
+      const priceEl  = p.precio === 'consultar' ? '$ Consultar' : `$ ${p.precio}`;
+      return `<div class="prod-row">${imgEl}
         <div><div class="prod-row-name">${p.nombre}</div><div class="prod-row-cat">${(p.descripcion||'').substring(0,55)}…</div></div>
-        <div><span class="cat-chip">${catLabel[p.categoria]||p.categoria}</span></div>
-        <div class="price-cell">${p.precio === 'consultar' ? '$ Consultar' : `$ ${p.precio}`}</div>
-        <div>${p.badge === 'nuevo' ? '<span class="row-badge rb-new">Nuevo</span>' : p.badge === 'popular' ? '<span class="row-badge rb-popular">Popular</span>' : '—'}</div>
+        <div><span class="cat-chip">${catLabel}</span></div>
+        <div class="price-cell">${priceEl}</div>
+        <div>${badgeEl}</div>
         <div class="row-actions">
           <button class="btn-edit" onclick="editProduct('${p.id}')">✏️ Editar</button>
           <button class="btn-del"  onclick="deleteProduct('${p.id}')">🗑</button>
-        </div>
-      </div>`).join('');
+        </div></div>`;
+    }).join('');
   }
 
   function updateStats() {
-    document.getElementById('stat-total').textContent     = products.length;
-    document.getElementById('stat-jabones').textContent   = products.filter(p=>p.categoria==='jabones').length;
-    document.getElementById('stat-cosmetica').textContent = products.filter(p=>p.categoria==='cosmetica').length;
-    document.getElementById('stat-bienestar').textContent = products.filter(p=>p.categoria==='bienestar').length;
+    document.getElementById('stat-total').textContent = products.length;
+    siteConfig.categorias.forEach((c, i) => {
+      const el = document.getElementById('stat-' + c.id) || document.getElementById('stat-' + ['jabones','cosmetica','bienestar'][i]);
+      if (el) el.textContent = products.filter(p => p.categoria === c.id).length;
+    });
   }
 
-  // ── HELPERS ──
+  // ── CLOUDINARY ───────────────────────────────────────────────
+  function uploadToCloudinary(file) {
+    return new Promise((resolve, reject) => {
+      const fd = new FormData();
+      fd.append('file', file);
+      fd.append('upload_preset', CLOUDINARY_PRESET);
+      fd.append('folder', 'ser-natural');
+      const xhr  = new XMLHttpRequest();
+      xhr.open('POST', `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`);
+      const wrap = document.getElementById('progress-wrap');
+      const fill = document.getElementById('progress-fill');
+      const lbl  = document.getElementById('progress-label');
+      if (wrap) wrap.style.display = 'block';
+      xhr.upload.onprogress = e => {
+        if (e.lengthComputable && fill && lbl) {
+          const pct = Math.round(e.loaded / e.total * 100);
+          fill.style.width = pct + '%'; lbl.textContent = `Subiendo imagen… ${pct}%`;
+        }
+      };
+      xhr.onload = () => {
+        if (wrap) { wrap.style.display = 'none'; fill.style.width = '0'; }
+        if (xhr.status === 200) resolve(JSON.parse(xhr.responseText).secure_url);
+        else reject(new Error('Error Cloudinary'));
+      };
+      xhr.onerror = () => { if(wrap) wrap.style.display='none'; reject(new Error('Error de red')); };
+      xhr.send(fd);
+    });
+  }
+
+  // ── HELPERS FORM ─────────────────────────────────────────────
   window.previewImage = (input) => {
-    const file = input.files[0];
-    if (!file) return;
-    if (file.size > 5 * 1024 * 1024) { showToast('La imagen no puede superar 5MB', true); input.value=''; return; }
+    const file = input.files[0]; if (!file) return;
+    if (file.size > 5*1024*1024) { showToast('La imagen no puede superar 5MB', true); input.value=''; return; }
     selectedFile = file;
     const reader = new FileReader();
     reader.onload = e => {
@@ -607,61 +826,36 @@
 
   window.setBadge = (val) => {
     badgeVal = val;
-    document.getElementById('badge-ninguna').classList.remove('active');
-    document.getElementById('badge-nuevo').classList.remove('active');
-    document.getElementById('badge-popular').classList.remove('active');
-    if (val === '')         document.getElementById('badge-ninguna').classList.add('active');
-    if (val === 'nuevo')    document.getElementById('badge-nuevo').classList.add('active');
-    if (val === 'popular')  document.getElementById('badge-popular').classList.add('active');
+    document.querySelectorAll('.badge-opt').forEach(b => b.classList.remove('active'));
+    const target = val === '' ? document.getElementById('badge-ninguna') : document.getElementById('badge-'+val);
+    if (target) target.classList.add('active');
   };
 
   function resetForm() {
     editingId = null; editingOldImg = null; selectedFile = null;
-    ['f-nombre','f-precio','f-desc'].forEach(id => document.getElementById(id).value = '');
-    document.getElementById('f-cat').value = '';
-    setPricePill('consultar');
-    setBadge('nuevo');
+    ['f-nombre','f-precio','f-desc'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
+    const cat = document.getElementById('f-cat'); if(cat) cat.value = '';
+    setPricePill('consultar'); setBadge('');
     const prev = document.getElementById('img-preview');
-    prev.src = ''; prev.style.display = 'none';
+    if (prev) { prev.src=''; prev.style.display='none'; }
     document.getElementById('upload-icon').style.display = 'block';
     document.getElementById('upload-text').style.display = 'block';
-    document.getElementById('f-img').value = '';
+    const fi = document.getElementById('f-img'); if(fi) fi.value = '';
     document.getElementById('form-title').textContent   = '➕ Agregar producto';
     document.getElementById('btn-save').textContent     = 'Guardar producto';
     document.getElementById('btn-cancel').style.display = 'none';
   }
 
-  let toastTimer;
-  function showToast(msg, isError=false) {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.className = 'show' + (isError ? ' error' : '');
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(()=>{ t.className=''; }, 3500);
-  }
-
-
-  // ── GALERÍA ADMIN ─────────────────────────────────────────
-  let galleryData      = { inicio: [], proceso: [], final: [] };
-  let activeGalleryTab = 'inicio';
-  let galFileSHA       = null;
-  let galSelectedFile  = null;
-
-  const tabLabels = { inicio: 'Inicio', proceso: 'El Proceso', final: 'El Producto Final' };
-
+  // ── GALLERY ADMIN ─────────────────────────────────────────────
   async function loadGalleryAdmin() {
     try {
-      const res = await fetch(`${WORKER_URL}/gallery`, { cache: 'no-store' });
-      if (!res.ok) throw new Error('sin datos');
+      const res  = await fetch(`${WORKER_URL}/gallery`, { headers: authHeaders(), cache: 'no-store' });
+      if (!res.ok) throw new Error('');
       const data = await res.json();
       galFileSHA  = data.sha;
-      galleryData = data.gallery || { inicio: [], proceso: [], final: [] };
-      if (!galleryData.inicio)  galleryData.inicio  = [];
-      if (!galleryData.proceso) galleryData.proceso = [];
-      if (!galleryData.final)   galleryData.final   = [];
-    } catch(e) {
-      galleryData = { inicio: [], proceso: [], final: [] };
-    }
+      galleryData = data.gallery || { inicio:[], proceso:[], final:[] };
+      ['inicio','proceso','final'].forEach(k => { if(!galleryData[k]) galleryData[k]=[]; });
+    } catch(e) { galleryData = { inicio:[], proceso:[], final:[] }; }
     renderGalleryAdmin(activeGalleryTab);
   }
 
@@ -685,16 +879,15 @@
     }
     grid.innerHTML = items.map((item, idx) => `
       <div class="gallery-admin-item">
-        <img src="${item.url}" alt="${item.caption || ''}" />
-        <button class="gallery-admin-del" onclick="deleteGalleryPhoto('${tab}',${idx})" title="Eliminar">✕</button>
+        <img src="${item.url}" alt="${item.caption||''}" />
+        <button class="gallery-admin-del" onclick="deleteGalleryPhoto('${tab}',${idx})">✕</button>
         ${item.caption ? `<div class="gallery-admin-caption">${item.caption}</div>` : ''}
       </div>`).join('');
   }
 
   window.galPreviewImage = (input) => {
-    const file = input.files[0];
-    if (!file) return;
-    if (file.size > 5 * 1024 * 1024) { showToast('La imagen no puede superar 5MB', true); input.value=''; return; }
+    const file = input.files[0]; if (!file) return;
+    if (file.size > 5*1024*1024) { showToast('La imagen no puede superar 5MB', true); input.value=''; return; }
     galSelectedFile = file;
     const reader = new FileReader();
     reader.onload = e => {
@@ -709,9 +902,8 @@
   window.saveGalleryPhoto = async () => {
     if (!galSelectedFile) { showToast('Seleccioná una imagen primero.', true); return; }
     const caption = document.getElementById('gal-caption').value.trim();
-    const btn     = document.getElementById('gal-btn-save');
-    btn.disabled  = true;
-    btn.innerHTML = '<span class="spinner"></span>Guardando…';
+    const btn = document.getElementById('gal-btn-save');
+    btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Guardando…';
     try {
       const imageURL = await uploadToCloudinary(galSelectedFile);
       galleryData[activeGalleryTab].push({ url: imageURL, caption, addedAt: new Date().toISOString() });
@@ -719,71 +911,70 @@
       renderGalleryAdmin(activeGalleryTab);
       galResetForm();
       showToast('✅ Foto agregada a la galería');
-    } catch(e) {
-      showToast('Error: ' + e.message, true);
-    } finally {
-      btn.disabled  = false;
-      btn.innerHTML = 'Guardar foto';
-    }
+    } catch(e) { showToast('Error: ' + e.message, true); }
+    finally { btn.disabled = false; btn.innerHTML = 'Guardar foto'; }
   };
 
   window.deleteGalleryPhoto = async (tab, idx) => {
-    if (!confirm('¿Eliminar esta foto de la galería?')) return;
+    if (!confirm('¿Eliminar esta foto?')) return;
     galleryData[tab].splice(idx, 1);
-    try {
-      await saveGalleryToWorker();
-      renderGalleryAdmin(tab);
-      showToast('🗑 Foto eliminada');
-    } catch(e) { showToast('Error al eliminar: ' + e.message, true); }
+    try { await saveGalleryToWorker(); renderGalleryAdmin(tab); showToast('🗑 Foto eliminada'); }
+    catch(e) { showToast('Error al eliminar: ' + e.message, true); }
   };
 
   async function saveGalleryToWorker() {
     const res = await fetch(`${WORKER_URL}/gallery`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json', 'X-Admin-Key': ADMIN_KEY },
+      method: 'PUT', headers: authHeaders(),
       body: JSON.stringify({ gallery: galleryData, sha: galFileSHA }),
     });
-    if (!res.ok) { const e = await res.json(); throw new Error(e.error || 'Error al guardar'); }
+    if (!res.ok) { const e = await res.json(); throw new Error(e.error || 'Error'); }
     const data = await res.json();
     galFileSHA  = data.sha;
   }
 
   function galResetForm() {
     galSelectedFile = null;
-    const fi = document.getElementById('gal-img');
-    if (fi) fi.value = '';
-    const cap = document.getElementById('gal-caption');
-    if (cap) cap.value = '';
+    const fi = document.getElementById('gal-img'); if(fi) fi.value = '';
+    const cap = document.getElementById('gal-caption'); if(cap) cap.value = '';
     const prev = document.getElementById('gal-img-preview');
-    if (prev) { prev.src = ''; prev.style.display = 'none'; }
+    if (prev) { prev.src=''; prev.style.display='none'; }
     const icon = document.getElementById('gal-upload-icon');
     const txt  = document.getElementById('gal-upload-text');
     if (icon) icon.style.display = 'block';
     if (txt)  txt.style.display  = 'block';
   }
 
-  loadGalleryAdmin();
-  // ────────────────────────────────────────────────────────────
+  // ── TOAST ────────────────────────────────────────────────────
+  let toastTimer;
+  function showToast(msg, isError=false) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'show' + (isError ? ' error' : '');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => { t.className=''; }, 3500);
+  }
 
-  // Drag & drop
-  const dropArea = document.getElementById('drop-area');
-  dropArea.addEventListener('dragover', e => { e.preventDefault(); dropArea.classList.add('drag'); });
-  dropArea.addEventListener('dragleave', () => dropArea.classList.remove('drag'));
-  dropArea.addEventListener('drop', e => {
-    e.preventDefault(); dropArea.classList.remove('drag');
-    const file = e.dataTransfer.files[0];
-    if (file && file.type.startsWith('image/')) {
-      selectedFile = file;
-      const reader = new FileReader();
-      reader.onload = ev => {
-        const prev = document.getElementById('img-preview');
-        prev.src = ev.target.result; prev.style.display = 'block';
-        document.getElementById('upload-icon').style.display = 'none';
-        document.getElementById('upload-text').style.display = 'none';
-      };
-      reader.readAsDataURL(file);
-    }
+  // ── DRAG & DROP ──────────────────────────────────────────────
+  document.addEventListener('DOMContentLoaded', () => {
+    const dropArea = document.getElementById('drop-area');
+    if (!dropArea) return;
+    dropArea.addEventListener('dragover', e => { e.preventDefault(); dropArea.classList.add('drag'); });
+    dropArea.addEventListener('dragleave', () => dropArea.classList.remove('drag'));
+    dropArea.addEventListener('drop', e => {
+      e.preventDefault(); dropArea.classList.remove('drag');
+      const file = e.dataTransfer.files[0];
+      if (file && file.type.startsWith('image/')) {
+        selectedFile = file;
+        const reader = new FileReader();
+        reader.onload = ev => {
+          const prev = document.getElementById('img-preview');
+          prev.src = ev.target.result; prev.style.display = 'block';
+          document.getElementById('upload-icon').style.display = 'none';
+          document.getElementById('upload-text').style.display = 'none';
+        };
+        reader.readAsDataURL(file);
+      }
+    });
   });
 </script>
 </body>
-</html>
