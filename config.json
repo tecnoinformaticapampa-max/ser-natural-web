@@ -1,0 +1,11 @@
+{
+  "categorias": [
+    { "id": "jabones",   "label": "Jabones artesanales" },
+    { "id": "cosmetica", "label": "Cosmética natural" },
+    { "id": "bienestar", "label": "Bienestar" }
+  ],
+  "etiquetas": [
+    { "id": "nuevo",   "label": "Nuevo" },
+    { "id": "popular", "label": "Popular" }
+  ]
+}
