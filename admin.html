@@ -580,13 +580,13 @@
   function renderBadgeSelector() {
     const wrap = document.getElementById('badge-selector-wrap');
     if (!wrap) return;
-    wrap.innerHTML =
-      '<button class="badge-opt" id="badge-ninguna" onclick="setBadge('')">Sin etiqueta</button>' +
-      siteConfig.etiquetas.map(e =>
-        `<button class="badge-opt" id="badge-${e.id}" onclick="setBadge('${e.id}')">${e.label}</button>`
-      ).join('');
+    const noneBtn = `<button class="badge-opt" id="badge-ninguna" onclick="setBadge('')">Sin etiqueta</button>`;
+    const etqBtns = siteConfig.etiquetas.map(e =>
+      `<button class="badge-opt" id="badge-${e.id}" onclick="setBadge('${e.id}')">${e.label}</button>`
+    ).join('');
+    wrap.innerHTML = noneBtn + etqBtns;
     if (badgeVal) setBadge(badgeVal);
-    else document.getElementById('badge-ninguna').classList.add('active');
+    else { const n = document.getElementById('badge-ninguna'); if(n) n.classList.add('active'); }
   }
 
   // Config UI (superadmin)
@@ -610,7 +610,7 @@
     const input = document.getElementById('new-cat-label');
     const label = input.value.trim();
     if (!label) return;
-    const id = label.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'');
+    const id = label.toLowerCase().replace(/[áéíóúüñÁÉÍÓÚÜÑ]/g, c => 'aeiouunAEIOUUN'['áéíóúüñÁÉÍÓÚÜÑ'.indexOf(c)]).replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'');
     if (siteConfig.categorias.find(c => c.id === id)) { showToast('Ya existe esa categoría', true); return; }
     siteConfig.categorias.push({ id, label });
     try { await saveConfig(); renderCatList(); renderCatSelect(); input.value = ''; showToast('✅ Categoría agregada'); }
@@ -628,7 +628,7 @@
     const input = document.getElementById('new-etiq-label');
     const label = input.value.trim();
     if (!label) return;
-    const id = label.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'');
+    const id = label.toLowerCase().replace(/[áéíóúüñÁÉÍÓÚÜÑ]/g, c => 'aeiouunAEIOUUN'['áéíóúüñÁÉÍÓÚÜÑ'.indexOf(c)]).replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'');
     if (siteConfig.etiquetas.find(e => e.id === id)) { showToast('Ya existe esa etiqueta', true); return; }
     siteConfig.etiquetas.push({ id, label });
     try { await saveConfig(); renderEtiqList(); renderBadgeSelector(); input.value = ''; showToast('✅ Etiqueta agregada'); }
