@@ -401,6 +401,36 @@
     .btn-back-cart:hover { border-color:var(--bark-lt); color:var(--bark); }
     .checkout-note { font-size:.72rem; color:var(--text-lt); text-align:center; line-height:1.5; margin-top:4px; }
     @media(max-width:480px) { .checkout-modal { padding:24px 20px; } }
+
+    /* ── PRODUCT MODAL ── */
+    .prod-modal-overlay { position:fixed; inset:0; background:rgba(46,42,36,.55); z-index:400; display:flex; align-items:center; justify-content:center; padding:16px; opacity:0; pointer-events:none; transition:opacity .25s; }
+    .prod-modal-overlay.open { opacity:1; pointer-events:all; }
+    .prod-modal { background:var(--white); border-radius:var(--r-lg); width:100%; max-width:620px; max-height:90vh; overflow-y:auto; box-shadow:0 24px 60px rgba(46,42,36,.22); transform:translateY(16px); transition:transform .3s cubic-bezier(.34,1.56,.64,1); }
+    .prod-modal-overlay.open .prod-modal { transform:translateY(0); }
+    .prod-modal-img { width:100%; aspect-ratio:4/3; object-fit:cover; border-radius:var(--r-lg) var(--r-lg) 0 0; background:var(--cream2); display:flex; align-items:center; justify-content:center; font-size:3rem; }
+    .prod-modal-img img { width:100%; height:100%; object-fit:cover; border-radius:var(--r-lg) var(--r-lg) 0 0; display:block; }
+    .prod-modal-body { padding:28px 28px 24px; }
+    .prod-modal-cat { font-size:.7rem; letter-spacing:.14em; text-transform:uppercase; color:var(--sage-dk); font-weight:600; margin-bottom:6px; }
+    .prod-modal-name { font-family:var(--font-display); font-size:1.5rem; color:var(--bark); margin-bottom:10px; }
+    .prod-modal-desc { font-size:.9rem; color:var(--text-lt); line-height:1.7; margin-bottom:18px; }
+    .prod-modal-extras { border-top:1px solid var(--cream2); padding-top:16px; margin-bottom:18px; }
+    .prod-modal-extra-item { margin-bottom:12px; }
+    .prod-modal-extra-label { font-size:.75rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--bark); margin-bottom:4px; }
+    .prod-modal-extra-val { font-size:.88rem; color:var(--text-lt); line-height:1.65; }
+    .prod-modal-footer { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+    .prod-modal-price { font-family:var(--font-display); font-size:1.4rem; color:var(--bark); }
+    .prod-modal-close { position:absolute; top:12px; right:12px; background:rgba(255,255,255,.9); border:none; border-radius:50%; width:34px; height:34px; cursor:pointer; font-size:1.1rem; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 8px rgba(0,0,0,.15); }
+
+    /* ── REVIEWS DINÁMICAS ── */
+    .reviews-section { padding:80px 0; background:var(--cream); }
+    .reviews-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; margin-top:48px; }
+    .happy-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-top:48px; }
+    .happy-item { border-radius:var(--r-md); overflow:hidden; aspect-ratio:1/1; position:relative; cursor:pointer; }
+    .happy-item img { width:100%; height:100%; object-fit:cover; transition:transform .4s; display:block; }
+    .happy-item:hover img { transform:scale(1.06); }
+    .happy-item-name { position:absolute; bottom:0; left:0; right:0; background:rgba(46,42,36,.55); color:#fff; font-size:.78rem; padding:8px 10px; opacity:0; transition:opacity .3s; }
+    .happy-item:hover .happy-item-name { opacity:1; }
+    @media(max-width:768px) { .reviews-grid{grid-template-columns:1fr;} .happy-grid{grid-template-columns:1fr 1fr;} }
   </style>
 </head>
 <body>
@@ -409,7 +439,7 @@
 <nav id="navbar">
   <div class="nav-inner">
     <a href="#inicio" class="nav-logo">
-      <img src="https://i.postimg.cc/W16Cb2t6/395740464-122094653600094688-9024125943526889344-n.jpg" alt="SerNatural logo" />
+      <img id="logo-nav" src="https://i.postimg.cc/W16Cb2t6/395740464-122094653600094688-9024125943526889344-n.jpg" alt="SerNatural logo" />
       <span class="nav-logo-text">Ser<span>Natural</span></span>
     </a>
     <ul class="nav-links">
@@ -459,7 +489,7 @@
     <div class="hero-visual fade-in" style="transition-delay:.2s">
       <div class="hero-blob">
         <div class="hero-logo-circle">
-          <img src="https://i.postimg.cc/W16Cb2t6/395740464-122094653600094688-9024125943526889344-n.jpg" alt="SerNatural" />
+          <img id="logo-hero" src="https://i.postimg.cc/W16Cb2t6/395740464-122094653600094688-9024125943526889344-n.jpg" alt="SerNatural" />
         </div>
       </div>
       <div class="float-card fc1">🧴 Cosmética natural</div>
@@ -535,7 +565,7 @@
     <div class="about-img-wrap fade-in">
       <div class="about-bg-rect"></div>
       <div class="about-img-panel">
-        <img src="https://i.postimg.cc/W16Cb2t6/395740464-122094653600094688-9024125943526889344-n.jpg" alt="SerNatural" />
+        <img id="logo-hero" src="https://i.postimg.cc/W16Cb2t6/395740464-122094653600094688-9024125943526889344-n.jpg" alt="SerNatural" />
         <p>"Creemos que lo natural no es una moda,<br>sino una forma de vivir."</p>
       </div>
     </div>
@@ -594,17 +624,25 @@
 </section>
 
 <!-- TESTIMONIALS -->
-<section id="testimonios">
+<section id="testimonios" class="reviews-section">
   <div class="container">
     <div class="testi-head fade-in">
       <span class="tag">Opiniones reales</span>
       <h2 class="section-title">Lo que dicen<br>nuestros clientes</h2>
       <p class="section-sub" style="margin:12px auto 0">Experiencias genuinas de personas que eligieron lo natural.</p>
     </div>
-    <div class="testi-grid">
-      <div class="testi-card fade-in"><div class="stars">★★★★★</div><p class="testi-text">"Los jabones artesanales son increíbles. Mi piel nunca estuvo tan hidratada y suave. ¡Y el olor es hermoso!"</p><div class="testi-author"><div class="testi-avatar">M</div><div><div class="testi-name">Mariana G.</div><div class="testi-loc">Clienta satisfecha</div></div></div></div>
-      <div class="testi-card fade-in" style="transition-delay:.1s"><div class="stars">★★★★★</div><p class="testi-text">"Excelente atención, me asesoraron muy bien para elegir los productos según mi rutina. Los recomiendo 100%."</p><div class="testi-author"><div class="testi-avatar">L</div><div><div class="testi-name">Laura P.</div><div class="testi-loc">Clienta habitual</div></div></div></div>
-      <div class="testi-card fade-in" style="transition-delay:.2s"><div class="stars">★★★★★</div><p class="testi-text">"Me encanta que todo es natural y que se nota la calidad en cada producto. Muy feliz con mi compra."</p><div class="testi-author"><div class="testi-avatar">V</div><div><div class="testi-name">Valentina R.</div><div class="testi-loc">Nueva clienta</div></div></div></div>
+    <div class="reviews-grid" id="reviews-grid">
+      <div class="testi-card fade-in"><div class="stars">★★★★★</div><p class="testi-text">"Los jabones artesanales son increíbles. Mi piel nunca estuvo tan hidratada y suave."</p><div class="testi-author"><div class="testi-avatar">M</div><div><div class="testi-name">Mariana G.</div><div class="testi-loc">Clienta satisfecha</div></div></div></div>
+      <div class="testi-card fade-in" style="transition-delay:.1s"><div class="stars">★★★★★</div><p class="testi-text">"Excelente atención, me asesoraron muy bien. Los recomiendo 100%."</p><div class="testi-author"><div class="testi-avatar">L</div><div><div class="testi-name">Laura P.</div><div class="testi-loc">Clienta habitual</div></div></div></div>
+      <div class="testi-card fade-in" style="transition-delay:.2s"><div class="stars">★★★★★</div><p class="testi-text">"Me encanta que todo es natural y que se nota la calidad. Muy feliz con mi compra."</p><div class="testi-author"><div class="testi-avatar">V</div><div><div class="testi-name">Valentina R.</div><div class="testi-loc">Nueva clienta</div></div></div></div>
+    </div>
+    <!-- Clientes felices -->
+    <div id="happy-section" style="display:none;margin-top:64px">
+      <div class="testi-head fade-in" style="margin-bottom:0">
+        <span class="tag" style="background:rgba(201,169,122,.15);color:var(--sand)">Clientes felices</span>
+        <h2 class="section-title">Nuestra comunidad</h2>
+      </div>
+      <div class="happy-grid" id="happy-grid"></div>
     </div>
   </div>
 </section>
@@ -703,7 +741,7 @@
   <div class="container">
     <div class="footer-inner">
       <div>
-        <div class="footer-logo"><img src="https://i.postimg.cc/W16Cb2t6/395740464-122094653600094688-9024125943526889344-n.jpg" alt="SerNatural" /><span class="footer-brand-name">Ser<span>Natural</span></span></div>
+        <div class="footer-logo"><img id="logo-hero" src="https://i.postimg.cc/W16Cb2t6/395740464-122094653600094688-9024125943526889344-n.jpg" alt="SerNatural" /><span class="footer-brand-name">Ser<span>Natural</span></span></div>
         <p class="footer-brand-desc">Cosmética artesanal y productos naturales pensados para acompañarte hacia un estilo de vida más consciente.</p>
         <p style="font-size:.78rem;color:rgba(237,231,220,.35)">⚠️ Los productos no reemplazan consulta médica.</p>
       </div>
@@ -718,163 +756,206 @@
   <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.122 1.532 5.849L.057 23.97l6.277-1.448A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.885 0-3.645-.517-5.152-1.415l-.369-.219-3.825.881.908-3.729-.24-.382A9.961 9.961 0 012 12C2 6.486 6.486 2 12 2s10 4.486 10 10-4.486 10-10 10z"/></svg>
 </a>
 
-<!-- ── CATÁLOGO + CARRITO ── -->
+<!-- ── SERNATURAL — JS DINÁMICO ── -->
 <script>
-  const GITHUB_RAW = 'https://raw.githubusercontent.com/tecnoinformaticapampa-max/ser-natural-web/main/products.json';
-  const WA_NUMBER  = '5491139014518'; // link de wa.me
+  const WORKER = 'https://ser-natural-api.tecnoinformaticapampa.workers.dev';
+  const WA_NUM = '5491139014518';
 
   let allProducts  = [];
   let activeFilter = 'todos';
-  let cart         = {}; // { productId: { product, qty } }
+  let cart         = {};
+  const cardQty    = {};
+  let siteConfig   = { categorias:[], etiquetas:[], camposExtra:[], logoUrl:'' };
+  let galleryData  = { inicio:[], proceso:[], final:[] };
+  let reviewsData  = { opiniones:[], clientes:[] };
 
-  const catLabels = { jabones:'Jabones artesanales', cosmetica:'Cosmética natural', bienestar:'Bienestar' };
-  const catEmoji  = { jabones:'🧼', cosmetica:'🌿', bienestar:'🍃' };
+  const galleryIntros = {
+    inicio:  'Todo comienza con una escucha atenta. Antes de preparar cada pedido, nos tomamos el tiempo de conocerte: tus necesidades, tu piel, tus preferencias. Porque lo que te entregamos no es un producto genérico, es algo pensado especialmente para vos.',
+    proceso: 'Seleccionamos cada materia prima con criterio y cuidado. Trabajamos con ingredientes naturales de calidad, prestando especial atención a cada detalle: si sos alérgico a algo, si buscás algo suave o intenso, si es para vos o para regalar. Cada pedido pasa por nuestras manos con dedicación real.',
+    final:   'Así llega tu pedido: armado con cariño, protegido para el viaje, listo para abrirlo con la misma emoción con la que lo preparamos. Porque para nosotros, el packaging no es un detalle — es parte de la experiencia SerNatural.'
+  };
 
-  // ── CATALOG LOAD ──
+  // ── INIT ────────────────────────────────────────────────────
+  async function init() {
+    await loadConfig();
+    await Promise.all([loadCatalog(), loadGallery(), loadReviews()]);
+  }
+
+  // ── CONFIG ──────────────────────────────────────────────────
+  async function loadConfig() {
+    try {
+      const res = await fetch(WORKER + '/config/public', { cache: 'no-store' });
+      if (res.ok) siteConfig = await res.json();
+    } catch(e) {}
+    renderFilters();
+    applyLogo();
+  }
+
+  function applyLogo() {
+    const url = siteConfig.logoUrl;
+    if (!url) return;
+    ['logo-nav','logo-hero','logo-footer'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.src = url;
+    });
+  }
+
+  function renderFilters() {
+    const bar = document.getElementById('filter-bar');
+    if (!bar || !siteConfig.categorias || !siteConfig.categorias.length) return;
+    bar.innerHTML =
+      '<button class="filter-btn active" id="fbtn-todos" onclick="filterCatalog('todos',this)">Todos</button>' +
+      siteConfig.categorias.map(c =>
+        '<button class="filter-btn" id="fbtn-' + c.id + '" onclick="filterCatalog('' + c.id + '',this)">' + c.label + '</button>'
+      ).join('');
+  }
+
+  // ── CATALOG ─────────────────────────────────────────────────
   async function loadCatalog() {
     try {
-      const res = await fetch(GITHUB_RAW + '?t=' + Date.now());
-      if (!res.ok) throw new Error('sin datos');
-      allProducts = await res.json();
+      const res = await fetch(WORKER + '/products/public?t=' + Date.now());
+      if (res.ok) allProducts = await res.json();
     } catch(e) { allProducts = []; }
     renderProducts();
   }
 
+  function getCatLabel(id) {
+    const c = (siteConfig.categorias||[]).find(c => c.id === id);
+    return c ? c.label : id;
+  }
+
+  function getEtqLabel(id) {
+    const e = (siteConfig.etiquetas||[]).find(e => e.id === id);
+    return e ? e.label : id;
+  }
+
+  const catEmoji = { jabones:'🧼', cosmetica:'🌿', bienestar:'🍃' };
+
   function renderProducts() {
     const grid = document.getElementById('products-grid');
-    const filtered = activeFilter === 'todos'
-      ? allProducts
-      : allProducts.filter(p => p.categoria === activeFilter);
-
+    const filtered = activeFilter === 'todos' ? allProducts : allProducts.filter(p => p.categoria === activeFilter);
     if (!filtered.length) {
-      grid.innerHTML = `<div class="catalog-empty"><div class="ce-icon">${activeFilter === 'todos' ? '🌿' : (catEmoji[activeFilter]||'📦')}</div><p>Próximamente nuevos productos en esta categoría.<br>Consultanos por WhatsApp.</p></div>`;
+      grid.innerHTML = '<div class="catalog-empty"><div class="ce-icon">🌿</div><p>Próximamente nuevos productos.<br>Consultanos por WhatsApp.</p></div>';
       return;
     }
-
     grid.innerHTML = filtered.map(p => {
-      const imgEl = p.imagenURL
-        ? `<img src="${p.imagenURL}" alt="${p.nombre}" loading="lazy" />`
-        : `<div class="prod-img-placeholder">${catEmoji[p.categoria]||'📦'}<span class="ph-label">${catLabels[p.categoria]||''}</span></div>`;
-
+      const imgEl   = p.imagenURL
+        ? '<img src="' + p.imagenURL + '" alt="' + p.nombre + '" loading="lazy" />'
+        : '<div class="prod-img-placeholder">' + (catEmoji[p.categoria]||'📦') + '</div>';
       const badgeEl = p.badge && p.badge !== ''
-        ? `<span class="prod-badge-tag ${p.badge}">${p.badge === 'nuevo' ? 'Nuevo' : 'Popular'}</span>`
-        : '';
-
+        ? '<span class="prod-badge-tag ' + p.badge + '">' + getEtqLabel(p.badge) + '</span>' : '';
       const priceDisplay = p.precio === 'consultar'
-        ? `<span style="font-size:.88rem;color:var(--sage-dk);font-weight:600">$ Consultar</span>`
-        : `$ ${Number(p.precio).toLocaleString('es-AR')}`;
-
-      const inCart = cart[p.id];
-      const qty    = inCart ? inCart.qty : 1;
-
-      return `
-        <div class="prod-card" id="card-${p.id}">
-          <div class="prod-img-wrap">
-            ${imgEl}
-            ${badgeEl}
-          </div>
-          <div class="prod-info">
-            <div class="prod-cat">${catLabels[p.categoria]||p.categoria}</div>
-            <div class="prod-name">${p.nombre}</div>
-            <div class="prod-desc">${p.descripcion}</div>
-            <div class="prod-footer-top">
-              <div class="prod-price">${priceDisplay}</div>
-            </div>
-            <div class="qty-row">
-              <div class="qty-ctrl">
-                <button class="qty-btn" onclick="changeQty('${p.id}',-1)">−</button>
-                <span class="qty-num" id="qty-${p.id}">${qty}</span>
-                <button class="qty-btn" onclick="changeQty('${p.id}',1)">+</button>
-              </div>
-              <button class="btn-add-cart" id="addbtn-${p.id}" onclick="addToCart('${p.id}')">
-                🛒 ${inCart ? 'En carrito' : 'Agregar'}
-              </button>
-            </div>
-          </div>
-        </div>`;
+        ? '<span style="font-size:.88rem;color:var(--sage-dk);font-weight:600">$ Consultar</span>'
+        : '$ ' + Number(p.precio).toLocaleString('es-AR');
+      const qty    = cardQty[p.id] || 1;
+      const inCart = !!cart[p.id];
+      return '<div class="prod-card" id="card-' + p.id + '" onclick="openProdModal('' + p.id + '')" style="cursor:pointer">' +
+        '<div class="prod-img-wrap">' + imgEl + badgeEl + '</div>' +
+        '<div class="prod-info">' +
+        '<div class="prod-cat">' + getCatLabel(p.categoria) + '</div>' +
+        '<div class="prod-name">' + p.nombre + '</div>' +
+        '<div class="prod-desc">' + p.descripcion + '</div>' +
+        '<div class="prod-price">' + priceDisplay + '</div>' +
+        '<div class="qty-row" onclick="event.stopPropagation()">' +
+        '<div class="qty-ctrl">' +
+        '<button class="qty-btn" onclick="changeQty('' + p.id + '',-1)">−</button>' +
+        '<span class="qty-num" id="qty-' + p.id + '">' + qty + '</span>' +
+        '<button class="qty-btn" onclick="changeQty('' + p.id + '',1)">+</button>' +
+        '</div>' +
+        '<button class="btn-add-cart" id="addbtn-' + p.id + '" onclick="addToCart('' + p.id + '')">' +
+        (inCart ? '✓ En carrito' : 'Agregar') +
+        '</button>' +
+        '</div></div></div>';
     }).join('');
   }
 
-  // ── QUANTITY ON CARD ──
-  const cardQty = {}; // local qty before adding to cart
+  // ── PRODUCT MODAL ────────────────────────────────────────────
+  window._modalProdId = null;
+
+  window.openProdModal = (id) => {
+    const p = allProducts.find(x => x.id === id); if (!p) return;
+    window._modalProdId = id;
+    const imgWrap = document.getElementById('prod-modal-img-wrap');
+    imgWrap.innerHTML = p.imagenURL
+      ? '<img src="' + p.imagenURL + '" alt="' + p.nombre + '" />'
+      : '<div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:4rem;background:var(--cream2)">' + (catEmoji[p.categoria]||'📦') + '</div>';
+    document.getElementById('pm-cat').textContent  = getCatLabel(p.categoria);
+    document.getElementById('pm-name').textContent = p.nombre;
+    document.getElementById('pm-desc').textContent = p.descripcion;
+    const priceEl = document.getElementById('pm-price');
+    priceEl.textContent = p.precio === 'consultar' ? '$ Consultar' : '$ ' + Number(p.precio).toLocaleString('es-AR');
+    // Extra fields
+    const extrasWrap = document.getElementById('pm-extras');
+    const campos = siteConfig.camposExtra || [];
+    const extra  = p.extra || {};
+    const filledCampos = campos.filter(c => extra[c.id]);
+    if (filledCampos.length) {
+      extrasWrap.style.display = 'block';
+      extrasWrap.innerHTML = filledCampos.map(c =>
+        '<div class="prod-modal-extra-item">' +
+        '<div class="prod-modal-extra-label">' + c.label + '</div>' +
+        '<div class="prod-modal-extra-val">' + extra[c.id] + '</div>' +
+        '</div>'
+      ).join('');
+    } else {
+      extrasWrap.style.display = 'none';
+    }
+    // Qty sync
+    const qtyEl = document.getElementById('modal-qty');
+    if (qtyEl) qtyEl.textContent = cardQty[id] || 1;
+    const addBtn = document.getElementById('modal-add-btn');
+    if (addBtn) addBtn.textContent = cart[id] ? '✓ En carrito' : '🛒 Agregar';
+    document.getElementById('prod-modal-overlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  };
+
+  window.closeProdModal = () => {
+    document.getElementById('prod-modal-overlay').classList.remove('open');
+    document.body.style.overflow = '';
+  };
+
+  // ── CART ────────────────────────────────────────────────────
   window.changeQty = (id, delta) => {
-    if (!cardQty[id]) cardQty[id] = 1;
-    cardQty[id] = Math.max(1, cardQty[id] + delta);
+    cardQty[id] = Math.max(1, (cardQty[id] || 1) + delta);
     const el = document.getElementById('qty-' + id);
     if (el) el.textContent = cardQty[id];
+    const mel = document.getElementById('modal-qty');
+    if (mel && window._modalProdId === id) mel.textContent = cardQty[id];
   };
 
-  // ── ADD TO CART ──
   window.addToCart = (id) => {
-    const p   = allProducts.find(x => x.id === id);
-    if (!p) return;
+    const p = allProducts.find(x => x.id === id); if (!p) return;
     const qty = cardQty[id] || 1;
-    if (cart[id]) {
-      cart[id].qty += qty;
-    } else {
-      cart[id] = { product: p, qty };
-    }
+    cart[id] ? (cart[id].qty += qty) : (cart[id] = { product: p, qty });
     cardQty[id] = 1;
-    const el = document.getElementById('qty-' + id);
-    if (el) el.textContent = 1;
+    const qel = document.getElementById('qty-' + id); if (qel) qel.textContent = 1;
     const btn = document.getElementById('addbtn-' + id);
     if (btn) { btn.textContent = '✓ En carrito'; btn.style.background = 'var(--sage)'; }
+    const mBtn = document.getElementById('modal-add-btn');
+    if (mBtn) mBtn.textContent = '✓ En carrito';
     updateCartUI();
-    // Brief shake animation on cart button
-    const cb = document.getElementById('cart-badge');
-    cb.style.transform = 'scale(1.4)';
-    setTimeout(() => cb.style.transform = '', 200);
+    const badge = document.getElementById('cart-badge');
+    badge.style.transform = 'scale(1.5)'; setTimeout(() => badge.style.transform='', 200);
   };
 
-  // ── CART UI ──
   function updateCartUI() {
-    const items   = Object.values(cart);
-    const total   = items.reduce((s, i) => i.product.precio !== 'consultar' ? s + Number(i.product.precio) * i.qty : s, 0);
-    const hasConsultar = items.some(i => i.product.precio === 'consultar');
-    const count   = items.reduce((s, i) => s + i.qty, 0);
-
-    // badge
+    const items = Object.values(cart);
+    const total = items.reduce((s,i) => i.product.precio !== 'consultar' ? s + Number(i.product.precio)*i.qty : s, 0);
+    const hasC  = items.some(i => i.product.precio === 'consultar');
+    const count = items.reduce((s,i) => s+i.qty, 0);
     const badge = document.getElementById('cart-badge');
     badge.textContent = count;
     badge.classList.toggle('visible', count > 0);
-
-    // footer
     document.getElementById('cart-footer').style.display = items.length ? 'block' : 'none';
-
-    // total
-    document.getElementById('cart-total').textContent = total > 0
-      ? '$ ' + total.toLocaleString('es-AR')
-      : hasConsultar ? 'A confirmar' : '$ 0';
-
-    // consultar warning
-    document.getElementById('consultar-warn').classList.toggle('show', hasConsultar);
-
-    // items list
+    document.getElementById('cart-total').textContent = total > 0 ? '$ '+total.toLocaleString('es-AR') : hasC ? 'A confirmar' : '$ 0';
+    document.getElementById('consultar-warn').classList.toggle('show', hasC);
     const el = document.getElementById('cart-items');
-    if (!items.length) {
-      el.innerHTML = '<div class="cart-empty"><div class="cart-empty-icon">🛒</div><p>Tu carrito está vacío.<br>Agregá productos del catálogo.</p></div>';
-      return;
-    }
-    el.innerHTML = items.map(({ product: p, qty }) => {
-      const imgEl = p.imagenURL
-        ? `<div class="cart-item-img"><img src="${p.imagenURL}" alt="${p.nombre}" /></div>`
-        : `<div class="cart-item-img">${catEmoji[p.categoria]||'📦'}</div>`;
-      const priceEl = p.precio === 'consultar'
-        ? `<div class="cart-item-price consultar">Precio a consultar</div>`
-        : `<div class="cart-item-price">$ ${(Number(p.precio) * qty).toLocaleString('es-AR')} (${qty} × $ ${Number(p.precio).toLocaleString('es-AR')})</div>`;
-      return `
-        <div class="cart-item">
-          ${imgEl}
-          <div>
-            <div class="cart-item-name">${p.nombre}</div>
-            ${priceEl}
-          </div>
-          <div class="cart-item-qty">
-            <button class="cq-btn" onclick="cartChangeQty('${p.id}',-1)">−</button>
-            <span class="cq-num">${qty}</span>
-            <button class="cq-btn" onclick="cartChangeQty('${p.id}',1)">+</button>
-          </div>
-        </div>`;
+    if (!items.length) { el.innerHTML='<div class="cart-empty"><div class="cart-empty-icon">🛒</div><p>Tu carrito está vacío.</p></div>'; return; }
+    el.innerHTML = items.map(({product:p, qty}) => {
+      const imgEl = p.imagenURL ? '<div class="cart-item-img"><img src="'+p.imagenURL+'" alt="'+p.nombre+'" /></div>' : '<div class="cart-item-img">'+(catEmoji[p.categoria]||'📦')+'</div>';
+      const priceEl = p.precio === 'consultar' ? '<div class="cart-item-price consultar">Precio a consultar</div>' : '<div class="cart-item-price">$ '+(Number(p.precio)*qty).toLocaleString('es-AR')+'</div>';
+      return '<div class="cart-item">'+imgEl+'<div><div class="cart-item-name">'+p.nombre+'</div>'+priceEl+'</div>'+
+        '<div class="cart-item-qty"><button class="cq-btn" onclick="cartChangeQty(''+p.id+'',-1)">−</button><span class="cq-num">'+qty+'</span><button class="cq-btn" onclick="cartChangeQty(''+p.id+'',1)">+</button></div></div>';
     }).join('');
   }
 
@@ -883,61 +964,56 @@
     cart[id].qty = Math.max(0, cart[id].qty + delta);
     if (cart[id].qty === 0) {
       delete cart[id];
-      // reset card button
-      const btn = document.getElementById('addbtn-' + id);
-      if (btn) { btn.textContent = '🛒 Agregar'; btn.style.background = ''; }
+      const btn = document.getElementById('addbtn-'+id);
+      if (btn) { btn.textContent='Agregar'; btn.style.background=''; }
     }
     updateCartUI();
   };
 
   window.clearCart = () => {
-    cart = {};
-    // reset all add buttons
-    allProducts.forEach(p => {
-      const btn = document.getElementById('addbtn-' + p.id);
-      if (btn) { btn.textContent = '🛒 Agregar'; btn.style.background = ''; }
-      const qel = document.getElementById('qty-' + p.id);
-      if (qel) qel.textContent = 1;
+    Object.keys(cart).forEach(id => {
+      const btn = document.getElementById('addbtn-'+id);
+      if (btn) { btn.textContent='Agregar'; btn.style.background=''; }
+      const qel = document.getElementById('qty-'+id); if (qel) qel.textContent=1;
+      cardQty[id] = 1;
     });
-    cardQty = {};
+    cart = {}; updateCartUI();
+  };
+
+  window.openCart = () => {
+    document.getElementById('cart-drawer').classList.add('open');
+    document.getElementById('cart-overlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
     updateCartUI();
   };
-
-  // ── WHATSAPP CHECKOUT ──
-  // ── CHECKOUT MODAL ──
-  window.sendToWhatsApp = () => {
-    openCheckout();
+  window.closeCart = () => {
+    document.getElementById('cart-drawer').classList.remove('open');
+    document.getElementById('cart-overlay').classList.remove('open');
+    document.body.style.overflow = '';
   };
 
+  // ── CHECKOUT ────────────────────────────────────────────────
+  window.sendToWhatsApp = () => { openCheckout(); };
+
   window.openCheckout = () => {
-    const items = Object.values(cart);
-    if (!items.length) return;
-    // Render summary inside modal
-    const total = items.reduce((s,i) => i.product.precio !== 'consultar' ? s + Number(i.product.precio)*i.qty : s, 0);
-    const hasConsultar = items.some(i => i.product.precio === 'consultar');
-    let summaryHtml = '';
+    const items = Object.values(cart); if (!items.length) return;
+    const total = items.reduce((s,i) => i.product.precio !== 'consultar' ? s+Number(i.product.precio)*i.qty : s, 0);
+    const hasC  = items.some(i => i.product.precio === 'consultar');
+    let sumHtml = '';
     items.forEach(({product:p, qty}) => {
-      const priceStr = p.precio === 'consultar'
-        ? 'Precio a consultar'
-        : `$ ${(Number(p.precio)*qty).toLocaleString('es-AR')}`;
-      summaryHtml += `<div class="checkout-summary-item"><span>${p.nombre} x${qty}</span><span>${priceStr}</span></div>`;
+      const pr = p.precio === 'consultar' ? 'Precio a consultar' : '$ '+(Number(p.precio)*qty).toLocaleString('es-AR');
+      sumHtml += '<div class="checkout-summary-item"><span>'+p.nombre+' x'+qty+'</span><span>'+pr+'</span></div>';
     });
-    const totalStr = total > 0 ? `$ ${total.toLocaleString('es-AR')}` : 'A confirmar';
-    document.getElementById('co-summary').innerHTML = summaryHtml;
-    document.getElementById('co-total').textContent = totalStr;
-    // Clear fields
+    document.getElementById('co-summary').innerHTML = sumHtml;
+    document.getElementById('co-total').textContent = total > 0 ? '$ '+total.toLocaleString('es-AR') : 'A confirmar';
     ['co-nombre','co-localidad','co-cp','co-direccion'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) { el.value = ''; el.classList.remove('error'); }
+      const el=document.getElementById(id); if(el){el.value='';el.classList.remove('error');}
     });
-    // Open modal, close cart
+    const sel = document.getElementById('co-provincia'); if(sel){sel.value='';sel.classList.remove('error');}
     closeCart();
     document.getElementById('checkout-overlay').classList.add('open');
     document.body.style.overflow = 'hidden';
-    const sel = document.getElementById('co-provincia');
-    if (sel) sel.value = '';
-    document.getElementById('co-provincia').classList.remove('error');
-    setTimeout(() => document.getElementById('co-nombre').focus(), 300);
+    setTimeout(() => { const n=document.getElementById('co-nombre'); if(n) n.focus(); }, 300);
   };
 
   window.closeCheckout = () => {
@@ -951,148 +1027,153 @@
     const provincia = document.getElementById('co-provincia').value;
     const cp        = document.getElementById('co-cp').value.trim();
     const direccion = document.getElementById('co-direccion').value.trim();
-
     let valid = true;
-    const validate = (id, ok) => {
-      document.getElementById(id).classList.toggle('error', !ok);
-      if (!ok) valid = false;
-    };
-    validate('co-nombre',    !!nombre);
-    validate('co-localidad', !!localidad);
-    validate('co-provincia', !!provincia);
-    validate('co-cp',        !!cp);
+    const val = (id, ok) => { document.getElementById(id).classList.toggle('error',!ok); if(!ok) valid=false; };
+    val('co-nombre', !!nombre); val('co-localidad', !!localidad);
+    val('co-provincia', !!provincia); val('co-cp', !!cp);
     if (!valid) return;
-
     const items = Object.values(cart);
-    const total = items.reduce((s,i) => i.product.precio !== 'consultar' ? s + Number(i.product.precio)*i.qty : s, 0);
-    const hasConsultar = items.some(i => i.product.precio === 'consultar');
+    const total = items.reduce((s,i) => i.product.precio !== 'consultar' ? s+Number(i.product.precio)*i.qty : s, 0);
+    const hasC  = items.some(i => i.product.precio === 'consultar');
+    let msg = 'Hola SerNatural! Quiero hacer el siguiente pedido
+';
+    msg += '━'.repeat(22) + '
 
-    let msg = 'Hola SerNatural! Quiero hacer el siguiente pedido\n';
-    msg += '━━━━━━━━━━━━━━━━━━━━━━\n';
-    msg += '\n DATOS DEL CLIENTE\n';
-    msg += `Nombre: ${nombre}\n`;
-    msg += `Localidad: ${localidad}\n`;
-    msg += `Provincia: ${provincia}\n`;
-    msg += `Codigo postal: ${cp}\n`;
-    if (direccion) msg += `Direccion: ${direccion}\n`;
-    msg += '\n PRODUCTOS\n';
+';
+    msg += ' DATOS DEL CLIENTE
+';
+    msg += 'Nombre: ' + nombre + '
+';
+    msg += 'Localidad: ' + localidad + '
+';
+    msg += 'Provincia: ' + provincia + '
+';
+    msg += 'Codigo postal: ' + cp + '
+';
+    if (direccion) msg += 'Direccion: ' + direccion + '
+';
+    msg += '
+ PRODUCTOS
+';
     items.forEach(({product:p, qty}) => {
-      if (p.precio === 'consultar') {
-        msg += `• ${p.nombre} x${qty} — Precio a consultar\n`;
-      } else {
-        msg += `• ${p.nombre} x${qty} — $ ${(Number(p.precio)*qty).toLocaleString('es-AR')}\n`;
-      }
+      msg += p.precio === 'consultar'
+        ? '• ' + p.nombre + ' x' + qty + ' — Precio a consultar
+'
+        : '• ' + p.nombre + ' x' + qty + ' — $ ' + (Number(p.precio)*qty).toLocaleString('es-AR') + '
+';
     });
-    msg += '\n';
-    if (total > 0) msg += `Total estimado: $ ${total.toLocaleString('es-AR')}\n`;
-    if (hasConsultar) msg += '(Algunos precios a confirmar)\n';
-    msg += '━━━━━━━━━━━━━━━━━━━━━━\n';
+    msg += '
+';
+    if (total > 0) msg += 'Total estimado: $ ' + total.toLocaleString('es-AR') + '
+';
+    if (hasC) msg += '(Algunos precios a confirmar)
+';
+    msg += '━'.repeat(22) + '
+';
     msg += 'Por favor confirmarme disponibilidad, precio final y costo de envio. Gracias!';
-
     closeCheckout();
-    window.open('https://wa.me/' + WA_NUMBER + '?text=' + encodeURIComponent(msg), '_blank');
+    window.open('https://wa.me/' + WA_NUM + '?text=' + encodeURIComponent(msg), '_blank');
   };
 
-  // ── CART OPEN/CLOSE ──
-  window.openCart = () => {
-    document.getElementById('cart-drawer').classList.add('open');
-    document.getElementById('cart-overlay').classList.add('open');
-    document.body.style.overflow = 'hidden';
-    updateCartUI();
-  };
-  window.closeCart = () => {
-    document.getElementById('cart-drawer').classList.remove('open');
-    document.getElementById('cart-overlay').classList.remove('open');
-    document.body.style.overflow = '';
-  };
-
-  // ── FILTER ──
-  window.filterCatalog = (cat, btn) => {
-    activeFilter = cat;
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    if (btn) btn.classList.add('active');
-    else {
-      const map = { todos:'fbtn-todos', jabones:'fbtn-jabones', cosmetica:'fbtn-cosmetica', bienestar:'fbtn-bienestar' };
-      const el = document.getElementById(map[cat]);
-      if (el) el.classList.add('active');
-    }
-    renderProducts();
-  };
-
-
-  // ── GALERÍA DINÁMICA ──────────────────────────────────────
-  const GALLERY_RAW = 'https://raw.githubusercontent.com/tecnoinformaticapampa-max/ser-natural-web/main/gallery.json';
-
-  const galleryIntros = {
-    inicio:  'Todo comienza con una escucha atenta. Antes de preparar cada pedido, nos tomamos el tiempo de conocerte: tus necesidades, tu piel, tus preferencias. Porque lo que te entregamos no es un producto genérico, es algo pensado especialmente para vos.',
-    proceso: 'Seleccionamos cada materia prima con criterio y cuidado. Trabajamos con ingredientes naturales de calidad, prestando especial atención a cada detalle: si sos alérgico a algo, si buscás algo suave o intenso, si es para vos o para regalar. Cada pedido pasa por nuestras manos con dedicación real.',
-    final:   'Así llega tu pedido: armado con cariño, protegido para el viaje, listo para abrirlo con la misma emoción con la que lo preparamos. Porque para nosotros, el packaging no es un detalle — es parte de la experiencia SerNatural.'
-  };
-
-  let galleryData     = {};
-  let activeGalleryTab = 'inicio';
-
+  // ── GALLERY ─────────────────────────────────────────────────
   async function loadGallery() {
     try {
-      const res = await fetch(GALLERY_RAW + '?t=' + Date.now());
-      if (!res.ok) throw new Error('sin datos');
-      galleryData = await res.json();
-    } catch(e) {
-      galleryData = { inicio: [], proceso: [], final: [] };
-    }
+      const res = await fetch(WORKER + '/gallery/public?t=' + Date.now());
+      if (res.ok) galleryData = await res.json();
+    } catch(e) { galleryData = { inicio:[], proceso:[], final:[] }; }
     renderGallery('inicio');
   }
 
   function renderGallery(tab) {
-    activeGalleryTab = tab;
-    const grid = document.getElementById('gallery-grid');
+    const grid  = document.getElementById('gallery-grid');
     const intro = document.getElementById('gallery-intro-text');
-    if (!grid || !intro) return;
-
-    intro.textContent = galleryIntros[tab] || '';
-
-    const items = (galleryData[tab] || []);
+    if (!grid) return;
+    if (intro) intro.textContent = galleryIntros[tab] || '';
+    const items = galleryData[tab] || [];
     if (!items.length) {
-      grid.innerHTML = '<div class="gallery-empty-state"><div class="ge-icon">📸</div><p>Próximamente subimos fotos de esta sección.</p></div>';
+      grid.innerHTML = '<div class="gallery-empty-state"><div class="ge-icon">📸</div><p>Próximamente subimos fotos.</p></div>';
       return;
     }
-
-    grid.innerHTML = items.map(item => `
-      <div class="gallery-dyn-item">
-        <img src="${item.url}" alt="${item.caption || ''}" loading="lazy" />
-        <div class="gallery-dyn-overlay">
-          ${item.caption ? `<div class="gallery-dyn-caption">${item.caption}</div>` : ''}
-        </div>
-      </div>
-    `).join('');
+    grid.innerHTML = items.map(item =>
+      '<div class="gallery-dyn-item">' +
+      '<img src="' + item.url + '" alt="' + (item.caption||'') + '" loading="lazy" />' +
+      '<div class="gallery-dyn-overlay">' +
+      (item.caption ? '<div class="gallery-dyn-caption">' + item.caption + '</div>' : '') +
+      '</div></div>'
+    ).join('');
   }
 
   window.switchGalleryTab = (tab, btn) => {
     document.querySelectorAll('.gallery-tab').forEach(b => b.classList.remove('active'));
     if (btn) btn.classList.add('active');
     const grid = document.getElementById('gallery-grid');
-    grid.classList.add('loading');
-    setTimeout(() => {
-      renderGallery(tab);
-      grid.classList.remove('loading');
-    }, 200);
+    if (grid) grid.classList.add('loading');
+    setTimeout(() => { renderGallery(tab); if(grid) grid.classList.remove('loading'); }, 200);
   };
 
-  loadGallery();
-  // ────────────────────────────────────────────────────────────
+  // ── REVIEWS ─────────────────────────────────────────────────
+  async function loadReviews() {
+    try {
+      const res = await fetch(WORKER + '/reviews/public?t=' + Date.now());
+      if (res.ok) reviewsData = await res.json();
+    } catch(e) { reviewsData = { opiniones:[], clientes:[] }; }
+    renderReviews(); renderHappy();
+  }
 
-  loadCatalog();
-</script>
+  function renderReviews() {
+    const grid = document.getElementById('reviews-grid'); if (!grid) return;
+    const items = reviewsData.opiniones || [];
+    if (!items.length) return; // Keep static fallback cards
+    grid.innerHTML = items.map((r, i) => {
+      const stars = '★'.repeat(r.stars||5);
+      const avatar = r.fotoUrl
+        ? '<img src="' + r.fotoUrl + '" alt="' + r.nombre + '" style="width:36px;height:36px;border-radius:50%;object-fit:cover" />'
+        : '<div class="testi-avatar">' + (r.nombre||'?')[0].toUpperCase() + '</div>';
+      return '<div class="testi-card fade-in" style="transition-delay:' + (i*0.1) + 's">' +
+        '<div class="stars">' + stars + '</div>' +
+        '<p class="testi-text">&ldquo;' + r.texto + '&rdquo;</p>' +
+        '<div class="testi-author">' + avatar +
+        '<div><div class="testi-name">' + r.nombre + '</div>' +
+        (r.loc ? '<div class="testi-loc">' + r.loc + '</div>' : '') +
+        '</div></div></div>';
+    }).join('');
+  }
 
-<!-- JS general del sitio -->
-<script>
-  function toggleMenu(){ document.getElementById('drawer').classList.toggle('open'); }
+  function renderHappy() {
+    const section = document.getElementById('happy-section');
+    const grid    = document.getElementById('happy-grid');
+    const items   = reviewsData.clientes || [];
+    if (!items.length || !section || !grid) return;
+    section.style.display = 'block';
+    grid.innerHTML = items.map(c =>
+      '<div class="happy-item">' +
+      '<img src="' + c.url + '" alt="' + (c.nombre||'Cliente feliz') + '" loading="lazy" />' +
+      (c.nombre ? '<div class="happy-item-name">' + c.nombre + '</div>' : '') +
+      '</div>'
+    ).join('');
+  }
+
+  // ── FILTER ──────────────────────────────────────────────────
+  window.filterCatalog = (cat, btn) => {
+    activeFilter = cat;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+    else {
+      const el = document.getElementById('fbtn-' + cat); if(el) el.classList.add('active');
+    }
+    renderProducts();
+  };
+
+  // ── MISC ────────────────────────────────────────────────────
+  function toggleMenu() { document.getElementById('drawer').classList.toggle('open'); }
+
   window.addEventListener('scroll', () => {
-    document.getElementById('navbar').style.boxShadow = window.scrollY > 10 ? '0 2px 20px rgba(74,60,43,.10)' : 'none';
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 20);
   });
+
   const obs = new IntersectionObserver(entries => {
-    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); obs.unobserve(e.target); } });
-  }, { threshold: 0.12 });
+    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); obs.unobserve(e.target); }});
+  }, { threshold: 0.1 });
   document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
 
   function submitForm() {
@@ -1100,13 +1181,19 @@
     const phone = document.getElementById('f-phone').value.trim();
     const topic = document.getElementById('f-topic').value;
     const msg   = document.getElementById('f-msg').value.trim();
-    if (!name) { alert('Por favor ingresá tu nombre.'); return; }
-    if (!msg)  { alert('Por favor escribí tu consulta.'); return; }
-    const waMsg = encodeURIComponent('Hola! Me contacto desde la web 🌿\n*Nombre:* '+name+'\n'+(phone?'*Teléfono:* '+phone+'\n':'')+(topic?'*Consulta sobre:* '+topic+'\n':'')+'*Mensaje:* '+msg);
-    window.open('https://wa.me/5491139014518?text='+waMsg,'_blank');
+    if (!name)  { alert('Por favor ingresá tu nombre.'); return; }
+    if (!msg)   { alert('Por favor escribí tu consulta.'); return; }
+    const waMsg = encodeURIComponent('Hola! Me contacto desde la web
+Nombre: '+name+(phone?'
+Telefono: '+phone:'')+(topic?'
+Consulta: '+topic:'')+'
+Mensaje: '+msg);
+    window.open('https://wa.me/' + WA_NUM + '?text=' + waMsg, '_blank');
     document.getElementById('form-body').style.display = 'none';
     document.getElementById('form-success').style.display = 'block';
   }
+
+  init();
 </script>
 
 <!-- CART OVERLAY -->
@@ -1217,5 +1304,31 @@
     <p class="checkout-note">Te vamos a responder a la brevedad para confirmar stock, precio final y costo de envio.</p>
   </div>
 </div>
+
+<!-- PRODUCT DETAIL MODAL -->
+<div class="prod-modal-overlay" id="prod-modal-overlay" onclick="if(event.target===this)closeProdModal()">
+  <div class="prod-modal" style="position:relative">
+    <button class="prod-modal-close" onclick="closeProdModal()">✕</button>
+    <div id="prod-modal-img-wrap" class="prod-modal-img"></div>
+    <div class="prod-modal-body">
+      <div class="prod-modal-cat" id="pm-cat"></div>
+      <div class="prod-modal-name" id="pm-name"></div>
+      <div class="prod-modal-desc" id="pm-desc"></div>
+      <div class="prod-modal-extras" id="pm-extras" style="display:none"></div>
+      <div class="prod-modal-footer">
+        <div class="prod-modal-price" id="pm-price"></div>
+        <div style="display:flex;gap:10px;align-items:center">
+          <div class="qty-ctrl">
+            <button class="qty-btn" onclick="changeQty(window._modalProdId,-1)">−</button>
+            <span class="qty-num" id="modal-qty">1</span>
+            <button class="qty-btn" onclick="changeQty(window._modalProdId,1)">+</button>
+          </div>
+          <button class="btn-add-cart" id="modal-add-btn" onclick="addToCart(window._modalProdId);closeProdModal()">🛒 Agregar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
