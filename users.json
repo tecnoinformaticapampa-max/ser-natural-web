@@ -1,0 +1,4 @@
+[
+  { "user": "admin", "pass": "pilucha16?", "role": "superadmin" },
+  { "user": "sernatural", "pass": "SN2024admin", "role": "cliente" }
+]
