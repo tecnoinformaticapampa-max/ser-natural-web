@@ -388,26 +388,6 @@
       </div>
     </div><!-- end panel-galeria -->
 
-    <!-- TAB: CONFIGURACIÓN (superadmin) -->
-    <div class="tab-panel" id="panel-config">
-      <div class="config-section">
-        <h3>📂 Categorías de Productos</h3>
-        <div class="tag-list" id="cats-list"></div>
-        <div class="tag-add-row">
-          <input type="text" id="new-cat-label" placeholder="Nombre de la nueva categoría…" maxlength="40" />
-          <button class="btn-add-tag" onclick="addCategoria()">+ Agregar</button>
-        </div>
-      </div>
-      <div class="config-section">
-        <h3>🏷️ Etiquetas de Productos</h3>
-        <div class="tag-list" id="etiq-list"></div>
-        <div class="tag-add-row">
-          <input type="text" id="new-etiq-label" placeholder="Nombre de la nueva etiqueta…" maxlength="30" />
-          <button class="btn-add-tag" onclick="addEtiqueta()">+ Agregar</button>
-        </div>
-      </div>
-    </div><!-- end panel-config -->
-
     <!-- TAB: USUARIOS (superadmin) -->
     <div class="tab-panel" id="panel-usuarios">
       <div class="config-section">
@@ -751,12 +731,12 @@
 
   function renderBadgeSelector() {
     const wrap = document.getElementById('badge-selector-wrap'); if (!wrap) return;
-    const none = '<button class="badge-opt" id="badge-ninguna" onclick="setBadge('')">Sin etiqueta</button>';
-    const btns = (siteConfig.etiquetas||[]).map(e =>
-      '<button class="badge-opt" id="badge-' + e.id + '" onclick="setBadge('' + e.id + '')">' + e.label + '</button>'
-    ).join('');
-    wrap.innerHTML = none + btns;
-    const t = badgeVal ? document.getElementById('badge-'+badgeVal) : document.getElementById('badge-ninguna');
+    let html = '<button class="badge-opt" id="badge-ninguna" onclick="setBadge(\'\')">Sin etiqueta</button>';
+    (siteConfig.etiquetas||[]).forEach(e => {
+      html += '<button class="badge-opt" id="badge-' + e.id + '" onclick="setBadge(\'' + e.id + '\')">' + e.label + '</button>';
+    });
+    wrap.innerHTML = html;
+    const t = badgeVal ? document.getElementById('badge-' + badgeVal) : document.getElementById('badge-ninguna');
     if (t) t.classList.add('active');
   }
 
