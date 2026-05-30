@@ -255,10 +255,10 @@
     <div class="admin-tabs" id="admin-tabs">
       <button class="admin-tab-btn active" onclick="switchTab('productos')" data-tab="productos">📦 Productos</button>
       <button class="admin-tab-btn" onclick="switchTab('galeria')" data-tab="galeria">📸 Galería</button>
-      <button class="admin-tab-btn" onclick="switchTab('opiniones')" data-tab="opiniones">⭐ Opiniones</button>
-      <button class="admin-tab-btn superadmin-only" id="tab-identidad" style="display:none" onclick="switchTab('identidad')" data-tab="identidad">🎨 Identidad</button>
-      <button class="admin-tab-btn superadmin-only" onclick="switchTab('config')" data-tab="config" id="tab-config" style="display:none">⚙️ Configuración</button>
-      <button class="admin-tab-btn superadmin-only" onclick="switchTab('usuarios')" data-tab="usuarios" id="tab-usuarios" style="display:none">👥 Usuarios</button>
+      <button class="admin-tab-btn" onclick="switchTab('opiniones')" data-tab="opiniones" id="tab-opiniones">⭐ Opiniones</button>
+      <button class="admin-tab-btn" onclick="switchTab('identidad')" data-tab="identidad" id="tab-identidad">🎨 Identidad</button>
+      <button class="admin-tab-btn" onclick="switchTab('config')" data-tab="config" id="tab-config">⚙️ Configuración</button>
+      <button class="admin-tab-btn" onclick="switchTab('usuarios')" data-tab="usuarios" id="tab-usuarios" style="display:none">👥 Usuarios</button>
     </div>
 
     <!-- TAB: PRODUCTOS -->
@@ -292,7 +292,6 @@
           <label>Descripción *</label>
           <textarea id="f-desc" placeholder="Describí el producto, sus ingredientes y beneficios…"></textarea>
         </div>
-        <div id="extra-fields-wrap"></div>
         <div class="form-group">
           <label>Precio</label>
           <div style="display:flex;gap:10px;margin-bottom:10px">
@@ -407,18 +406,75 @@
           <button class="btn-add-tag" onclick="addEtiqueta()">+ Agregar</button>
         </div>
       </div>
-      <div class="config-section">
-        <h3>📋 Campos Extra de Productos</h3>
-        <p style="font-size:.82rem;color:var(--text-lt);margin-bottom:14px">Campos opcionales que aparecen en el formulario de cada producto. Ej: Modo de uso, Ingredientes.</p>
-        <div class="tag-list" id="campos-list"></div>
-        <div class="tag-add-row">
-          <input type="text" id="new-campo-label" placeholder="Ej: Modo de uso, Precauciones…" maxlength="40" />
-          <button class="btn-add-tag" onclick="addCampoExtra()">+ Agregar</button>
-        </div>
-      </div>
     </div><!-- end panel-config -->
 
-    <!-- TAB: IDENTIDAD (superadmin) -->
+    <!-- TAB: USUARIOS (superadmin) -->
+    <div class="tab-panel" id="panel-usuarios">
+      <div class="config-section">
+        <h3>👥 Usuarios del Panel</h3>
+        <div class="users-table" id="users-table"></div>
+        <div class="reset-info">
+          <strong>¿Cómo cambiar una contraseña?</strong>
+          Para cambiar la contraseña de cualquier usuario: ir a <strong>Cloudflare Dashboard → Workers & Pages → ser-natural-api → Settings → Variables</strong> y editar la variable <code>USERS_JSON</code> con el nuevo valor.
+        </div>
+      </div>
+    </div><!-- end panel-usuarios -->
+
+
+    </div><!-- end panel-productos -->
+
+    <!-- ═══ TAB: OPINIONES ═══ -->
+    <div class="tab-panel" id="panel-opiniones">
+      <div class="admin-tabs" style="margin-bottom:24px;border-bottom:1px solid var(--cream2);padding-bottom:0">
+        <button class="admin-tab-btn active" id="rtab-opiniones" onclick="switchReviewsTab('opiniones',this)" style="border-bottom:2px solid var(--sage-dk)">⭐ Opiniones</button>
+        <button class="admin-tab-btn" id="rtab-clientes" onclick="switchReviewsTab('clientes',this)">📸 Clientes felices</button>
+      </div>
+      <!-- Opiniones sub -->
+      <div id="rpanel-opiniones">
+        <div class="form-card">
+          <div class="form-grid">
+            <div class="form-group"><label>Nombre del cliente *</label><input type="text" id="rev-nombre" placeholder="Ej: María G." maxlength="60" /></div>
+            <div class="form-group"><label>Calificación</label><select id="rev-stars"><option value="5">★★★★★</option><option value="4">★★★★☆</option><option value="3">★★★☆☆</option></select></div>
+            <div class="form-group full"><label>Opinión *</label><textarea id="rev-texto" placeholder="Escribí la opinión del cliente…" maxlength="300"></textarea></div>
+            <div class="form-group">
+              <label>Foto del cliente <span style="color:var(--text-lt);font-weight:400;font-size:.75rem">(opcional)</span></label>
+              <div class="gallery-upload-area" id="rev-drop-area">
+                <input type="file" id="rev-img" accept="image/*" onchange="revPreviewImage(this)" />
+                <div id="rev-upload-icon" style="font-size:1.8rem;margin-bottom:4px">📷</div>
+                <div id="rev-upload-text" style="font-size:.82rem;color:var(--text-lt)"><strong style="color:var(--sage-dk)">Clic o arrastrá</strong></div>
+                <img id="rev-img-preview" alt="preview" style="display:none;max-height:120px;border-radius:8px;margin-top:8px;width:100%;object-fit:cover" />
+              </div>
+            </div>
+            <div class="form-group"><label>Ubicación <span style="color:var(--text-lt);font-weight:400;font-size:.75rem">(opcional)</span></label><input type="text" id="rev-loc" placeholder="Ej: Buenos Aires" maxlength="50" /></div>
+          </div>
+          <div class="form-actions"><button class="btn-save" id="rev-btn-save" onclick="saveOpinion()">Guardar opinión</button></div>
+        </div>
+        <div class="section-header"><h2>Opiniones cargadas (<span id="rev-count">0</span>)</h2></div>
+        <div class="gallery-grid-admin" id="rev-list"></div>
+      </div>
+      <!-- Clientes felices sub -->
+      <div id="rpanel-clientes" style="display:none">
+        <div class="form-card">
+          <div class="form-grid">
+            <div class="form-group full">
+              <label>Foto del cliente con producto *</label>
+              <div class="gallery-upload-area" id="cli-drop-area">
+                <input type="file" id="cli-img" accept="image/*" onchange="cliPreviewImage(this)" />
+                <div id="cli-upload-icon" style="font-size:2rem;margin-bottom:6px">📷</div>
+                <div id="cli-upload-text" style="font-size:.85rem;color:var(--text-lt)"><strong style="color:var(--sage-dk)">Clic o arrastrá</strong></div>
+                <img id="cli-img-preview" alt="preview" style="display:none;max-height:180px;border-radius:10px;margin-top:10px;width:100%;object-fit:cover" />
+              </div>
+            </div>
+            <div class="form-group"><label>Nombre <span style="color:var(--text-lt);font-weight:400;font-size:.75rem">(opcional)</span></label><input type="text" id="cli-nombre" placeholder="Ej: @mariana.natural" maxlength="60" /></div>
+          </div>
+          <div class="form-actions"><button class="btn-save" id="cli-btn-save" onclick="saveClientePhoto()">Guardar foto</button></div>
+        </div>
+        <div class="section-header"><h2>Fotos de clientes (<span id="cli-count">0</span>)</h2></div>
+        <div class="gallery-grid-admin" id="cli-list"></div>
+      </div>
+    </div><!-- end panel-opiniones -->
+
+    <!-- ═══ TAB: IDENTIDAD ═══ -->
     <div class="tab-panel" id="panel-identidad">
       <div class="config-section">
         <h3>🎨 Logo de la marca</h3>
@@ -431,7 +487,7 @@
           <input type="file" id="logo-img" accept="image/*" onchange="logoPreviewImage(this)" />
           <div id="logo-upload-icon" style="font-size:2rem;margin-bottom:6px">🖼️</div>
           <div id="logo-upload-text" style="font-size:.85rem;color:var(--text-lt)">
-            <strong style="color:var(--sage-dk)">Hacé clic o arrastrá</strong> el nuevo logo aquí<br>
+            <strong style="color:var(--sage-dk)">Hacé clic o arrastrá</strong> el nuevo logo<br>
             <span style="font-size:.75rem">Recomendado: imagen cuadrada, mínimo 200×200px</span>
           </div>
           <img id="logo-img-preview" alt="preview" style="display:none;width:100%;max-height:160px;object-fit:cover;border-radius:10px;margin-top:10px" />
@@ -442,7 +498,30 @@
       </div>
     </div><!-- end panel-identidad -->
 
-    <!-- TAB: USUARIOS (superadmin) -->
+    <!-- ═══ TAB: CONFIGURACIÓN ═══ -->
+    <div class="tab-panel" id="panel-config">
+      <!-- Categorías y etiquetas — everyone can see, only superadmin can edit -->
+      <div class="config-section">
+        <h3>📂 Categorías de Productos</h3>
+        <div class="tag-list" id="cats-list"></div>
+        <div class="tag-add-row" id="cats-add-row" style="display:none">
+          <input type="text" id="new-cat-label" placeholder="Nombre de la nueva categoría…" maxlength="40" />
+          <button class="btn-add-tag" onclick="addCategoria()">+ Agregar</button>
+        </div>
+        <p id="cats-readonly-note" style="font-size:.78rem;color:var(--text-lt);margin-top:8px;display:none">Solo el administrador puede modificar las categorías.</p>
+      </div>
+      <div class="config-section">
+        <h3>🏷️ Etiquetas de Productos</h3>
+        <div class="tag-list" id="etiq-list"></div>
+        <div class="tag-add-row" id="etiq-add-row" style="display:none">
+          <input type="text" id="new-etiq-label" placeholder="Nombre de la nueva etiqueta…" maxlength="30" />
+          <button class="btn-add-tag" onclick="addEtiqueta()">+ Agregar</button>
+        </div>
+        <p id="etiq-readonly-note" style="font-size:.78rem;color:var(--text-lt);margin-top:8px;display:none">Solo el administrador puede modificar las etiquetas.</p>
+      </div>
+    </div><!-- end panel-config -->
+
+    <!-- ═══ TAB: USUARIOS — superadmin only ═══ -->
     <div class="tab-panel" id="panel-usuarios">
       <div class="config-section">
         <h3>👥 Usuarios del Panel</h3>
@@ -452,123 +531,22 @@
         <h3>🔑 Cambiar contraseña</h3>
         <p style="font-size:.82rem;color:var(--text-lt);margin-bottom:16px">Seleccioná el usuario y definí la nueva contraseña.</p>
         <div class="form-grid">
-          <div class="form-group">
-            <label>Usuario</label>
-            <select id="chpass-user"></select>
-          </div>
-          <div class="form-group">
-            <label>Nueva contraseña</label>
-            <input type="password" id="chpass-new" placeholder="Nueva contraseña…" autocomplete="new-password" />
-          </div>
-          <div class="form-group">
-            <label>Repetir contraseña</label>
-            <input type="password" id="chpass-confirm" placeholder="Repetir contraseña…" autocomplete="new-password" />
-          </div>
+          <div class="form-group"><label>Usuario</label><select id="chpass-user"></select></div>
+          <div class="form-group"><label>Nueva contraseña</label><input type="password" id="chpass-new" placeholder="Nueva contraseña…" autocomplete="new-password" /></div>
+          <div class="form-group"><label>Repetir contraseña</label><input type="password" id="chpass-confirm" placeholder="Repetir…" autocomplete="new-password" /></div>
         </div>
-        <div class="form-actions">
-          <button class="btn-save" onclick="changePassword()">Cambiar contraseña</button>
-        </div>
+        <div class="form-actions"><button class="btn-save" onclick="changePassword()">Cambiar contraseña</button></div>
       </div>
       <div class="config-section" style="margin-top:24px">
         <h3>➕ Crear nuevo usuario</h3>
         <div class="form-grid">
-          <div class="form-group">
-            <label>Usuario</label>
-            <input type="text" id="newu-user" placeholder="nombre_usuario" maxlength="30" />
-          </div>
-          <div class="form-group">
-            <label>Contraseña</label>
-            <input type="password" id="newu-pass" placeholder="Contraseña…" autocomplete="new-password" />
-          </div>
-          <div class="form-group">
-            <label>Rol</label>
-            <select id="newu-role">
-              <option value="cliente">Cliente</option>
-              <option value="superadmin">Super Admin</option>
-            </select>
-          </div>
+          <div class="form-group"><label>Usuario</label><input type="text" id="newu-user" placeholder="nombre_usuario" maxlength="30" /></div>
+          <div class="form-group"><label>Contraseña</label><input type="password" id="newu-pass" placeholder="Contraseña…" autocomplete="new-password" /></div>
+          <div class="form-group"><label>Rol</label><select id="newu-role"><option value="cliente">Cliente</option><option value="superadmin">Super Admin</option></select></div>
         </div>
-        <div class="form-actions">
-          <button class="btn-save" onclick="createUser()">Crear usuario</button>
-        </div>
+        <div class="form-actions"><button class="btn-save" onclick="createUser()">Crear usuario</button></div>
       </div>
     </div><!-- end panel-usuarios -->
-
-    <!-- TAB: OPINIONES -->
-    <div class="tab-panel" id="panel-opiniones">
-      <div class="admin-tabs" style="margin-bottom:24px;border-bottom:1px solid var(--cream2)">
-        <button class="admin-tab-btn active" onclick="switchReviewTab('opiniones',this)" id="rtab-opiniones" style="border-bottom:2px solid var(--sage-dk)">⭐ Opiniones de clientes</button>
-        <button class="admin-tab-btn" onclick="switchReviewTab('clientes',this)" id="rtab-clientes">📸 Clientes felices</button>
-      </div>
-
-      <!-- Sub-tab: Opiniones -->
-      <div id="rev-panel-opiniones">
-        <div class="form-card">
-          <div class="form-grid">
-            <div class="form-group">
-              <label>Nombre del cliente *</label>
-              <input type="text" id="rev-nombre" placeholder="Ej: María G." maxlength="60" />
-            </div>
-            <div class="form-group">
-              <label>Calificación</label>
-              <select id="rev-stars">
-                <option value="5">★★★★★</option>
-                <option value="4">★★★★☆</option>
-                <option value="3">★★★☆☆</option>
-              </select>
-            </div>
-            <div class="form-group full">
-              <label>Opinión *</label>
-              <textarea id="rev-texto" placeholder="Escribí la opinión del cliente…" maxlength="300"></textarea>
-            </div>
-            <div class="form-group">
-              <label>Foto del cliente <span style="color:var(--text-lt);font-weight:400;font-size:.75rem">(opcional)</span></label>
-              <div class="gallery-upload-area" id="rev-drop-area">
-                <input type="file" id="rev-img" accept="image/*" onchange="revPreviewImage(this)" />
-                <div id="rev-upload-icon" style="font-size:1.8rem;margin-bottom:4px">📷</div>
-                <div id="rev-upload-text" style="font-size:.82rem;color:var(--text-lt)"><strong style="color:var(--sage-dk)">Clic o arrastrá</strong></div>
-                <img id="rev-img-preview" alt="preview" style="display:none;max-height:120px;border-radius:8px;margin-top:8px;width:100%;object-fit:cover" />
-              </div>
-            </div>
-            <div class="form-group">
-              <label>Ubicación <span style="color:var(--text-lt);font-weight:400;font-size:.75rem">(opcional)</span></label>
-              <input type="text" id="rev-loc" placeholder="Ej: Buenos Aires" maxlength="50" />
-            </div>
-          </div>
-          <div class="form-actions">
-            <button class="btn-save" id="rev-btn-save" onclick="saveOpinion()">Guardar opinión</button>
-          </div>
-        </div>
-        <div class="section-header"><h2>Opiniones cargadas (<span id="rev-count">0</span>)</h2></div>
-        <div class="gallery-grid-admin" id="rev-list"></div>
-      </div>
-
-      <!-- Sub-tab: Clientes Felices -->
-      <div id="rev-panel-clientes" style="display:none">
-        <div class="form-card">
-          <div class="form-grid">
-            <div class="form-group full">
-              <label>Foto del cliente con producto *</label>
-              <div class="gallery-upload-area" id="cli-drop-area">
-                <input type="file" id="cli-img" accept="image/*" onchange="cliPreviewImage(this)" />
-                <div id="cli-upload-icon" style="font-size:2rem;margin-bottom:6px">📷</div>
-                <div id="cli-upload-text" style="font-size:.85rem;color:var(--text-lt)"><strong style="color:var(--sage-dk)">Clic o arrastrá</strong> la foto</div>
-                <img id="cli-img-preview" alt="preview" style="display:none;max-height:180px;border-radius:10px;margin-top:10px;width:100%;object-fit:cover" />
-              </div>
-            </div>
-            <div class="form-group">
-              <label>Nombre <span style="color:var(--text-lt);font-weight:400;font-size:.75rem">(opcional)</span></label>
-              <input type="text" id="cli-nombre" placeholder="Ej: @mariana.natural" maxlength="60" />
-            </div>
-          </div>
-          <div class="form-actions">
-            <button class="btn-save" id="cli-btn-save" onclick="saveClientePhoto()">Guardar foto</button>
-          </div>
-        </div>
-        <div class="section-header"><h2>Fotos de clientes (<span id="cli-count">0</span>)</h2></div>
-        <div class="gallery-grid-admin" id="cli-list"></div>
-      </div>
-    </div><!-- end panel-opiniones -->
 
   </main>
 </div>
@@ -576,13 +554,14 @@
 <div id="toast"></div>
 
 <script>
-  // ── CONFIG ────────────────────────────────────────
+  // ── CONFIG ─────────────────────────────────────────────────
   const CLOUDINARY_CLOUD  = 'ditz4ufas';
   const CLOUDINARY_PRESET = 'ser_natural_unsigned';
-  const WORKER_URL        = 'https://ser-natural-api.tecnoinformaticapampa.workers.dev';
-  // ──────────────────────────────────────────────────
+  const WORKER_URL = 'https://ser-natural-api.tecnoinformaticapampa.workers.dev';
+  const GITHUB_RAW = 'https://raw.githubusercontent.com/tecnoinformaticapampa-max/ser-natural-web/main/users.json';
+  // ───────────────────────────────────────────────────────────
 
-  // ── STATE ──────────────────────────────────────────
+  // ── STATE ──────────────────────────────────────────────────
   let sessionToken = null, sessionRole = null, sessionUser = null;
   let products = [], editingId = null, editingOldImg = null;
   let pricePill = 'consultar', badgeVal = '', selectedFile = null, fileSHA = null;
@@ -591,10 +570,10 @@
   let activeGalleryTab = 'inicio', galSelectedFile = null;
   let reviewsData = { opiniones:[], clientes:[] }, reviewsSHA = null;
   let revSelectedFile = null, cliSelectedFile = null, logoSelectedFile = null;
-  let allUsersData = [], usersSHA = null;
+  let allUsersSHA = null;
   const tabLabels = { inicio:'Inicio', proceso:'El Proceso', final:'El Producto Final' };
 
-  // ── AUTH ───────────────────────────────────────────
+  // ── AUTH ────────────────────────────────────────────────────
   async function doLogin() {
     const user = document.getElementById('login-user').value.trim();
     const pass = document.getElementById('login-pass').value;
@@ -604,8 +583,7 @@
     btn.disabled = true; btn.textContent = 'Verificando…';
     try {
       const res  = await fetch(WORKER_URL + '/auth', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method:'POST', headers:{'Content-Type':'application/json'},
         body: JSON.stringify({ user, pass }),
       });
       const data = await res.json();
@@ -614,16 +592,18 @@
       sessionStorage.setItem('sn_token', sessionToken);
       sessionStorage.setItem('sn_role',  sessionRole);
       sessionStorage.setItem('sn_user',  sessionUser);
-      showApp();
+      initApp();
     } catch(e) {
       err.textContent = e.message || 'Usuario o contraseña incorrectos.';
       document.getElementById('login-pass').value = '';
-    } finally { btn.disabled = false; btn.textContent = 'Ingresar'; }
+    } finally { btn.disabled=false; btn.textContent='Ingresar'; }
   }
 
   function doLogout() {
     sessionStorage.clear();
-    sessionToken = null; sessionRole = null; sessionUser = null;
+    sessionToken=null; sessionRole=null; sessionUser=null;
+    // RESET DOM completely to avoid stale state between sessions
+    resetAllTabs();
     document.getElementById('app').style.display = 'none';
     document.getElementById('login-screen').style.display = 'flex';
     document.getElementById('login-user').value = '';
@@ -631,19 +611,64 @@
     document.getElementById('login-err').textContent = '';
   }
 
-  function showApp() {
+  function resetAllTabs() {
+    // Hide all superadmin-only tabs
+    ['tab-usuarios'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = 'none';
+    });
+    // Show all common tabs
+    ['tab-opiniones','tab-identidad','tab-config'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = 'block';
+    });
+    // Reset to productos tab
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.admin-tab-btn[data-tab]').forEach(b => b.classList.remove('active'));
+    const pp = document.getElementById('panel-productos');
+    const pb = document.querySelector('[data-tab="productos"]');
+    if (pp) pp.classList.add('active');
+    if (pb) pb.classList.add('active');
+  }
+
+  function initApp() {
     document.getElementById('login-screen').style.display = 'none';
     document.getElementById('app').style.display = 'block';
+
+    // Set header
     const rb = document.getElementById('header-role-badge');
     const un = document.getElementById('header-username');
-    if (rb) { rb.textContent = sessionRole === 'superadmin' ? 'Super Admin' : 'Admin'; rb.className = 'role-badge ' + sessionRole; }
+    if (rb) { rb.textContent = sessionRole==='superadmin' ? 'Super Admin' : 'Admin'; rb.className='role-badge '+sessionRole; }
     if (un) un.textContent = sessionUser;
+
+    // Tab visibility based on role
+    // Todos ven: Productos, Galería, Opiniones, Identidad, Configuración
+    // Solo superadmin ve: Usuarios
+    ['tab-opiniones','tab-identidad','tab-config'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = 'block';
+    });
+    const tabU = document.getElementById('tab-usuarios');
+    if (tabU) tabU.style.display = sessionRole==='superadmin' ? 'block' : 'none';
+
+    // Config panel: show add/remove only to superadmin
+    const catsAdd  = document.getElementById('cats-add-row');
+    const etiqAdd  = document.getElementById('etiq-add-row');
+    const catsNote = document.getElementById('cats-readonly-note');
+    const etiqNote = document.getElementById('etiq-readonly-note');
     if (sessionRole === 'superadmin') {
-      ['tab-config','tab-usuarios','tab-identidad'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.style.display = 'block';
-      });
+      if (catsAdd)  catsAdd.style.display  = 'flex';
+      if (etiqAdd)  etiqAdd.style.display  = 'flex';
+      if (catsNote) catsNote.style.display = 'none';
+      if (etiqNote) etiqNote.style.display = 'none';
+    } else {
+      if (catsAdd)  catsAdd.style.display  = 'none';
+      if (etiqAdd)  etiqAdd.style.display  = 'none';
+      if (catsNote) catsNote.style.display = 'block';
+      if (etiqNote) etiqNote.style.display = 'block';
     }
+
+    // Load data
     loadConfig();
     loadProducts();
     loadGalleryAdmin();
@@ -651,54 +676,67 @@
     if (sessionRole === 'superadmin') loadUsersAdmin();
   }
 
-  const saved = sessionStorage.getItem('sn_token');
-  if (saved) {
-    sessionToken = saved;
+  // Restore session on page load
+  const savedToken = sessionStorage.getItem('sn_token');
+  if (savedToken) {
+    sessionToken = savedToken;
     sessionRole  = sessionStorage.getItem('sn_role');
     sessionUser  = sessionStorage.getItem('sn_user');
-    showApp();
+    initApp();
   }
 
-  // ── TABS ───────────────────────────────────────────
+  // ── TABS ────────────────────────────────────────────────────
   window.switchTab = (tab) => {
     document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.admin-tab-btn[data-tab]').forEach(b => b.classList.remove('active'));
     const panel = document.getElementById('panel-' + tab);
+    const btn   = document.querySelector('[data-tab="' + tab + '"]');
     if (panel) panel.classList.add('active');
-    const btn = document.querySelector('[data-tab="' + tab + '"]');
-    if (btn) btn.classList.add('active');
+    if (btn)   btn.classList.add('active');
   };
 
-  window.switchReviewTab = (tab, btn) => {
-    document.getElementById('rev-panel-opiniones').style.display = tab === 'opiniones' ? 'block' : 'none';
-    document.getElementById('rev-panel-clientes').style.display  = tab === 'clientes'  ? 'block' : 'none';
-    document.querySelectorAll('[id^="rtab-"]').forEach(b => {
-      b.style.borderBottom = ''; b.classList.remove('active');
+  window.switchReviewsTab = (tab, btn) => {
+    document.getElementById('rpanel-opiniones').style.display = tab==='opiniones' ? 'block' : 'none';
+    document.getElementById('rpanel-clientes').style.display  = tab==='clientes'  ? 'block' : 'none';
+    ['rtab-opiniones','rtab-clientes'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) { el.classList.remove('active'); el.style.borderBottom=''; }
     });
-    if (btn) { btn.style.borderBottom = '2px solid var(--sage-dk)'; btn.classList.add('active'); }
+    if (btn) { btn.classList.add('active'); btn.style.borderBottom='2px solid var(--sage-dk)'; }
   };
 
-  // ── AUTH HEADERS ───────────────────────────────────
-  function ah() { return { 'Content-Type': 'application/json', 'X-Session-Token': sessionToken }; }
+  // ── HEADERS ────────────────────────────────────────────────
+  function ah() { return { 'Content-Type':'application/json', 'X-Session-Token':sessionToken }; }
 
-  // ── CONFIG ─────────────────────────────────────────
+  // ── CONFIG ─────────────────────────────────────────────────
   async function loadConfig() {
     try {
-      const res  = await fetch(WORKER_URL + '/config', { headers: ah(), cache: 'no-store' });
+      const res  = await fetch(WORKER_URL + '/config', { headers:ah(), cache:'no-store' });
       const data = await res.json();
       siteConfig = data.config; configSHA = data.sha;
-    } catch(e) {}
-    renderCatSelect(); renderBadgeSelector();
-    renderExtraFieldsForm();
-    if (sessionRole === 'superadmin') { renderCatList(); renderEtiqList(); renderCamposList(); renderLogoPreview(); }
+    } catch(e) {
+      siteConfig = { categorias:[
+        { id:'jabones', label:'Jabones artesanales' },
+        { id:'cosmetica', label:'Cosmética natural' },
+        { id:'bienestar', label:'Bienestar' },
+      ], etiquetas:[
+        { id:'nuevo', label:'Nuevo' },
+        { id:'popular', label:'Popular' },
+      ], camposExtra:[], logoUrl:'' };
+    }
+    renderCatSelect();
+    renderBadgeSelector();
+    renderCatList();
+    renderEtiqList();
+    renderLogoPreview();
   }
 
   async function saveConfig() {
     const res = await fetch(WORKER_URL + '/config', {
-      method: 'PUT', headers: ah(),
-      body: JSON.stringify({ config: siteConfig, sha: configSHA }),
+      method:'PUT', headers:ah(),
+      body: JSON.stringify({ config:siteConfig, sha:configSHA }),
     });
-    if (!res.ok) { const e = await res.json(); throw new Error(e.error || 'Error config'); }
+    if (!res.ok) { const e=await res.json(); throw new Error(e.error||'Error config'); }
     configSHA = (await res.json()).sha;
   }
 
@@ -706,211 +744,170 @@
     const sel = document.getElementById('f-cat'); if (!sel) return;
     const curr = sel.value;
     sel.innerHTML = '<option value="">Seleccioná…</option>' +
-      (siteConfig.categorias || []).map(c =>
-        '<option value="' + c.id + '"' + (c.id === curr ? ' selected' : '') + '>' + c.label + '</option>'
+      (siteConfig.categorias||[]).map(c =>
+        '<option value="' + c.id + '"' + (c.id===curr?' selected':'') + '>' + c.label + '</option>'
       ).join('');
   }
 
   function renderBadgeSelector() {
     const wrap = document.getElementById('badge-selector-wrap'); if (!wrap) return;
-    const noneBtn = '<button class="badge-opt" id="badge-ninguna" onclick="setBadge(\'\')">Sin etiqueta</button>';
-    const etqBtns = (siteConfig.etiquetas || []).map(e =>
-      '<button class="badge-opt" id="badge-' + e.id + '" onclick="setBadge(\'' + e.id + '\')">' + e.label + '</button>'
+    const none = '<button class="badge-opt" id="badge-ninguna" onclick="setBadge('')">Sin etiqueta</button>';
+    const btns = (siteConfig.etiquetas||[]).map(e =>
+      '<button class="badge-opt" id="badge-' + e.id + '" onclick="setBadge('' + e.id + '')">' + e.label + '</button>'
     ).join('');
-    wrap.innerHTML = noneBtn + etqBtns;
-    const target = badgeVal ? document.getElementById('badge-' + badgeVal) : document.getElementById('badge-ninguna');
-    if (target) target.classList.add('active');
-  }
-
-  function renderExtraFieldsForm() {
-    const wrap = document.getElementById('extra-fields-wrap'); if (!wrap) return;
-    const campos = siteConfig.camposExtra || [];
-    wrap.innerHTML = campos.length === 0 ? '' : campos.map(c =>
-      '<div class="form-group full"><label>' + c.label + ' <span style="color:var(--text-lt);font-weight:400;font-size:.75rem">(opcional)</span></label>' +
-      '<textarea id="ef-' + c.id + '" placeholder="Ej: Aplicar en piel húmeda…" style="min-height:72px"></textarea></div>'
-    ).join('');
-  }
-
-  function renderLogoPreview() {
-    const url  = siteConfig.logoUrl;
-    const wrap = document.getElementById('logo-preview-wrap');
-    const img  = document.getElementById('logo-current-preview');
-    if (url && wrap && img) { img.src = url; wrap.style.display = 'block'; }
+    wrap.innerHTML = none + btns;
+    const t = badgeVal ? document.getElementById('badge-'+badgeVal) : document.getElementById('badge-ninguna');
+    if (t) t.classList.add('active');
   }
 
   function renderCatList() {
     const el = document.getElementById('cats-list'); if (!el) return;
-    el.innerHTML = (siteConfig.categorias || []).map((c,i) =>
-      '<span class="tag-item">' + c.label + '<button class="tag-del" onclick="deleteCat(' + i + ')">✕</button></span>'
+    const isSA = sessionRole === 'superadmin';
+    el.innerHTML = (siteConfig.categorias||[]).map((c,i) =>
+      '<span class="tag-item">' + c.label +
+      (isSA ? '<button class="tag-del" onclick="deleteCat(' + i + ')">✕</button>' : '') +
+      '</span>'
     ).join('') || '<span style="color:var(--text-lt);font-size:.82rem">Sin categorías</span>';
   }
 
   function renderEtiqList() {
     const el = document.getElementById('etiq-list'); if (!el) return;
-    el.innerHTML = (siteConfig.etiquetas || []).map((e,i) =>
-      '<span class="tag-item">' + e.label + '<button class="tag-del" onclick="deleteEtiq(' + i + ')">✕</button></span>'
+    const isSA = sessionRole === 'superadmin';
+    el.innerHTML = (siteConfig.etiquetas||[]).map((e,i) =>
+      '<span class="tag-item">' + e.label +
+      (isSA ? '<button class="tag-del" onclick="deleteEtiq(' + i + ')">✕</button>' : '') +
+      '</span>'
     ).join('') || '<span style="color:var(--text-lt);font-size:.82rem">Sin etiquetas</span>';
   }
 
-  function renderCamposList() {
-    const el = document.getElementById('campos-list'); if (!el) return;
-    el.innerHTML = (siteConfig.camposExtra || []).map((c,i) =>
-      '<span class="tag-item">' + c.label + '<button class="tag-del" onclick="deleteCampo(' + i + ')">✕</button></span>'
-    ).join('') || '<span style="color:var(--text-lt);font-size:.82rem">Sin campos extra</span>';
+  function renderLogoPreview() {
+    const url = siteConfig.logoUrl;
+    const wrap = document.getElementById('logo-preview-wrap');
+    const img  = document.getElementById('logo-current-preview');
+    if (url && wrap && img) { img.src=url; wrap.style.display='block'; }
   }
 
   function slugify(label) {
-    return label.toLowerCase()
-      .replace(/[áàâä]/g,'a').replace(/[éèêë]/g,'e').replace(/[íìîï]/g,'i')
-      .replace(/[óòôö]/g,'o').replace(/[úùûü]/g,'u').replace(/ñ/g,'n')
+    const map = { á:'a',é:'e',í:'i',ó:'o',ú:'u',ü:'u',ñ:'n',Á:'a',É:'e',Í:'i',Ó:'o',Ú:'u',Ü:'u',Ñ:'n' };
+    return label.toLowerCase().replace(/[áéíóúüñÁÉÍÓÚÜÑ]/g, c => map[c]||c)
       .replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'');
   }
 
   window.addCategoria = async () => {
+    if (sessionRole !== 'superadmin') return;
     const input = document.getElementById('new-cat-label');
     const label = input.value.trim(); if (!label) return;
     const id = slugify(label);
-    if ((siteConfig.categorias||[]).find(c => c.id === id)) { showToast('Ya existe esa categoría', true); return; }
+    if ((siteConfig.categorias||[]).find(c=>c.id===id)) { showToast('Ya existe esa categoría', true); return; }
+    if (!siteConfig.categorias) siteConfig.categorias = [];
     siteConfig.categorias.push({ id, label });
-    try { await saveConfig(); renderCatList(); renderCatSelect(); input.value = ''; showToast('✅ Categoría agregada'); }
-    catch(e) { showToast('Error: ' + e.message, true); siteConfig.categorias.pop(); }
+    try { await saveConfig(); renderCatList(); renderCatSelect(); input.value=''; showToast('✅ Categoría agregada'); }
+    catch(e) { showToast('Error: '+e.message, true); siteConfig.categorias.pop(); }
   };
 
   window.deleteCat = async (idx) => {
+    if (sessionRole !== 'superadmin') return;
     if (!confirm('¿Eliminar esta categoría?')) return;
-    const [r] = siteConfig.categorias.splice(idx, 1);
+    const [r] = siteConfig.categorias.splice(idx,1);
     try { await saveConfig(); renderCatList(); renderCatSelect(); showToast('🗑 Categoría eliminada'); }
-    catch(e) { showToast('Error: ' + e.message, true); siteConfig.categorias.splice(idx, 0, r); }
+    catch(e) { showToast('Error: '+e.message, true); siteConfig.categorias.splice(idx,0,r); }
   };
 
   window.addEtiqueta = async () => {
+    if (sessionRole !== 'superadmin') return;
     const input = document.getElementById('new-etiq-label');
     const label = input.value.trim(); if (!label) return;
     const id = slugify(label);
-    if ((siteConfig.etiquetas||[]).find(e => e.id === id)) { showToast('Ya existe esa etiqueta', true); return; }
+    if ((siteConfig.etiquetas||[]).find(e=>e.id===id)) { showToast('Ya existe esa etiqueta', true); return; }
+    if (!siteConfig.etiquetas) siteConfig.etiquetas = [];
     siteConfig.etiquetas.push({ id, label });
-    try { await saveConfig(); renderEtiqList(); renderBadgeSelector(); input.value = ''; showToast('✅ Etiqueta agregada'); }
-    catch(e) { showToast('Error: ' + e.message, true); siteConfig.etiquetas.pop(); }
+    try { await saveConfig(); renderEtiqList(); renderBadgeSelector(); input.value=''; showToast('✅ Etiqueta agregada'); }
+    catch(e) { showToast('Error: '+e.message, true); siteConfig.etiquetas.pop(); }
   };
 
   window.deleteEtiq = async (idx) => {
+    if (sessionRole !== 'superadmin') return;
     if (!confirm('¿Eliminar esta etiqueta?')) return;
-    const [r] = siteConfig.etiquetas.splice(idx, 1);
+    const [r] = siteConfig.etiquetas.splice(idx,1);
     try { await saveConfig(); renderEtiqList(); renderBadgeSelector(); showToast('🗑 Etiqueta eliminada'); }
-    catch(e) { showToast('Error: ' + e.message, true); siteConfig.etiquetas.splice(idx, 0, r); }
+    catch(e) { showToast('Error: '+e.message, true); siteConfig.etiquetas.splice(idx,0,r); }
   };
 
-  window.addCampoExtra = async () => {
-    const input = document.getElementById('new-campo-label');
-    const label = input.value.trim(); if (!label) return;
-    const id = slugify(label);
-    if (!(siteConfig.camposExtra)) siteConfig.camposExtra = [];
-    if (siteConfig.camposExtra.find(c => c.id === id)) { showToast('Ya existe ese campo', true); return; }
-    siteConfig.camposExtra.push({ id, label });
-    try { await saveConfig(); renderCamposList(); renderExtraFieldsForm(); input.value = ''; showToast('✅ Campo agregado'); }
-    catch(e) { showToast('Error: ' + e.message, true); siteConfig.camposExtra.pop(); }
-  };
-
-  window.deleteCampo = async (idx) => {
-    if (!confirm('¿Eliminar este campo?')) return;
-    const [r] = siteConfig.camposExtra.splice(idx, 1);
-    try { await saveConfig(); renderCamposList(); renderExtraFieldsForm(); showToast('🗑 Campo eliminado'); }
-    catch(e) { showToast('Error: ' + e.message, true); siteConfig.camposExtra.splice(idx, 0, r); }
-  };
-
-  // ── LOGO ───────────────────────────────────────────
+  // ── LOGO ────────────────────────────────────────────────────
   window.logoPreviewImage = (input) => {
     const file = input.files[0]; if (!file) return;
-    if (file.size > 5*1024*1024) { showToast('Máx. 5MB', true); return; }
+    if (file.size > 5*1024*1024) { showToast('Máx 5MB', true); return; }
     logoSelectedFile = file;
-    const reader = new FileReader();
-    reader.onload = e => {
-      const prev = document.getElementById('logo-img-preview');
-      prev.src = e.target.result; prev.style.display = 'block';
-      document.getElementById('logo-upload-icon').style.display = 'none';
-      document.getElementById('logo-upload-text').style.display = 'none';
+    const r = new FileReader();
+    r.onload = e => {
+      const p = document.getElementById('logo-img-preview');
+      if (p) { p.src=e.target.result; p.style.display='block'; }
+      document.getElementById('logo-upload-icon').style.display='none';
+      document.getElementById('logo-upload-text').style.display='none';
     };
-    reader.readAsDataURL(file);
+    r.readAsDataURL(file);
   };
 
   window.saveLogo = async () => {
-    if (!logoSelectedFile) { showToast('Seleccioná una imagen primero.', true); return; }
+    if (!logoSelectedFile) { showToast('Seleccioná una imagen.', true); return; }
     const btn = document.getElementById('logo-btn-save');
-    btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Guardando…';
+    btn.disabled=true; btn.innerHTML='<span class="spinner"></span>Guardando…';
     try {
-      // Delete old logo from Cloudinary if exists
       if (siteConfig.logoUrl) {
-        await fetch(WORKER_URL + '/image', { method: 'DELETE', headers: ah(), body: JSON.stringify({ url: siteConfig.logoUrl }) });
+        await fetch(WORKER_URL+'/image', { method:'DELETE', headers:ah(), body:JSON.stringify({ url:siteConfig.logoUrl }) }).catch(()=>{});
       }
       const url = await uploadToCloudinary(logoSelectedFile);
       siteConfig.logoUrl = url;
       await saveConfig();
       renderLogoPreview();
       showToast('✅ Logo actualizado');
-    } catch(e) { showToast('Error: ' + e.message, true); }
-    finally { btn.disabled = false; btn.innerHTML = 'Guardar logo'; }
+    } catch(e) { showToast('Error: '+e.message, true); }
+    finally { btn.disabled=false; btn.innerHTML='Guardar logo'; }
   };
 
-  // ── USERS ADMIN ────────────────────────────────────
+  // ── USERS (superadmin) ──────────────────────────────────────
   async function loadUsersAdmin() {
     try {
-      const res  = await fetch(WORKER_URL + '/users', { headers: ah() });
+      const res  = await fetch(WORKER_URL + '/users', { headers:ah() });
       const data = await res.json();
-      usersSHA   = data.sha;
-      // We need full users with passwords for editing - read from GitHub via worker
-      // Worker returns users without passwords for security, but superadmin can write
-      // We keep a local version for display only
-      allUsersData = data.users || [];
-      renderUsersTable();
-      renderUserSelect();
-    } catch(e) { console.error('loadUsers', e); }
-  }
-
-  function renderUsersTable() {
-    const el = document.getElementById('users-table'); if (!el) return;
-    el.innerHTML = allUsersData.map(u =>
-      '<div class="user-row">' +
-      '<div class="user-name">' + u.user + '</div>' +
-      '<div><span class="user-role role-' + u.role + '">' + (u.role === 'superadmin' ? 'Super Admin' : 'Cliente') + '</span></div>' +
-      '<div></div>' +
-      '</div>'
-    ).join('');
-  }
-
-  function renderUserSelect() {
-    const sel = document.getElementById('chpass-user'); if (!sel) return;
-    sel.innerHTML = allUsersData.map(u =>
-      '<option value="' + u.user + '">' + u.user + ' (' + u.role + ')</option>'
-    ).join('');
+      allUsersSHA = data.sha;
+      const el = document.getElementById('users-table'); if (!el) return;
+      el.innerHTML = (data.users||[]).map(u =>
+        '<div class="user-row">' +
+        '<div class="user-name">' + u.user + '</div>' +
+        '<div><span class="user-role role-' + u.role + '">' + (u.role==='superadmin'?'Super Admin':'Cliente') + '</span></div>' +
+        '<div></div></div>'
+      ).join('');
+      // Populate user select
+      const sel = document.getElementById('chpass-user'); if (!sel) return;
+      sel.innerHTML = (data.users||[]).map(u =>
+        '<option value="' + u.user + '">' + u.user + ' (' + u.role + ')</option>'
+      ).join('');
+    } catch(e) { console.error(e); }
   }
 
   window.changePassword = async () => {
-    const user    = document.getElementById('chpass-user').value;
-    const newPass = document.getElementById('chpass-new').value;
-    const confirm = document.getElementById('chpass-confirm').value;
-    if (!newPass) { showToast('Ingresá la nueva contraseña', true); return; }
-    if (newPass !== confirm) { showToast('Las contraseñas no coinciden', true); return; }
-    if (newPass.length < 6) { showToast('Mínimo 6 caracteres', true); return; }
+    const user = document.getElementById('chpass-user').value;
+    const np   = document.getElementById('chpass-new').value;
+    const conf = document.getElementById('chpass-confirm').value;
+    if (!np) { showToast('Ingresá la nueva contraseña', true); return; }
+    if (np !== conf) { showToast('Las contraseñas no coinciden', true); return; }
+    if (np.length < 6) { showToast('Mínimo 6 caracteres', true); return; }
     try {
-      // Read full users file from GitHub to get current passwords
-      const res  = await fetch(WORKER_URL + '/users', { headers: ah() });
-      const data = await res.json();
-      // We can't get passwords from the GET endpoint (they're stripped)
-      // So we read directly from GitHub raw
-      const rawRes = await fetch(
-        'https://raw.githubusercontent.com/tecnoinformaticapampa-max/ser-natural-web/main/users.json?t=' + Date.now()
-      );
-      const fullUsers = await rawRes.json();
-      const updated = fullUsers.map(u => u.user === user ? { ...u, pass: newPass } : u);
-      const putRes = await fetch(WORKER_URL + '/users', {
-        method: 'PUT', headers: ah(),
-        body: JSON.stringify({ users: updated, sha: data.sha }),
+      const rawRes = await fetch(GITHUB_RAW + '?t=' + Date.now());
+      const full   = await rawRes.json();
+      const shaRes = await fetch(WORKER_URL + '/users', { headers:ah() });
+      const shaData = await shaRes.json();
+      const updated = full.map(u => u.user===user ? { ...u, pass:np } : u);
+      const putRes  = await fetch(WORKER_URL + '/users', {
+        method:'PUT', headers:ah(),
+        body: JSON.stringify({ users:updated, sha:shaData.sha }),
       });
       if (!putRes.ok) throw new Error('Error al guardar');
-      document.getElementById('chpass-new').value = '';
-      document.getElementById('chpass-confirm').value = '';
+      document.getElementById('chpass-new').value='';
+      document.getElementById('chpass-confirm').value='';
       showToast('✅ Contraseña actualizada para ' + user);
-    } catch(e) { showToast('Error: ' + e.message, true); }
+    } catch(e) { showToast('Error: '+e.message, true); }
   };
 
   window.createUser = async () => {
@@ -920,124 +917,101 @@
     if (!user || !pass) { showToast('Completá usuario y contraseña', true); return; }
     if (pass.length < 6) { showToast('Mínimo 6 caracteres', true); return; }
     try {
-      const rawRes = await fetch(
-        'https://raw.githubusercontent.com/tecnoinformaticapampa-max/ser-natural-web/main/users.json?t=' + Date.now()
-      );
-      const fullUsers = await rawRes.json();
-      if (fullUsers.find(u => u.user === user)) { showToast('Ya existe ese usuario', true); return; }
-      fullUsers.push({ user, pass, role });
-      const shaRes = await fetch(WORKER_URL + '/users', { headers: ah() });
+      const rawRes  = await fetch(GITHUB_RAW + '?t=' + Date.now());
+      const full    = await rawRes.json();
+      if (full.find(u => u.user===user)) { showToast('Ya existe ese usuario', true); return; }
+      full.push({ user, pass, role });
+      const shaRes  = await fetch(WORKER_URL + '/users', { headers:ah() });
       const shaData = await shaRes.json();
-      const putRes = await fetch(WORKER_URL + '/users', {
-        method: 'PUT', headers: ah(),
-        body: JSON.stringify({ users: fullUsers, sha: shaData.sha }),
+      const putRes  = await fetch(WORKER_URL + '/users', {
+        method:'PUT', headers:ah(),
+        body: JSON.stringify({ users:full, sha:shaData.sha }),
       });
       if (!putRes.ok) throw new Error('Error al crear');
-      document.getElementById('newu-user').value = '';
-      document.getElementById('newu-pass').value = '';
+      document.getElementById('newu-user').value='';
+      document.getElementById('newu-pass').value='';
       await loadUsersAdmin();
       showToast('✅ Usuario creado: ' + user);
-    } catch(e) { showToast('Error: ' + e.message, true); }
+    } catch(e) { showToast('Error: '+e.message, true); }
   };
 
-  // ── PRODUCTS ───────────────────────────────────────
+  // ── PRODUCTS ────────────────────────────────────────────────
   async function loadProducts() {
     try {
-      const res  = await fetch(WORKER_URL + '/products', { headers: ah(), cache: 'no-store' });
+      const res  = await fetch(WORKER_URL + '/products', { headers:ah(), cache:'no-store' });
       const data = await res.json();
       fileSHA = data.sha; products = data.products || [];
-    } catch(e) { products = []; }
+    } catch(e) { products=[]; }
     renderList(); updateStats();
   }
 
   async function saveToWorker(updated) {
     const res = await fetch(WORKER_URL + '/products', {
-      method: 'PUT', headers: ah(),
-      body: JSON.stringify({ products: updated, sha: fileSHA }),
+      method:'PUT', headers:ah(),
+      body: JSON.stringify({ products:updated, sha:fileSHA }),
     });
-    if (!res.ok) { const e = await res.json(); throw new Error(e.error || 'Error'); }
-    fileSHA = (await res.json()).sha;
-    products = updated;
+    if (!res.ok) { const e=await res.json(); throw new Error(e.error||'Error'); }
+    fileSHA = (await res.json()).sha; products = updated;
   }
 
   window.saveProduct = async () => {
     const nombre = document.getElementById('f-nombre').value.trim();
     const cat    = document.getElementById('f-cat').value;
     const desc   = document.getElementById('f-desc').value.trim();
-    const precio = pricePill === 'consultar' ? 'consultar' : (document.getElementById('f-precio').value.trim() || 'consultar');
-    if (!nombre || !cat || !desc) { showToast('Completá nombre, categoría y descripción.', true); return; }
+    const precio = pricePill==='consultar' ? 'consultar' : (document.getElementById('f-precio').value.trim()||'consultar');
+    if (!nombre||!cat||!desc) { showToast('Completá nombre, categoría y descripción.', true); return; }
     const btn = document.getElementById('btn-save');
-    btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Guardando…';
+    btn.disabled=true; btn.innerHTML='<span class="spinner"></span>Guardando…';
     try {
       let imagenURL = editingOldImg || '';
       if (selectedFile) {
-        // Delete old image if replacing
-        if (editingOldImg) {
-          await fetch(WORKER_URL + '/image', { method: 'DELETE', headers: ah(), body: JSON.stringify({ url: editingOldImg }) }).catch(() => {});
-        }
+        if (editingOldImg) await fetch(WORKER_URL+'/image',{method:'DELETE',headers:ah(),body:JSON.stringify({url:editingOldImg})}).catch(()=>{});
         imagenURL = await uploadToCloudinary(selectedFile);
       }
-      // Collect extra fields
-      const extra = {};
-      (siteConfig.camposExtra || []).forEach(c => {
-        const el = document.getElementById('ef-' + c.id);
-        if (el && el.value.trim()) extra[c.id] = el.value.trim();
-      });
       const now = new Date().toISOString();
       let updated;
       if (editingId) {
-        updated = products.map(p => p.id === editingId
-          ? { ...p, nombre, categoria:cat, descripcion:desc, precio, badge:badgeVal, imagenURL, extra, updatedAt:now }
-          : p);
+        updated = products.map(p => p.id===editingId ? {...p,nombre,categoria:cat,descripcion:desc,precio,badge:badgeVal,imagenURL,updatedAt:now} : p);
         showToast('✅ Producto actualizado');
       } else {
-        updated = [{ id:'p_'+Date.now(), nombre, categoria:cat, descripcion:desc, precio, badge:badgeVal, imagenURL, extra, createdAt:now, updatedAt:now }, ...products];
+        updated = [{ id:'p_'+Date.now(),nombre,categoria:cat,descripcion:desc,precio,badge:badgeVal,imagenURL,createdAt:now,updatedAt:now }, ...products];
         showToast('✅ Producto agregado');
       }
-      await saveToWorker(updated);
-      renderList(); updateStats(); resetForm();
-    } catch(e) { showToast('Error: ' + e.message, true); }
-    finally { btn.disabled = false; btn.innerHTML = editingId ? 'Actualizar producto' : 'Guardar producto'; }
+      await saveToWorker(updated); renderList(); updateStats(); resetForm();
+    } catch(e) { showToast('Error: '+e.message, true); }
+    finally { btn.disabled=false; btn.innerHTML=editingId?'Actualizar producto':'Guardar producto'; }
   };
 
   window.deleteProduct = async (id) => {
     if (!confirm('¿Eliminar este producto?')) return;
-    const prod = products.find(p => p.id === id);
+    const prod = products.find(p=>p.id===id);
     try {
-      if (prod && prod.imagenURL) {
-        await fetch(WORKER_URL + '/image', { method: 'DELETE', headers: ah(), body: JSON.stringify({ url: prod.imagenURL }) }).catch(() => {});
-      }
-      await saveToWorker(products.filter(p => p.id !== id));
+      if (prod&&prod.imagenURL) await fetch(WORKER_URL+'/image',{method:'DELETE',headers:ah(),body:JSON.stringify({url:prod.imagenURL})}).catch(()=>{});
+      await saveToWorker(products.filter(p=>p.id!==id));
       renderList(); updateStats(); showToast('🗑 Producto eliminado');
-    } catch(e) { showToast('Error: ' + e.message, true); }
+    } catch(e) { showToast('Error: '+e.message, true); }
   };
 
   window.editProduct = (id) => {
-    const p = products.find(x => x.id === id); if (!p) return;
-    editingId = id; editingOldImg = p.imagenURL || '';
-    document.getElementById('f-nombre').value = p.nombre || '';
-    document.getElementById('f-cat').value    = p.categoria || '';
-    document.getElementById('f-desc').value   = p.descripcion || '';
-    setPricePill(p.precio === 'consultar' ? 'consultar' : 'fijo');
-    if (p.precio !== 'consultar') document.getElementById('f-precio').value = p.precio;
-    setBadge(p.badge || '');
-    // Fill extra fields
-    const extra = p.extra || {};
-    (siteConfig.camposExtra || []).forEach(c => {
-      const el = document.getElementById('ef-' + c.id);
-      if (el) el.value = extra[c.id] || '';
-    });
+    const p = products.find(x=>x.id===id); if (!p) return;
+    editingId=id; editingOldImg=p.imagenURL||'';
+    document.getElementById('f-nombre').value = p.nombre||'';
+    document.getElementById('f-cat').value    = p.categoria||'';
+    document.getElementById('f-desc').value   = p.descripcion||'';
+    setPricePill(p.precio==='consultar'?'consultar':'fijo');
+    if (p.precio!=='consultar') document.getElementById('f-precio').value=p.precio;
+    setBadge(p.badge||'');
     if (p.imagenURL) {
-      const prev = document.getElementById('img-preview');
-      prev.src = p.imagenURL; prev.style.display = 'block';
-      document.getElementById('upload-icon').style.display = 'none';
-      document.getElementById('upload-text').style.display = 'none';
+      const prev=document.getElementById('img-preview');
+      prev.src=p.imagenURL; prev.style.display='block';
+      document.getElementById('upload-icon').style.display='none';
+      document.getElementById('upload-text').style.display='none';
     }
-    document.getElementById('form-title').textContent   = '✏️ Editando: ' + p.nombre;
-    document.getElementById('btn-save').textContent     = 'Actualizar producto';
-    document.getElementById('btn-cancel').style.display = 'inline-block';
+    document.getElementById('form-title').textContent='✏️ Editando: '+p.nombre;
+    document.getElementById('btn-save').textContent='Actualizar producto';
+    document.getElementById('btn-cancel').style.display='inline-block';
     switchTab('productos');
-    document.getElementById('form-title').scrollIntoView({ behavior:'smooth', block:'center' });
+    document.getElementById('form-title').scrollIntoView({behavior:'smooth',block:'center'});
   };
 
   window.cancelEdit = resetForm;
@@ -1046,35 +1020,33 @@
     const el = document.getElementById('products-list');
     document.getElementById('count-label').textContent = products.length;
     if (!products.length) {
-      el.innerHTML = '<div class="empty-state"><div class="empty-icon">🌿</div><div class="empty-text">Todavía no hay productos.</div></div>';
-      return;
+      el.innerHTML='<div class="empty-state"><div class="empty-icon">🌿</div><div class="empty-text">Todavía no hay productos.</div></div>'; return;
     }
     el.innerHTML = products.map(p => {
-      const catObj  = (siteConfig.categorias||[]).find(c => c.id === p.categoria) || {};
-      const etqObj  = (siteConfig.etiquetas||[]).find(e => e.id === p.badge) || {};
-      const imgEl   = p.imagenURL ? '<div class="prod-row-img"><img src="' + p.imagenURL + '" alt="' + p.nombre + '" /></div>' : '<div class="prod-row-img">📦</div>';
-      const badgeEl = etqObj.label ? '<span class="row-badge rb-' + p.badge + '">' + etqObj.label + '</span>' : '—';
-      const priceEl = p.precio === 'consultar' ? '$ Consultar' : '$ ' + p.precio;
-      return '<div class="prod-row">' + imgEl +
-        '<div><div class="prod-row-name">' + p.nombre + '</div><div class="prod-row-cat">' + (p.descripcion||'').substring(0,50) + '…</div></div>' +
-        '<div><span class="cat-chip">' + (catObj.label || p.categoria) + '</span></div>' +
-        '<div class="price-cell">' + priceEl + '</div>' +
-        '<div>' + badgeEl + '</div>' +
-        '<div class="row-actions"><button class="btn-edit" onclick="editProduct(\'' + p.id + '\')">✏️</button><button class="btn-del" onclick="deleteProduct(\'' + p.id + '\')">🗑</button></div>' +
+      const catL = ((siteConfig.categorias||[]).find(c=>c.id===p.categoria)||{}).label || p.categoria;
+      const etqL = ((siteConfig.etiquetas||[]).find(e=>e.id===p.badge)||{}).label;
+      const imgEl = p.imagenURL ? '<div class="prod-row-img"><img src="'+p.imagenURL+'" alt="'+p.nombre+'" /></div>' : '<div class="prod-row-img">📦</div>';
+      const bdg   = etqL ? '<span class="row-badge rb-'+p.badge+'">'+etqL+'</span>' : '—';
+      const pr    = p.precio==='consultar' ? '$ Consultar' : '$ '+p.precio;
+      return '<div class="prod-row">'+imgEl+
+        '<div><div class="prod-row-name">'+p.nombre+'</div><div class="prod-row-cat">'+(p.descripcion||'').substring(0,50)+'…</div></div>'+
+        '<div><span class="cat-chip">'+catL+'</span></div>'+
+        '<div class="price-cell">'+pr+'</div>'+
+        '<div>'+bdg+'</div>'+
+        '<div class="row-actions"><button class="btn-edit" onclick="editProduct(''+p.id+'')">✏️</button><button class="btn-del" onclick="deleteProduct(''+p.id+'')">🗑</button></div>'+
         '</div>';
     }).join('');
   }
 
   function updateStats() {
     document.getElementById('stat-total').textContent = products.length;
-    const catIds = ['jabones','cosmetica','bienestar'];
-    catIds.forEach(id => {
-      const el = document.getElementById('stat-' + id);
-      if (el) el.textContent = products.filter(p => p.categoria === id).length;
+    ['jabones','cosmetica','bienestar'].forEach(id => {
+      const el = document.getElementById('stat-'+id);
+      if (el) el.textContent = products.filter(p=>p.categoria===id).length;
     });
   }
 
-  // ── CLOUDINARY UPLOAD ──────────────────────────────
+  // ── CLOUDINARY ──────────────────────────────────────────────
   function uploadToCloudinary(file) {
     return new Promise((resolve, reject) => {
       const fd = new FormData();
@@ -1082,37 +1054,36 @@
       fd.append('upload_preset', CLOUDINARY_PRESET);
       fd.append('folder', 'ser-natural');
       const xhr = new XMLHttpRequest();
-      xhr.open('POST', 'https://api.cloudinary.com/v1_1/' + CLOUDINARY_CLOUD + '/image/upload');
-      const wrap = document.getElementById('progress-wrap');
-      const fill = document.getElementById('progress-fill');
-      const lbl  = document.getElementById('progress-label');
-      if (wrap) wrap.style.display = 'block';
+      xhr.open('POST','https://api.cloudinary.com/v1_1/'+CLOUDINARY_CLOUD+'/image/upload');
+      const wrap=document.getElementById('progress-wrap');
+      const fill=document.getElementById('progress-fill');
+      const lbl =document.getElementById('progress-label');
+      if (wrap) wrap.style.display='block';
       xhr.upload.onprogress = e => {
         if (e.lengthComputable && fill && lbl) {
-          const pct = Math.round(e.loaded/e.total*100);
-          fill.style.width = pct + '%';
-          lbl.textContent  = 'Subiendo imagen… ' + pct + '%';
+          const pct=Math.round(e.loaded/e.total*100);
+          fill.style.width=pct+'%'; lbl.textContent='Subiendo imagen… '+pct+'%';
         }
       };
       xhr.onload = () => {
         if (wrap) { wrap.style.display='none'; if(fill) fill.style.width='0'; }
-        if (xhr.status === 200) resolve(JSON.parse(xhr.responseText).secure_url);
-        else reject(new Error('Error Cloudinary ' + xhr.status));
+        if (xhr.status===200) resolve(JSON.parse(xhr.responseText).secure_url);
+        else reject(new Error('Error Cloudinary '+xhr.status));
       };
       xhr.onerror = () => { if(wrap) wrap.style.display='none'; reject(new Error('Error de red')); };
       xhr.send(fd);
     });
   }
 
-  // ── GALLERY ────────────────────────────────────────
+  // ── GALLERY ─────────────────────────────────────────────────
   async function loadGalleryAdmin() {
     try {
-      const res  = await fetch(WORKER_URL + '/gallery', { headers: ah(), cache: 'no-store' });
+      const res  = await fetch(WORKER_URL+'/gallery', { headers:ah(), cache:'no-store' });
       const data = await res.json();
-      galFileSHA  = data.sha;
-      galleryData = data.gallery || { inicio:[], proceso:[], final:[] };
-      ['inicio','proceso','final'].forEach(k => { if (!galleryData[k]) galleryData[k] = []; });
-    } catch(e) { galleryData = { inicio:[], proceso:[], final:[] }; }
+      galFileSHA = data.sha;
+      galleryData = data.gallery || { inicio:[],proceso:[],final:[] };
+      ['inicio','proceso','final'].forEach(k => { if(!galleryData[k]) galleryData[k]=[]; });
+    } catch(e) { galleryData={inicio:[],proceso:[],final:[]}; }
     renderGalleryAdmin(activeGalleryTab);
   }
 
@@ -1124,277 +1095,235 @@
     const cnt = document.getElementById('gal-count-label');
     if (lbl) lbl.textContent = tabLabels[tab];
     if (cnt) cnt.textContent = tabLabels[tab];
-    galResetForm();
-    renderGalleryAdmin(tab);
+    galResetForm(); renderGalleryAdmin(tab);
   };
 
   function renderGalleryAdmin(tab) {
-    const grid  = document.getElementById('gallery-admin-grid');
-    const items = galleryData[tab] || [];
-    const cnt   = document.getElementById('gal-count');
+    const grid = document.getElementById('gallery-admin-grid');
+    const items = galleryData[tab]||[];
+    const cnt = document.getElementById('gal-count');
     if (cnt) cnt.textContent = items.length;
-    if (!items.length) { grid.innerHTML = '<div class="gallery-empty-admin">No hay fotos aún.</div>'; return; }
+    if (!items.length) { grid.innerHTML='<div class="gallery-empty-admin">No hay fotos aún.</div>'; return; }
     grid.innerHTML = items.map((item,idx) =>
-      '<div class="gallery-admin-item">' +
-      '<img src="' + item.url + '" alt="' + (item.caption||'') + '" />' +
-      '<button class="gallery-admin-del" onclick="deleteGalleryPhoto(\'' + tab + '\',' + idx + ')">✕</button>' +
-      (item.caption ? '<div class="gallery-admin-caption">' + item.caption + '</div>' : '') +
+      '<div class="gallery-admin-item">'+
+      '<img src="'+item.url+'" alt="'+(item.caption||'')+'" />'+
+      '<button class="gallery-admin-del" onclick="deleteGalleryPhoto(''+tab+'','+idx+')">✕</button>'+
+      (item.caption ? '<div class="gallery-admin-caption">'+item.caption+'</div>' : '')+
       '</div>'
     ).join('');
   }
 
   window.galPreviewImage = (input) => {
-    const file = input.files[0]; if (!file) return;
-    if (file.size > 5*1024*1024) { showToast('Máx. 5MB', true); return; }
-    galSelectedFile = file;
-    const reader = new FileReader();
-    reader.onload = e => {
-      const prev = document.getElementById('gal-img-preview');
-      if (!prev) return;
-      prev.src = e.target.result; prev.style.display = 'block';
-      document.getElementById('gal-upload-icon').style.display = 'none';
-      document.getElementById('gal-upload-text').style.display = 'none';
-    };
-    reader.readAsDataURL(file);
+    const file=input.files[0]; if(!file) return;
+    if (file.size>5*1024*1024) { showToast('Máx 5MB',true); return; }
+    galSelectedFile=file;
+    const r=new FileReader();
+    r.onload=e=>{ const p=document.getElementById('gal-img-preview'); if(p){p.src=e.target.result;p.style.display='block';} document.getElementById('gal-upload-icon').style.display='none'; document.getElementById('gal-upload-text').style.display='none'; };
+    r.readAsDataURL(file);
   };
 
   window.saveGalleryPhoto = async () => {
-    if (!galSelectedFile) { showToast('Seleccioná una imagen.', true); return; }
+    if (!galSelectedFile) { showToast('Seleccioná una imagen.',true); return; }
     const caption = document.getElementById('gal-caption').value.trim();
     const btn = document.getElementById('gal-btn-save');
-    btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Guardando…';
+    btn.disabled=true; btn.innerHTML='<span class="spinner"></span>Guardando…';
     try {
       const url = await uploadToCloudinary(galSelectedFile);
-      galleryData[activeGalleryTab].push({ url, caption, addedAt: new Date().toISOString() });
-      await saveGalleryWorker();
-      renderGalleryAdmin(activeGalleryTab);
-      galResetForm();
-      showToast('✅ Foto agregada');
-    } catch(e) { showToast('Error: ' + e.message, true); }
-    finally { btn.disabled = false; btn.innerHTML = 'Guardar foto'; }
+      galleryData[activeGalleryTab].push({ url, caption, addedAt:new Date().toISOString() });
+      await saveGalleryWorker(); renderGalleryAdmin(activeGalleryTab); galResetForm(); showToast('✅ Foto agregada');
+    } catch(e) { showToast('Error: '+e.message,true); }
+    finally { btn.disabled=false; btn.innerHTML='Guardar foto'; }
   };
 
   window.deleteGalleryPhoto = async (tab, idx) => {
     if (!confirm('¿Eliminar esta foto?')) return;
     const item = galleryData[tab][idx];
-    galleryData[tab].splice(idx, 1);
+    galleryData[tab].splice(idx,1);
     try {
-      if (item && item.url) await fetch(WORKER_URL + '/image', { method:'DELETE', headers:ah(), body:JSON.stringify({ url: item.url }) }).catch(()=>{});
-      await saveGalleryWorker();
-      renderGalleryAdmin(tab);
-      showToast('🗑 Foto eliminada');
-    } catch(e) { showToast('Error: ' + e.message, true); }
+      if (item&&item.url) await fetch(WORKER_URL+'/image',{method:'DELETE',headers:ah(),body:JSON.stringify({url:item.url})}).catch(()=>{});
+      await saveGalleryWorker(); renderGalleryAdmin(tab); showToast('🗑 Foto eliminada');
+    } catch(e) { showToast('Error: '+e.message,true); }
   };
 
   async function saveGalleryWorker() {
-    const res = await fetch(WORKER_URL + '/gallery', {
-      method: 'PUT', headers: ah(),
-      body: JSON.stringify({ gallery: galleryData, sha: galFileSHA }),
-    });
-    if (!res.ok) { const e = await res.json(); throw new Error(e.error||'Error'); }
-    galFileSHA = (await res.json()).sha;
+    const res = await fetch(WORKER_URL+'/gallery', { method:'PUT', headers:ah(), body:JSON.stringify({gallery:galleryData,sha:galFileSHA}) });
+    if (!res.ok) { const e=await res.json(); throw new Error(e.error||'Error'); }
+    galFileSHA=(await res.json()).sha;
   }
 
   function galResetForm() {
-    galSelectedFile = null;
-    const fi = document.getElementById('gal-img'); if(fi) fi.value='';
-    const cap = document.getElementById('gal-caption'); if(cap) cap.value='';
-    const prev = document.getElementById('gal-img-preview');
-    if (prev) { prev.src=''; prev.style.display='none'; }
-    const icon = document.getElementById('gal-upload-icon');
-    const txt  = document.getElementById('gal-upload-text');
-    if (icon) icon.style.display='block';
-    if (txt)  txt.style.display='block';
+    galSelectedFile=null;
+    const fi=document.getElementById('gal-img'); if(fi) fi.value='';
+    const cap=document.getElementById('gal-caption'); if(cap) cap.value='';
+    const prev=document.getElementById('gal-img-preview');
+    if(prev){prev.src='';prev.style.display='none';}
+    const icon=document.getElementById('gal-upload-icon'); if(icon) icon.style.display='block';
+    const txt=document.getElementById('gal-upload-text');  if(txt)  txt.style.display='block';
   }
 
-  // ── REVIEWS ────────────────────────────────────────
+  // ── REVIEWS ─────────────────────────────────────────────────
   async function loadReviews() {
     try {
-      const res  = await fetch(WORKER_URL + '/reviews', { headers: ah(), cache: 'no-store' });
+      const res  = await fetch(WORKER_URL+'/reviews', { headers:ah(), cache:'no-store' });
       const data = await res.json();
       reviewsSHA  = data.sha;
-      reviewsData = data.reviews || { opiniones:[], clientes:[] };
-      if (!reviewsData.opiniones) reviewsData.opiniones = [];
-      if (!reviewsData.clientes)  reviewsData.clientes  = [];
-    } catch(e) { reviewsData = { opiniones:[], clientes:[] }; }
+      reviewsData = data.reviews || { opiniones:[],clientes:[] };
+      if (!reviewsData.opiniones) reviewsData.opiniones=[];
+      if (!reviewsData.clientes)  reviewsData.clientes=[];
+    } catch(e) { reviewsData={opiniones:[],clientes:[]}; }
     renderOpiniones(); renderClientes();
   }
 
   async function saveReviews() {
-    const res = await fetch(WORKER_URL + '/reviews', {
-      method: 'PUT', headers: ah(),
-      body: JSON.stringify({ reviews: reviewsData, sha: reviewsSHA }),
-    });
-    if (!res.ok) { const e = await res.json(); throw new Error(e.error||'Error'); }
-    reviewsSHA = (await res.json()).sha;
+    const res = await fetch(WORKER_URL+'/reviews', { method:'PUT', headers:ah(), body:JSON.stringify({reviews:reviewsData,sha:reviewsSHA}) });
+    if (!res.ok) { const e=await res.json(); throw new Error(e.error||'Error'); }
+    reviewsSHA=(await res.json()).sha;
   }
 
   window.revPreviewImage = (input) => {
-    const file = input.files[0]; if (!file) return;
-    revSelectedFile = file;
-    const reader = new FileReader();
-    reader.onload = e => {
-      const prev = document.getElementById('rev-img-preview');
-      if (prev) { prev.src=e.target.result; prev.style.display='block'; }
-      document.getElementById('rev-upload-icon').style.display='none';
-      document.getElementById('rev-upload-text').style.display='none';
-    };
-    reader.readAsDataURL(file);
+    const file=input.files[0]; if(!file) return;
+    revSelectedFile=file;
+    const r=new FileReader();
+    r.onload=e=>{ const p=document.getElementById('rev-img-preview'); if(p){p.src=e.target.result;p.style.display='block';} document.getElementById('rev-upload-icon').style.display='none'; document.getElementById('rev-upload-text').style.display='none'; };
+    r.readAsDataURL(file);
   };
 
   window.saveOpinion = async () => {
-    const nombre = document.getElementById('rev-nombre').value.trim();
-    const texto  = document.getElementById('rev-texto').value.trim();
-    const stars  = document.getElementById('rev-stars').value;
-    const loc    = document.getElementById('rev-loc').value.trim();
-    if (!nombre || !texto) { showToast('Completá nombre y opinión.', true); return; }
-    const btn = document.getElementById('rev-btn-save');
-    btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Guardando…';
+    const nombre=document.getElementById('rev-nombre').value.trim();
+    const texto=document.getElementById('rev-texto').value.trim();
+    const stars=document.getElementById('rev-stars').value;
+    const loc=document.getElementById('rev-loc').value.trim();
+    if (!nombre||!texto) { showToast('Completá nombre y opinión.',true); return; }
+    const btn=document.getElementById('rev-btn-save');
+    btn.disabled=true; btn.innerHTML='<span class="spinner"></span>Guardando…';
     try {
-      let fotoUrl = '';
-      if (revSelectedFile) fotoUrl = await uploadToCloudinary(revSelectedFile);
-      reviewsData.opiniones.push({ nombre, texto, stars: parseInt(stars), loc, fotoUrl, addedAt: new Date().toISOString() });
-      await saveReviews();
-      renderOpiniones();
-      revResetForm();
-      showToast('✅ Opinión guardada');
-    } catch(e) { showToast('Error: ' + e.message, true); }
+      let fotoUrl='';
+      if (revSelectedFile) fotoUrl=await uploadToCloudinary(revSelectedFile);
+      reviewsData.opiniones.push({ nombre,texto,stars:parseInt(stars),loc,fotoUrl,addedAt:new Date().toISOString() });
+      await saveReviews(); renderOpiniones(); revResetForm(); showToast('✅ Opinión guardada');
+    } catch(e) { showToast('Error: '+e.message,true); }
     finally { btn.disabled=false; btn.innerHTML='Guardar opinión'; }
   };
 
   window.deleteOpinion = async (idx) => {
     if (!confirm('¿Eliminar esta opinión?')) return;
-    const item = reviewsData.opiniones[idx];
-    reviewsData.opiniones.splice(idx, 1);
+    const item=reviewsData.opiniones[idx];
+    reviewsData.opiniones.splice(idx,1);
     try {
-      if (item && item.fotoUrl) await fetch(WORKER_URL+'/image',{method:'DELETE',headers:ah(),body:JSON.stringify({url:item.fotoUrl})}).catch(()=>{});
+      if (item&&item.fotoUrl) await fetch(WORKER_URL+'/image',{method:'DELETE',headers:ah(),body:JSON.stringify({url:item.fotoUrl})}).catch(()=>{});
       await saveReviews(); renderOpiniones(); showToast('🗑 Opinión eliminada');
     } catch(e) { showToast('Error: '+e.message,true); }
   };
 
   function renderOpiniones() {
-    const el  = document.getElementById('rev-list');
-    const cnt = document.getElementById('rev-count');
-    if (cnt) cnt.textContent = reviewsData.opiniones.length;
-    if (!el) return;
+    const el=document.getElementById('rev-list');
+    const cnt=document.getElementById('rev-count');
+    if(cnt) cnt.textContent=reviewsData.opiniones.length;
+    if(!el) return;
     if (!reviewsData.opiniones.length) { el.innerHTML='<div class="gallery-empty-admin">No hay opiniones cargadas aún.</div>'; return; }
-    el.innerHTML = reviewsData.opiniones.map((r,i) =>
-      '<div class="gallery-admin-item" style="aspect-ratio:auto;padding:14px">' +
-      (r.fotoUrl ? '<img src="'+r.fotoUrl+'" style="width:48px;height:48px;border-radius:50%;object-fit:cover;float:left;margin-right:10px" />' : '') +
-      '<div style="font-weight:600;font-size:.88rem;color:var(--bark)">' + r.nombre + '</div>' +
-      '<div style="font-size:.75rem;color:var(--sand)">' + '★'.repeat(r.stars||5) + '</div>' +
-      '<div style="font-size:.8rem;color:var(--text-lt);margin-top:4px;clear:left">' + r.texto.substring(0,80) + '…</div>' +
-      '<button class="gallery-admin-del" onclick="deleteOpinion('+i+')">✕</button>' +
+    el.innerHTML=reviewsData.opiniones.map((r,i)=>
+      '<div class="gallery-admin-item" style="aspect-ratio:auto;padding:14px">'+
+      (r.fotoUrl?'<img src="'+r.fotoUrl+'" style="width:44px;height:44px;border-radius:50%;object-fit:cover;float:left;margin-right:10px" />':'')+
+      '<div style="font-weight:600;font-size:.88rem;color:var(--bark)">'+r.nombre+'</div>'+
+      '<div style="font-size:.75rem;color:var(--sand)">'+'★'.repeat(r.stars||5)+'</div>'+
+      '<div style="font-size:.8rem;color:var(--text-lt);margin-top:4px;clear:left">'+r.texto.substring(0,80)+'…</div>'+
+      '<button class="gallery-admin-del" onclick="deleteOpinion('+i+')">✕</button>'+
       '</div>'
     ).join('');
   }
 
   function revResetForm() {
-    revSelectedFile = null;
-    ['rev-nombre','rev-texto','rev-loc'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
-    const ri = document.getElementById('rev-img'); if(ri) ri.value='';
-    const prev = document.getElementById('rev-img-preview');
-    if (prev) { prev.src=''; prev.style.display='none'; }
+    revSelectedFile=null;
+    ['rev-nombre','rev-texto','rev-loc'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+    const ri=document.getElementById('rev-img'); if(ri) ri.value='';
+    const p=document.getElementById('rev-img-preview'); if(p){p.src='';p.style.display='none';}
     document.getElementById('rev-upload-icon').style.display='block';
     document.getElementById('rev-upload-text').style.display='block';
   }
 
   window.cliPreviewImage = (input) => {
-    const file = input.files[0]; if (!file) return;
-    cliSelectedFile = file;
-    const reader = new FileReader();
-    reader.onload = e => {
-      const prev = document.getElementById('cli-img-preview');
-      if (prev) { prev.src=e.target.result; prev.style.display='block'; }
-      document.getElementById('cli-upload-icon').style.display='none';
-      document.getElementById('cli-upload-text').style.display='none';
-    };
-    reader.readAsDataURL(file);
+    const file=input.files[0]; if(!file) return;
+    cliSelectedFile=file;
+    const r=new FileReader();
+    r.onload=e=>{ const p=document.getElementById('cli-img-preview'); if(p){p.src=e.target.result;p.style.display='block';} document.getElementById('cli-upload-icon').style.display='none'; document.getElementById('cli-upload-text').style.display='none'; };
+    r.readAsDataURL(file);
   };
 
   window.saveClientePhoto = async () => {
-    if (!cliSelectedFile) { showToast('Seleccioná una foto.', true); return; }
-    const nombre = document.getElementById('cli-nombre').value.trim();
-    const btn = document.getElementById('cli-btn-save');
+    if (!cliSelectedFile) { showToast('Seleccioná una foto.',true); return; }
+    const nombre=document.getElementById('cli-nombre').value.trim();
+    const btn=document.getElementById('cli-btn-save');
     btn.disabled=true; btn.innerHTML='<span class="spinner"></span>Guardando…';
     try {
-      const url = await uploadToCloudinary(cliSelectedFile);
-      reviewsData.clientes.push({ url, nombre, addedAt: new Date().toISOString() });
+      const url=await uploadToCloudinary(cliSelectedFile);
+      reviewsData.clientes.push({ url,nombre,addedAt:new Date().toISOString() });
       await saveReviews(); renderClientes(); cliResetForm(); showToast('✅ Foto guardada');
-    } catch(e) { showToast('Error: '+e.message, true); }
+    } catch(e) { showToast('Error: '+e.message,true); }
     finally { btn.disabled=false; btn.innerHTML='Guardar foto'; }
   };
 
   window.deleteClientePhoto = async (idx) => {
     if (!confirm('¿Eliminar esta foto?')) return;
-    const item = reviewsData.clientes[idx];
-    reviewsData.clientes.splice(idx, 1);
+    const item=reviewsData.clientes[idx];
+    reviewsData.clientes.splice(idx,1);
     try {
-      if (item && item.url) await fetch(WORKER_URL+'/image',{method:'DELETE',headers:ah(),body:JSON.stringify({url:item.url})}).catch(()=>{});
+      if(item&&item.url) await fetch(WORKER_URL+'/image',{method:'DELETE',headers:ah(),body:JSON.stringify({url:item.url})}).catch(()=>{});
       await saveReviews(); renderClientes(); showToast('🗑 Foto eliminada');
-    } catch(e) { showToast('Error: '+e.message, true); }
+    } catch(e) { showToast('Error: '+e.message,true); }
   };
 
   function renderClientes() {
-    const el  = document.getElementById('cli-list');
-    const cnt = document.getElementById('cli-count');
-    if (cnt) cnt.textContent = reviewsData.clientes.length;
-    if (!el) return;
+    const el=document.getElementById('cli-list');
+    const cnt=document.getElementById('cli-count');
+    if(cnt) cnt.textContent=reviewsData.clientes.length;
+    if(!el) return;
     if (!reviewsData.clientes.length) { el.innerHTML='<div class="gallery-empty-admin">No hay fotos de clientes aún.</div>'; return; }
-    el.innerHTML = reviewsData.clientes.map((c,i) =>
-      '<div class="gallery-admin-item">' +
-      '<img src="'+c.url+'" alt="'+(c.nombre||'')+'" />' +
-      (c.nombre ? '<div class="gallery-admin-caption">'+c.nombre+'</div>' : '') +
-      '<button class="gallery-admin-del" onclick="deleteClientePhoto('+i+')">✕</button>' +
+    el.innerHTML=reviewsData.clientes.map((c,i)=>
+      '<div class="gallery-admin-item">'+
+      '<img src="'+c.url+'" alt="'+(c.nombre||'')+'" />'+
+      (c.nombre?'<div class="gallery-admin-caption">'+c.nombre+'</div>':'')+
+      '<button class="gallery-admin-del" onclick="deleteClientePhoto('+i+')">✕</button>'+
       '</div>'
     ).join('');
   }
 
   function cliResetForm() {
-    cliSelectedFile = null;
-    const ci = document.getElementById('cli-img'); if(ci) ci.value='';
-    const cn = document.getElementById('cli-nombre'); if(cn) cn.value='';
-    const prev = document.getElementById('cli-img-preview');
-    if (prev) { prev.src=''; prev.style.display='none'; }
+    cliSelectedFile=null;
+    const ci=document.getElementById('cli-img'); if(ci) ci.value='';
+    const cn=document.getElementById('cli-nombre'); if(cn) cn.value='';
+    const p=document.getElementById('cli-img-preview'); if(p){p.src='';p.style.display='none';}
     document.getElementById('cli-upload-icon').style.display='block';
     document.getElementById('cli-upload-text').style.display='block';
   }
 
-  // ── PRODUCT FORM HELPERS ───────────────────────────
+  // ── FORM HELPERS ────────────────────────────────────────────
   window.previewImage = (input) => {
-    const file = input.files[0]; if (!file) return;
-    if (file.size > 5*1024*1024) { showToast('Máx. 5MB', true); input.value=''; return; }
-    selectedFile = file;
-    const reader = new FileReader();
-    reader.onload = e => {
-      const prev = document.getElementById('img-preview');
-      prev.src=e.target.result; prev.style.display='block';
-      document.getElementById('upload-icon').style.display='none';
-      document.getElementById('upload-text').style.display='none';
-    };
-    reader.readAsDataURL(file);
+    const file=input.files[0]; if(!file) return;
+    if (file.size>5*1024*1024) { showToast('Máx 5MB',true); input.value=''; return; }
+    selectedFile=file;
+    const r=new FileReader();
+    r.onload=e=>{ const p=document.getElementById('img-preview'); p.src=e.target.result; p.style.display='block'; document.getElementById('upload-icon').style.display='none'; document.getElementById('upload-text').style.display='none'; };
+    r.readAsDataURL(file);
   };
 
   window.setPricePill = (val) => {
-    pricePill = val;
-    document.getElementById('pill-consultar').classList.toggle('active', val==='consultar');
-    document.getElementById('pill-fijo').classList.toggle('active', val==='fijo');
-    document.getElementById('f-precio').style.display = val==='fijo' ? 'block' : 'none';
+    pricePill=val;
+    document.getElementById('pill-consultar').classList.toggle('active',val==='consultar');
+    document.getElementById('pill-fijo').classList.toggle('active',val==='fijo');
+    document.getElementById('f-precio').style.display=val==='fijo'?'block':'none';
   };
 
   window.setBadge = (val) => {
-    badgeVal = val;
-    document.querySelectorAll('.badge-opt').forEach(b => b.classList.remove('active'));
-    const t = val === '' ? document.getElementById('badge-ninguna') : document.getElementById('badge-'+val);
-    if (t) t.classList.add('active');
+    badgeVal=val;
+    document.querySelectorAll('.badge-opt').forEach(b=>b.classList.remove('active'));
+    const t=val===''?document.getElementById('badge-ninguna'):document.getElementById('badge-'+val);
+    if(t) t.classList.add('active');
   };
 
   function resetForm() {
     editingId=null; editingOldImg=null; selectedFile=null;
-    ['f-nombre','f-precio','f-desc'].forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
+    ['f-nombre','f-precio','f-desc'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
     const cat=document.getElementById('f-cat'); if(cat) cat.value='';
-    // Clear extra fields
-    (siteConfig.camposExtra||[]).forEach(c => { const el=document.getElementById('ef-'+c.id); if(el) el.value=''; });
     setPricePill('consultar'); setBadge('');
     const prev=document.getElementById('img-preview');
     if(prev){prev.src='';prev.style.display='none';}
@@ -1406,35 +1335,28 @@
     document.getElementById('btn-cancel').style.display='none';
   }
 
-  // ── TOAST ──────────────────────────────────────────
+  // ── TOAST ───────────────────────────────────────────────────
   let toastTimer;
   function showToast(msg, isError=false) {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.className = 'show' + (isError ? ' error' : '');
+    const t=document.getElementById('toast');
+    t.textContent=msg; t.className='show'+(isError?' error':'');
     clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => { t.className=''; }, 3500);
+    toastTimer=setTimeout(()=>{t.className='';},3500);
   }
 
-  // ── DRAG & DROP ────────────────────────────────────
+  // ── DRAG & DROP ─────────────────────────────────────────────
   document.addEventListener('DOMContentLoaded', () => {
-    const dropArea = document.getElementById('drop-area');
-    if (!dropArea) return;
-    dropArea.addEventListener('dragover', e => { e.preventDefault(); dropArea.classList.add('drag'); });
-    dropArea.addEventListener('dragleave', () => dropArea.classList.remove('drag'));
-    dropArea.addEventListener('drop', e => {
+    const dropArea=document.getElementById('drop-area'); if(!dropArea) return;
+    dropArea.addEventListener('dragover',e=>{e.preventDefault();dropArea.classList.add('drag');});
+    dropArea.addEventListener('dragleave',()=>dropArea.classList.remove('drag'));
+    dropArea.addEventListener('drop',e=>{
       e.preventDefault(); dropArea.classList.remove('drag');
-      const file = e.dataTransfer.files[0];
-      if (file && file.type.startsWith('image/')) {
-        selectedFile = file;
-        const reader = new FileReader();
-        reader.onload = ev => {
-          const prev=document.getElementById('img-preview');
-          prev.src=ev.target.result; prev.style.display='block';
-          document.getElementById('upload-icon').style.display='none';
-          document.getElementById('upload-text').style.display='none';
-        };
-        reader.readAsDataURL(file);
+      const file=e.dataTransfer.files[0];
+      if(file&&file.type.startsWith('image/')){
+        selectedFile=file;
+        const r=new FileReader();
+        r.onload=ev=>{const p=document.getElementById('img-preview');p.src=ev.target.result;p.style.display='block';document.getElementById('upload-icon').style.display='none';document.getElementById('upload-text').style.display='none';};
+        r.readAsDataURL(file);
       }
     });
   });

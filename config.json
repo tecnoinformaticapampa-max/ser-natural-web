@@ -1,16 +1,13 @@
 {
   "categorias": [
     { "id": "jabones",   "label": "Jabones artesanales" },
-    { "id": "cosmetica", "label": "Cosmética natural" },
+    { "id": "cosmetica", "label": "Cosmetica natural" },
     { "id": "bienestar", "label": "Bienestar" }
   ],
   "etiquetas": [
     { "id": "nuevo",   "label": "Nuevo" },
     { "id": "popular", "label": "Popular" }
   ],
-  "camposExtra": [
-    { "id": "modo_uso",      "label": "Modo de uso" },
-    { "id": "ingredientes",  "label": "Ingredientes principales" }
-  ],
+  "camposExtra": [],
   "logoUrl": "https://i.postimg.cc/W16Cb2t6/395740464-122094653600094688-9024125943526889344-n.jpg"
 }
