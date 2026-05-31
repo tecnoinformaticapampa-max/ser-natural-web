@@ -745,9 +745,12 @@
     const isSA = sessionRole === 'superadmin';
     el.innerHTML = (siteConfig.categorias||[]).map((c,i) =>
       '<span class="tag-item">' + c.label +
-      (isSA ? '<button class="tag-del" onclick="deleteCat(' + i + ')">✕</button>' : '') +
+      (isSA ? '<button class="tag-del" data-idx="' + i + '" data-fn="cat">✕</button>' : '') +
       '</span>'
     ).join('') || '<span style="color:var(--text-lt);font-size:.82rem">Sin categorías</span>';
+    el.querySelectorAll('[data-fn="cat"]').forEach(btn => {
+      btn.addEventListener('click', function() { deleteCat(parseInt(this.dataset.idx)); });
+    });
   }
 
   function renderEtiqList() {
@@ -755,9 +758,12 @@
     const isSA = sessionRole === 'superadmin';
     el.innerHTML = (siteConfig.etiquetas||[]).map((e,i) =>
       '<span class="tag-item">' + e.label +
-      (isSA ? '<button class="tag-del" onclick="deleteEtiq(' + i + ')">✕</button>' : '') +
+      (isSA ? '<button class="tag-del" data-idx="' + i + '" data-fn="etiq">✕</button>' : '') +
       '</span>'
     ).join('') || '<span style="color:var(--text-lt);font-size:.82rem">Sin etiquetas</span>';
+    el.querySelectorAll('[data-fn="etiq"]').forEach(btn => {
+      btn.addEventListener('click', function() { deleteEtiq(parseInt(this.dataset.idx)); });
+    });
   }
 
   function renderLogoPreview() {
@@ -1013,7 +1019,7 @@
         '<div><span class="cat-chip">'+catL+'</span></div>'+
         '<div class="price-cell">'+pr+'</div>'+
         '<div>'+bdg+'</div>'+
-        '<div class="row-actions"><button class="btn-edit" onclick="editProduct(''+p.id+'')">✏️</button><button class="btn-del" onclick="deleteProduct(''+p.id+'')">🗑</button></div>'+
+        '<div class="row-actions"><button class="btn-edit" onclick="editProduct(\'' + p.id + '\')">✏️</button><button class="btn-del" onclick="deleteProduct(\'' + p.id + '\')">🗑</button></div>'+
         '</div>';
     }).join('');
   }
@@ -1087,7 +1093,7 @@
     grid.innerHTML = items.map((item,idx) =>
       '<div class="gallery-admin-item">'+
       '<img src="'+item.url+'" alt="'+(item.caption||'')+'" />'+
-      '<button class="gallery-admin-del" onclick="deleteGalleryPhoto(''+tab+'','+idx+')">✕</button>'+
+      '<button class="gallery-admin-del" data-tab="'+tab+'" data-idx="'+idx+'">✕</button>'+
       (item.caption ? '<div class="gallery-admin-caption">'+item.caption+'</div>' : '')+
       '</div>'
     ).join('');
@@ -1207,9 +1213,12 @@
       '<div style="font-weight:600;font-size:.88rem;color:var(--bark)">'+r.nombre+'</div>'+
       '<div style="font-size:.75rem;color:var(--sand)">'+'★'.repeat(r.stars||5)+'</div>'+
       '<div style="font-size:.8rem;color:var(--text-lt);margin-top:4px;clear:left">'+r.texto.substring(0,80)+'…</div>'+
-      '<button class="gallery-admin-del" onclick="deleteOpinion('+i+')">✕</button>'+
+      '<button class="gallery-admin-del" data-idx="'+i+'">✕</button>'+
       '</div>'
     ).join('');
+    el.querySelectorAll('.gallery-admin-del').forEach(btn => {
+      btn.addEventListener('click', function() { deleteOpinion(parseInt(this.dataset.idx)); });
+    });
   }
 
   function revResetForm() {
@@ -1262,9 +1271,12 @@
       '<div class="gallery-admin-item">'+
       '<img src="'+c.url+'" alt="'+(c.nombre||'')+'" />'+
       (c.nombre?'<div class="gallery-admin-caption">'+c.nombre+'</div>':'')+
-      '<button class="gallery-admin-del" onclick="deleteClientePhoto('+i+')">✕</button>'+
+      '<button class="gallery-admin-del" data-idx="'+i+'">✕</button>'+
       '</div>'
     ).join('');
+    el.querySelectorAll('.gallery-admin-del').forEach(btn => {
+      btn.addEventListener('click', function() { deleteClientePhoto(parseInt(this.dataset.idx)); });
+    });
   }
 
   function cliResetForm() {

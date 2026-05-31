@@ -811,11 +811,13 @@
   function renderFilters() {
     const bar = document.getElementById('filter-bar');
     if (!bar || !siteConfig.categorias || !siteConfig.categorias.length) return;
-    bar.innerHTML =
-      '<button class="filter-btn active" id="fbtn-todos" onclick="filterCatalog('todos',this)">Todos</button>' +
-      siteConfig.categorias.map(c =>
-        '<button class="filter-btn" id="fbtn-' + c.id + '" onclick="filterCatalog('' + c.id + '',this)">' + c.label + '</button>'
+    bar.innerHTML = '<button class="filter-btn active" id="fbtn-todos" data-cat="todos">Todos</button>' +
+      (siteConfig.categorias||[]).map(c =>
+        '<button class="filter-btn" id="fbtn-' + c.id + '" data-cat="' + c.id + '">' + c.label + '</button>'
       ).join('');
+    bar.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', function() { filterCatalog(this.dataset.cat, this); });
+    });
   }
 
   // ── CATALOG ─────────────────────────────────────────────────
@@ -842,7 +844,7 @@
       : allProducts.filter(p => p.categoria === activeFilter);
 
     if (!filtered.length) {
-      grid.innerHTML = '<div class="catalog-empty"><div class="ce-icon">🌿</div><p>Próximamente nuevos productos.<br>Consultanos por WhatsApp.</p></div>';
+      grid.innerHTML = '<div class="catalog-empty"><div class="ce-icon">🌿</div><p>Pr\u00F3ximamente nuevos productos.<br>Consult\u00E1nos por WhatsApp.</p></div>';
       return;
     }
 
@@ -858,26 +860,40 @@
       const qty    = cardQty[p.id] || 1;
       const inCart = !!cart[p.id];
 
-      return '<div class="prod-card" id="card-' + p.id + '">' +
-        '<div class="prod-img-wrap" onclick="openProdModal('' + p.id + '')" style="cursor:pointer">' + imgEl + bdgEl + '</div>' +
+      return '<div class="prod-card" id="card-' + p.id + '" data-id="' + p.id + '">' +
+        '<div class="prod-img-wrap modal-trigger" data-id="' + p.id + '" style="cursor:pointer">' + imgEl + bdgEl + '</div>' +
         '<div class="prod-info">' +
           '<div class="prod-cat">' + catLabel(p.categoria) + '</div>' +
-          '<div class="prod-name" onclick="openProdModal('' + p.id + '')" style="cursor:pointer">' + p.nombre + '</div>' +
+          '<div class="prod-name modal-trigger" data-id="' + p.id + '" style="cursor:pointer">' + p.nombre + '</div>' +
           '<div class="prod-desc">' + p.descripcion + '</div>' +
           '<div class="prod-price">' + priceEl + '</div>' +
           '<div class="qty-row">' +
             '<div class="qty-ctrl">' +
-              '<button class="qty-btn" onclick="changeQty('' + p.id + '',-1)">−</button>' +
+              '<button class="qty-btn qty-minus" data-id="' + p.id + '">−</button>' +
               '<span class="qty-num" id="qty-' + p.id + '">' + qty + '</span>' +
-              '<button class="qty-btn" onclick="changeQty('' + p.id + '',1)">+</button>' +
+              '<button class="qty-btn qty-plus" data-id="' + p.id + '">+</button>' +
             '</div>' +
-            '<button class="btn-add-cart" id="addbtn-' + p.id + '" onclick="addToCart('' + p.id + '')">' +
+            '<button class="btn-add-cart add-cart-btn' + (inCart ? ' in-cart' : '') + '" id="addbtn-' + p.id + '" data-id="' + p.id + '">' +
               (inCart ? '✓ En carrito' : 'Agregar') +
             '</button>' +
           '</div>' +
         '</div>' +
       '</div>';
     }).join('');
+
+    // Event delegation - no inline JS needed
+    grid.querySelectorAll('.modal-trigger').forEach(el => {
+      el.addEventListener('click', function() { openProdModal(this.dataset.id); });
+    });
+    grid.querySelectorAll('.qty-minus').forEach(el => {
+      el.addEventListener('click', function(e) { e.stopPropagation(); changeQty(this.dataset.id, -1); });
+    });
+    grid.querySelectorAll('.qty-plus').forEach(el => {
+      el.addEventListener('click', function(e) { e.stopPropagation(); changeQty(this.dataset.id, 1); });
+    });
+    grid.querySelectorAll('.add-cart-btn').forEach(el => {
+      el.addEventListener('click', function(e) { e.stopPropagation(); addToCart(this.dataset.id); });
+    });
   }
 
   // ── PRODUCT MODAL ────────────────────────────────────────────
@@ -1000,34 +1016,20 @@
       const pr = p.precio==='consultar'
         ? '<div class="cart-item-price consultar">Precio a consultar</div>'
         : '<div class="cart-item-price">$ '+(Number(p.precio)*qty).toLocaleString('es-AR')+'</div>';
-      return '<div class="cart-item">'+img+
+      return '<div class="cart-item" data-id="'+p.id+'">'+img+
         '<div><div class="cart-item-name">'+p.nombre+'</div>'+pr+'</div>'+
         '<div class="cart-item-qty">'+
-          '<button class="cq-btn" onclick="cartChangeQty(''+p.id+'',-1)">−</button>'+
+          '<button class="cq-btn cq-minus" data-id="'+p.id+'">−</button>'+
           '<span class="cq-num">'+qty+'</span>'+
-          '<button class="cq-btn" onclick="cartChangeQty(''+p.id+'',1)">+</button>'+
+          '<button class="cq-btn cq-plus" data-id="'+p.id+'">+</button>'+
         '</div></div>';
     }).join('');
-  }
-
-  window.cartChangeQty = (id, delta) => {
-    if (!cart[id]) return;
-    cart[id].qty = Math.max(0, cart[id].qty + delta);
-    if (cart[id].qty === 0) {
-      delete cart[id];
-      const btn = document.getElementById('addbtn-'+id);
-      if (btn) { btn.textContent='Agregar'; btn.style.background=''; }
-    }
-    updateCartUI();
-  };
-
-  window.clearCart = () => {
-    Object.keys(cart).forEach(id => {
-      const btn = document.getElementById('addbtn-'+id);
-      if (btn) { btn.textContent='Agregar'; btn.style.background=''; }
-      const qEl = document.getElementById('qty-'+id); if(qEl) qEl.textContent=1;
-      cardQty[id] = 1;
+    el.querySelectorAll('.cq-minus').forEach(b => {
+      b.addEventListener('click', function() { cartChangeQty(this.dataset.id, -1); });
     });
+    el.querySelectorAll('.cq-plus').forEach(b => {
+      b.addEventListener('click', function() { cartChangeQty(this.dataset.id, 1); });
+    });;
     cart = {}; updateCartUI();
   };
 
