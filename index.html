@@ -1091,39 +1091,24 @@
     const hasC  = items.some(i=>i.product.precio==='consultar');
     const line  = '━'.repeat(22);
 
-    let msg = 'Hola SerNatural! Quiero hacer el siguiente pedido
-' + line + '
-
-';
-    msg += ' DATOS DEL CLIENTE
-';
-    msg += 'Nombre: '         + nombre    + '
-';
-    msg += 'Localidad: '      + localidad + '
-';
-    msg += 'Provincia: '      + provincia + '
-';
-    msg += 'Codigo postal: '  + cp        + '
-';
-    if (direccion) msg += 'Direccion: ' + direccion + '
-';
-    msg += '
- PRODUCTOS
-';
+    let msg = 'Hola SerNatural! Quiero hacer el siguiente pedido' + '\n' + line + '\n\n';
+    msg += ' DATOS DEL CLIENTE' + '\n';
+    msg += 'Nombre: ' + nombre + '\n';
+    msg += 'Localidad: ' + localidad + '\n';
+    msg += 'Provincia: ' + provincia + '\n';
+    msg += 'Codigo postal: ' + cp + '\n';
+    if (direccion) msg += 'Direccion: ' + direccion + '\n';
+    msg += '\n PRODUCTOS\n';
     items.forEach(({product:p, qty}) => {
-      msg += p.precio==='consultar'
-        ? '• '+p.nombre+' x'+qty+' — Precio a consultar
-'
-        : '• '+p.nombre+' x'+qty+' — $ '+(Number(p.precio)*qty).toLocaleString('es-AR')+'
-';
+      if (p.precio === 'consultar') {
+        msg += '\u2022 ' + p.nombre + ' x' + qty + ' \u2014 Precio a consultar\n';
+      } else {
+        msg += '\u2022 ' + p.nombre + ' x' + qty + ' \u2014 $ ' + (Number(p.precio)*qty).toLocaleString('es-AR') + '\n';
+      }
     });
-    if (total>0) msg += '
-Total estimado: $ '+total.toLocaleString('es-AR')+'
-';
-    if (hasC)    msg += '(Algunos precios a confirmar)
-';
-    msg += line + '
-Por favor confirmarme disponibilidad, precio final y costo de envio. Gracias!';
+    if (total > 0) msg += '\nTotal estimado: $ ' + total.toLocaleString('es-AR') + '\n';
+    if (hasC) msg += '(Algunos precios a confirmar)\n';
+    msg += line + '\nPor favor confirmarme disponibilidad, precio final y costo de envio. Gracias!';
 
     closeCheckout();
     window.open('https://wa.me/'+WA_NUM+'?text='+encodeURIComponent(msg),'_blank');
@@ -1234,19 +1219,14 @@ Por favor confirmarme disponibilidad, precio final y costo de envio. Gracias!';
     const phone = document.getElementById('f-phone').value.trim();
     const topic = document.getElementById('f-topic').value;
     const msg   = document.getElementById('f-msg').value.trim();
-    if (!name) { alert('Por favor ingresá tu nombre.'); return; }
-    if (!msg)  { alert('Por favor escribí tu consulta.'); return; }
-    const waMsg = encodeURIComponent(
-      'Hola! Me contacto desde la web
-Nombre: ' + name +
-      (phone ? '
-Telefono: ' + phone : '') +
-      (topic ? '
-Consulta sobre: ' + topic : '') +
-      '
-Mensaje: ' + msg
-    );
-    window.open('https://wa.me/' + WA_NUM + '?text=' + waMsg, '_blank');
+    if (!name) { alert('Por favor ingresa tu nombre.'); return; }
+    if (!msg)  { alert('Por favor escribe tu consulta.'); return; }
+    const nl = String.fromCharCode(10);
+    let waMsg = 'Hola! Me contacto desde la web' + nl + 'Nombre: ' + name;
+    if (phone) waMsg += nl + 'Telefono: ' + phone;
+    if (topic) waMsg += nl + 'Consulta sobre: ' + topic;
+    waMsg += nl + 'Mensaje: ' + msg;
+    window.open('https://wa.me/' + WA_NUM + '?text=' + encodeURIComponent(waMsg), '_blank');
     document.getElementById('form-body').style.display  = 'none';
     document.getElementById('form-success').style.display = 'block';
   }
