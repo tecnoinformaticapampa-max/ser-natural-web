@@ -539,8 +539,8 @@
             <div class="config-section" style="padding:16px;margin-bottom:0">
               <div style="font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--bark);margin-bottom:10px">&#128207; Medidas</div>
               <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-                <div class="form-group" style="margin-bottom:0"><label style="font-size:.75rem">Ancho (mm)</label><input type="number" id="lb-w" value="80" min="20" max="300" oninput="lbRender()" /></div>
-                <div class="form-group" style="margin-bottom:0"><label style="font-size:.75rem">Alto (mm)</label><input type="number" id="lb-h" value="50" min="20" max="300" oninput="lbRender()" /></div>
+                <div class="form-group" style="margin-bottom:0"><label style="font-size:.75rem">Ancho (cm)</label><input type="number" id="lb-w" value="8" min="1" max="30" step="0.5" oninput="lbRender()" /></div>
+                <div class="form-group" style="margin-bottom:0"><label style="font-size:.75rem">Alto (cm)</label><input type="number" id="lb-h" value="5" min="1" max="30" step="0.5" oninput="lbRender()" /></div>
               </div>
             </div>
 
@@ -1645,11 +1645,11 @@
   // ════ GENERADOR DE ETIQUETAS ════
   let lbBgColor = '#F7F2EC', lbLayout = 'minimalista', lbImgObj = null;
   const LB_SCALE = 3;
-  function lbMmToPx(mm) { return Math.round((mm / 25.4) * 96); }
+  function lbCmToPx(cm) { return Math.round((cm / 2.54) * 96); }
   function lbGetDims() {
     return {
-      w: lbMmToPx(Math.max(20, Number(document.getElementById('lb-w').value) || 80)),
-      h: lbMmToPx(Math.max(20, Number(document.getElementById('lb-h').value) || 50))
+      w: lbCmToPx(Math.max(1, Number(document.getElementById('lb-w').value) || 8)),
+      h: lbCmToPx(Math.max(1, Number(document.getElementById('lb-h').value) || 5))
     };
   }
   const defaultLbFields = [
@@ -1684,17 +1684,24 @@
     if (cur) lines.push(cur);
     return lines.length ? lines : [String(text)];
   }
-  function lbDrawText(ctx, x, y, maxW, maxH, align) {
+  function lbDrawText(ctx, x, y, maxW, maxH, forceAlign) {
     let cy = y + 8;
     lbFields.forEach(f => {
       if (!f.text || !f.text.trim()) return;
       const fs = Math.max(7, f.size || 12);
       ctx.font = (f.bold ? 'bold ' : '') + fs + 'px "DM Sans", Arial, sans-serif';
       ctx.fillStyle = f.color || '#2E2A24';
-      ctx.textAlign = align || f.align || 'left';
+      // forceAlign solo para layouts que lo requieren (minimalista centra todo)
+      // en 'clasico' y 'redondo' usamos el align individual de cada campo
+      const fieldAlign = forceAlign || f.align || 'left';
+      ctx.textAlign = fieldAlign;
+      // Calcular X según alineación
+      const tx = fieldAlign === 'center' ? x + maxW / 2
+               : fieldAlign === 'right'  ? x + maxW - 6
+               : x + 6; // left
       lbWrap(ctx, f.text, maxW - 12).forEach(line => {
         if (cy + fs > y + maxH) return;
-        ctx.fillText(line, align === 'center' ? x + maxW / 2 : x + 6, cy + fs);
+        ctx.fillText(line, tx, cy + fs);
         cy += fs + 2;
       });
       cy += 4;
@@ -1738,7 +1745,7 @@
       }
       ctx.strokeStyle = 'rgba(0,0,0,.1)'; ctx.lineWidth = 0.8;
       ctx.beginPath(); ctx.moveTo(imgW, 8); ctx.lineTo(imgW, ch-8); ctx.stroke();
-      lbDrawText(ctx, imgW+6, 4, cw-imgW-10, ch-8, 'left');
+      lbDrawText(ctx, imgW+6, 4, cw-imgW-10, ch-8, null);
     } else {
       if (lbImgObj) {
         const s = Math.min(cw, ch) * pct;
@@ -1767,8 +1774,8 @@
   window.lbReset = () => {
     lbBgColor = '#F7F2EC'; lbLayout = 'minimalista'; lbImgObj = null;
     lbFields = defaultLbFields.map(f => Object.assign({}, f));
-    const w = document.getElementById('lb-w'); if(w) w.value = 80;
-    const h = document.getElementById('lb-h'); if(h) h.value = 50;
+    const w = document.getElementById('lb-w'); if(w) w.value = 8;
+    const h = document.getElementById('lb-h'); if(h) h.value = 5;
     const s = document.getElementById('lb-img-size'); if(s) s.value = 40;
     const fi = document.getElementById('lb-img-file'); if(fi) fi.value = '';
     document.querySelectorAll('[data-layout]').forEach(b => b.classList.toggle('active', b.dataset.layout==='minimalista'));
