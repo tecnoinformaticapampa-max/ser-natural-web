@@ -1697,8 +1697,8 @@
       ctx.textAlign = fieldAlign;
       // Calcular X según alineación
       const tx = fieldAlign === 'center' ? x + maxW / 2
-               : fieldAlign === 'right'  ? x + maxW - 6
-               : x + 6; // left
+               : fieldAlign === 'right'  ? x + maxW - 4
+               : x + 4; // left
       lbWrap(ctx, f.text, maxW - 12).forEach(line => {
         if (cy + fs > y + maxH) return;
         ctx.fillText(line, tx, cy + fs);
@@ -1736,7 +1736,7 @@
         const iH = ch * pct * 1.4, iW = Math.min(cw * pct * 2, cw * .9);
         ctx.drawImage(lbImgObj, (cw-iW)/2, 4, iW, iH);
       }
-      lbDrawText(ctx, 0, lbImgObj ? ch * pct * 1.4 + 2 : 0, cw, ch - (lbImgObj ? ch * pct * 1.4 : 0), 'center');
+      lbDrawText(ctx, 0, lbImgObj ? ch * pct * 1.4 + 2 : 0, cw, ch - (lbImgObj ? ch * pct * 1.4 : 0), null);
     } else if (lbLayout === 'clasico') {
       const imgW = cw * 0.38;
       if (lbImgObj) {
