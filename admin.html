@@ -11,7 +11,7 @@
     :root {
       --cream: #F7F2EC; --cream2: #EDE7DC; --sage: #7A9E7E; --sage-dk: #4E7255;
       --bark: #6B4F3A; --sand: #C9A97A; --white: #fff;
-      --text: #2E2A24; --text-lt: #6B6459;
+      --text: #2E2A24; --text-lt: #4A4139;
       --red: #e05252;
       --font-display: 'Playfair Display', serif;
       --font-body: 'DM Sans', sans-serif;
@@ -257,6 +257,7 @@
       <button class="admin-tab-btn" onclick="switchTab('galeria')" data-tab="galeria">📸 Galería</button>
       <button class="admin-tab-btn" onclick="switchTab('opiniones')" data-tab="opiniones" id="tab-opiniones">⭐ Opiniones</button>
       <button class="admin-tab-btn" onclick="switchTab('identidad')" data-tab="identidad" id="tab-identidad">🎨 Identidad</button>
+      <button class="admin-tab-btn" onclick="switchTab('etiquetas')" data-tab="etiquetas" id="tab-etiquetas">&#127991; Etiquetas</button>
       <button class="admin-tab-btn" onclick="switchTab('usuarios')" data-tab="usuarios" id="tab-usuarios" style="display:none">👥 Usuarios</button>
     </div>
 
@@ -342,6 +343,15 @@
             <div class="progress-label" id="progress-label">Subiendo imagen…</div>
           </div>
         </div>
+      </div>
+      <!-- PRESENTACIONES -->
+      <div class="form-group full" id="presentaciones-section">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+          <label style="margin-bottom:0">&#127381; Presentaciones (variantes)</label>
+          <button class="btn-add-tag" id="btn-add-pres" style="font-size:.78rem;padding:6px 14px;border-radius:8px">+ Agregar</button>
+        </div>
+        <p style="font-size:.78rem;color:var(--text-lt);margin-bottom:10px">Definí variantes con nombre, precio y stock opcional. Si no hay presentaciones, se usa el precio fijo del campo arriba.</p>
+        <div id="pres-list" style="display:flex;flex-direction:column;gap:8px"></div>
       </div>
       <div class="form-actions">
         <button class="btn-cancel" id="btn-cancel" style="display:none" onclick="cancelEdit()">Cancelar</button>
@@ -496,10 +506,106 @@
           <button class="btn-save" id="logo-btn-save" onclick="saveLogo()">Guardar logo</button>
         </div>
       </div>
+      <!-- ENVIO GRATIS -->
+      <div class="config-section" style="margin-top:24px">
+        <h3>&#128666; Env&#237;o gratis</h3>
+        <p style="font-size:.82rem;color:var(--text-lt);margin-bottom:16px">Defin&#237; el monto m&#237;nimo de compra para ofrecer env&#237;o gratis. Se muestra en el carrito del sitio p&#250;blico. Dej&#225; en 0 o vac&#237;o para desactivar.</p>
+        <div class="form-grid" style="grid-template-columns:1fr 1fr">
+          <div class="form-group">
+            <label>Monto m&#237;nimo para env&#237;o gratis ($)</label>
+            <input type="number" id="envio-gratis-min" placeholder="Ej: 15000" min="0" style="max-width:280px" />
+          </div>
+        </div>
+        <div class="form-actions" style="margin-top:12px">
+          <button class="btn-save" onclick="saveEnvioGratis()">Guardar</button>
+        </div>
+      </div>
     </div><!-- end panel-identidad -->
 
 
     <!-- ═══ TAB: USUARIOS — superadmin only ═══ -->
+    <!-- ═══ TAB: ETIQUETAS ═══ -->
+    <div class="tab-panel" id="panel-etiquetas">
+      <div class="config-section">
+        <h3>&#127991; Generador de Etiquetas de Producto</h3>
+        <p style="font-size:.82rem;color:var(--text-lt);margin-bottom:20px">Dise&#241;&#225; etiquetas para tus productos. Ajust&#225; medidas, carg&#225; imagen, editá textos y descarg&#225; en alta resoluci&#243;n.</p>
+
+        <div style="display:grid;grid-template-columns:340px 1fr;gap:28px;align-items:flex-start" id="label-builder">
+
+          <!-- PANEL DE CONTROLES -->
+          <div style="display:flex;flex-direction:column;gap:16px">
+
+            <!-- Medidas -->
+            <div class="config-section" style="padding:16px;margin-bottom:0">
+              <div style="font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--bark);margin-bottom:10px">&#128207; Medidas</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+                <div class="form-group" style="margin-bottom:0"><label style="font-size:.75rem">Ancho (mm)</label><input type="number" id="lb-w" value="80" min="20" max="300" oninput="lbRender()" /></div>
+                <div class="form-group" style="margin-bottom:0"><label style="font-size:.75rem">Alto (mm)</label><input type="number" id="lb-h" value="50" min="20" max="300" oninput="lbRender()" /></div>
+              </div>
+            </div>
+
+            <!-- Layout -->
+            <div class="config-section" style="padding:16px;margin-bottom:0">
+              <div style="font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--bark);margin-bottom:10px">&#127963; Layout</div>
+              <div style="display:flex;gap:6px;flex-wrap:wrap">
+                <button class="toggle-pill active" data-layout="minimalista" id="lpill-minimalista" onclick="setLayout('minimalista',this)">Minimalista</button>
+                <button class="toggle-pill" data-layout="clasico" id="lpill-clasico" onclick="setLayout('clasico',this)">Cl&#225;sico</button>
+                <button class="toggle-pill" data-layout="redondo" id="lpill-redondo" onclick="setLayout('redondo',this)">Redondo</button>
+              </div>
+            </div>
+
+            <!-- Fondo -->
+            <div class="config-section" style="padding:16px;margin-bottom:0">
+              <div style="font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--bark);margin-bottom:10px">&#127912; Fondo</div>
+              <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
+                <button class="lb-color-swatch" data-color="#F7F2EC" onclick="setBgColor('#F7F2EC',this)" style="background:#F7F2EC;border:2px solid #ccc;width:28px;height:28px;border-radius:50%;cursor:pointer" title="Cream"></button>
+                <button class="lb-color-swatch" data-color="#EDE7DC" onclick="setBgColor('#EDE7DC',this)" style="background:#EDE7DC;border:2px solid #ccc;width:28px;height:28px;border-radius:50%;cursor:pointer" title="Cream 2"></button>
+                <button class="lb-color-swatch" data-color="#7A9E7E" onclick="setBgColor('#7A9E7E',this)" style="background:#7A9E7E;border:2px solid #ccc;width:28px;height:28px;border-radius:50%;cursor:pointer" title="Sage"></button>
+                <button class="lb-color-swatch" data-color="#4E7255" onclick="setBgColor('#4E7255',this)" style="background:#4E7255;border:2px solid #ccc;width:28px;height:28px;border-radius:50%;cursor:pointer" title="Sage Dark"></button>
+                <button class="lb-color-swatch" data-color="#6B4F3A" onclick="setBgColor('#6B4F3A',this)" style="background:#6B4F3A;border:2px solid #ccc;width:28px;height:28px;border-radius:50%;cursor:pointer" title="Bark"></button>
+                <button class="lb-color-swatch" data-color="#C9A97A" onclick="setBgColor('#C9A97A',this)" style="background:#C9A97A;border:2px solid #ccc;width:28px;height:28px;border-radius:50%;cursor:pointer" title="Sand"></button>
+                <button class="lb-color-swatch" data-color="#ffffff" onclick="setBgColor('#ffffff',this)" style="background:#fff;border:2px solid #ccc;width:28px;height:28px;border-radius:50%;cursor:pointer" title="Blanco"></button>
+              </div>
+              <input type="color" id="lb-bg-custom" value="#F7F2EC" oninput="setBgColor(this.value,null)" style="width:100%;height:32px;border-radius:8px;border:1.5px solid var(--cream2);cursor:pointer" />
+            </div>
+
+            <!-- Imagen -->
+            <div class="config-section" style="padding:16px;margin-bottom:0">
+              <div style="font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--bark);margin-bottom:10px">&#128247; Imagen del producto</div>
+              <input type="file" id="lb-img-file" accept="image/*" onchange="lbLoadImg(this)" style="font-size:.8rem;margin-bottom:8px;width:100%" />
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px">
+                <div class="form-group" style="margin-bottom:0"><label style="font-size:.75rem">Tama&#241;o img (%)</label><input type="range" id="lb-img-size" min="10" max="100" value="40" oninput="lbRender()" style="width:100%" /></div>
+                <div class="form-group" style="margin-bottom:0"><label style="font-size:.75rem">Valor: <span id="lb-img-size-val">40</span>%</label></div>
+              </div>
+            </div>
+
+            <!-- Campos de texto -->
+            <div class="config-section" style="padding:16px;margin-bottom:0">
+              <div style="font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--bark);margin-bottom:10px">&#128221; Textos</div>
+              <div id="lb-fields-wrap" style="display:flex;flex-direction:column;gap:10px"></div>
+            </div>
+
+            <!-- Acciones -->
+            <div style="display:flex;gap:10px">
+              <button class="btn-save" onclick="lbDownload()" style="flex:1">&#8595; Descargar PNG</button>
+              <button class="btn-cancel" onclick="lbReset()" style="display:block">Nueva etiqueta</button>
+            </div>
+
+          </div><!-- fin controles -->
+
+          <!-- PREVIEW -->
+          <div style="position:sticky;top:80px">
+            <div style="font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--bark);margin-bottom:10px">Vista previa</div>
+            <div style="background:#888;border-radius:12px;padding:16px;display:inline-block">
+              <canvas id="lb-canvas" style="border-radius:8px;max-width:100%;display:block;box-shadow:0 4px 20px rgba(0,0,0,.3)"></canvas>
+            </div>
+            <p style="font-size:.73rem;color:var(--text-lt);margin-top:8px">La descarga es 3x (alta resoluci&#243;n)</p>
+          </div>
+
+        </div>
+      </div>
+    </div><!-- end panel-etiquetas -->
+
     <div class="tab-panel" id="panel-usuarios">
       <!-- SUPERADMIN: ve todos los usuarios, puede cambiar cualquier contraseña y crear usuarios -->
       <div class="config-section" id="section-all-users">
@@ -694,6 +800,7 @@
     renderCamposList();
     renderExtraFieldsForm();
     renderLogoPreview();
+    loadEnvioGratis();
   }
 
   async function saveConfig() {
@@ -885,6 +992,67 @@
     finally { btn.disabled = false; btn.innerHTML = 'Guardar logo'; }
   };
 
+  // ── ENVIO GRATIS + PRESENTACIONES ─────────────────────────────
+  function loadEnvioGratis() {
+    const el = document.getElementById('envio-gratis-min');
+    if (el) el.value = siteConfig.envioGratisMin || '';
+  }
+
+  window.saveEnvioGratis = async () => {
+    const el = document.getElementById('envio-gratis-min');
+    const val = el ? Number(el.value) : 0;
+    siteConfig.envioGratisMin = (val && val > 0) ? val : 0;
+    try { await saveConfig(); showToast('Envio gratis guardado'); }
+    catch(e) { showToast('Error: ' + e.message, true); }
+  };
+
+  let currentPres = [];
+
+  function renderPresList() {
+    const wrap = document.getElementById('pres-list'); if (!wrap) return;
+    if (!currentPres.length) {
+      wrap.innerHTML = '<p style="font-size:.78rem;color:var(--text-lt)">Sin presentaciones. Se usará el precio fijo del producto.</p>';
+      return;
+    }
+    wrap.innerHTML = currentPres.map((pr, i) =>
+      '<div style="display:grid;grid-template-columns:1fr 120px 100px 36px;gap:6px;align-items:center;' +
+           'background:var(--cream);border-radius:10px;padding:8px 10px;border:1.5px solid var(--cream2)">' +
+        '<input type="text" placeholder="Nombre (ej: 50ml)" value="' + (pr.nombre || '') + '" ' +
+          'data-pres-idx="' + i + '" data-pres-field="nombre" class="pres-inp" ' +
+          'style="border:1px solid var(--cream2);border-radius:8px;padding:6px 10px;' +
+          'font-family:var(--font-body);font-size:.85rem" />' +
+        '<input type="number" placeholder="Precio $" value="' + (pr.precio || '') + '" ' +
+          'data-pres-idx="' + i + '" data-pres-field="precio" class="pres-inp" ' +
+          'style="border:1px solid var(--cream2);border-radius:8px;padding:6px 10px;' +
+          'font-family:var(--font-body);font-size:.85rem" />' +
+        '<input type="number" placeholder="Stock" value="' +
+          (pr.stock !== undefined && pr.stock !== '' ? pr.stock : '') + '" ' +
+          'data-pres-idx="' + i + '" data-pres-field="stock" class="pres-inp" ' +
+          'style="border:1px solid var(--cream2);border-radius:8px;padding:6px 10px;' +
+          'font-family:var(--font-body);font-size:.85rem" />' +
+        '<button class="btn-add-tag pres-del-btn" data-pres-idx="' + i + '" ' +
+          'style="padding:6px 8px;border-radius:8px;color:#c0392b;' +
+          'background:none;border:1.5px solid var(--cream2)">×</button>' +
+      '</div>'
+    ).join('');
+    wrap.querySelectorAll('.pres-inp').forEach(inp => {
+      inp.addEventListener('input', function() {
+        currentPres[Number(this.dataset.presIdx)][this.dataset.presField] = this.value;
+      });
+    });
+    wrap.querySelectorAll('.pres-del-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        currentPres.splice(Number(this.dataset.presIdx), 1);
+        renderPresList();
+      });
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const b = document.getElementById('btn-add-pres');
+    if (b) b.addEventListener('click', () => { currentPres.push({ nombre:'', precio:'', stock:'' }); renderPresList(); });
+  });
+
   // ── USERS ─────────────────────────────────────────────────────
   async function loadUsersAdmin() {
     try {
@@ -1000,15 +1168,24 @@
         const el = document.getElementById('ef-' + c.id);
         if (el && el.value.trim()) extra[c.id] = el.value.trim();
       });
+      // Presentaciones
+      const presentaciones = currentPres
+        .filter(pr => pr.nombre && pr.nombre.trim())
+        .map(pr => {
+          const obj = { nombre: pr.nombre.trim(), precio: Number(pr.precio) || 0 };
+          if (pr.stock !== '' && pr.stock !== undefined && pr.stock !== null)
+            obj.stock = Number(pr.stock);
+          return obj;
+        });
       const now = new Date().toISOString();
       let updated;
       if (editingId) {
         updated = products.map(p => p.id === editingId
-          ? { ...p, nombre, categoria:cat, descripcion:desc, precio, badge:badgeVal, imagenURL, extra, updatedAt:now }
+          ? { ...p, nombre, categoria:cat, descripcion:desc, precio, badge:badgeVal, imagenURL, extra, presentaciones, updatedAt:now }
           : p);
         showToast('✅ Producto actualizado');
       } else {
-        updated = [{ id:'p_'+Date.now(), nombre, categoria:cat, descripcion:desc, precio, badge:badgeVal, imagenURL, extra, createdAt:now, updatedAt:now }, ...products];
+        updated = [{ id:'p_'+Date.now(), nombre, categoria:cat, descripcion:desc, precio, badge:badgeVal, imagenURL, extra, presentaciones, createdAt:now, updatedAt:now }, ...products];
         showToast('✅ Producto agregado');
       }
       await saveToWorker(updated); renderList(); updateStats(); resetForm();
@@ -1041,6 +1218,13 @@
       const el = document.getElementById('ef-' + c.id);
       if (el) el.value = extra[c.id] || '';
     });
+    // Restore presentaciones
+    currentPres = (p.presentaciones || []).map(pr => ({
+      nombre: pr.nombre || '',
+      precio: pr.precio !== undefined ? String(pr.precio) : '',
+      stock:  pr.stock  !== undefined ? String(pr.stock)  : ''
+    }));
+    renderPresList();
     if (p.imagenURL) {
       const prev = document.getElementById('img-preview');
       prev.src = p.imagenURL; prev.style.display = 'block';
@@ -1421,6 +1605,7 @@
     document.getElementById('upload-icon').style.display = 'block';
     document.getElementById('upload-text').style.display = 'block';
     const fi = document.getElementById('f-img'); if (fi) fi.value = '';
+    currentPres = []; renderPresList();
     document.getElementById('form-title').textContent   = '➕ Agregar producto';
     document.getElementById('btn-save').textContent     = 'Guardar producto';
     document.getElementById('btn-cancel').style.display = 'none';
@@ -1456,5 +1641,185 @@
       }
     });
   });
+
+  // ════ GENERADOR DE ETIQUETAS ════
+  let lbBgColor = '#F7F2EC', lbLayout = 'minimalista', lbImgObj = null;
+  const LB_SCALE = 3;
+  function lbMmToPx(mm) { return Math.round((mm / 25.4) * 96); }
+  function lbGetDims() {
+    return {
+      w: lbMmToPx(Math.max(20, Number(document.getElementById('lb-w').value) || 80)),
+      h: lbMmToPx(Math.max(20, Number(document.getElementById('lb-h').value) || 50))
+    };
+  }
+  const defaultLbFields = [
+    { id:'f0', label:'Nombre',       text:'SerNatural',        size:22, bold:true,  color:'#6B4F3A', align:'center' },
+    { id:'f1', label:'Descripción',   text:'Cosmética artesanal', size:13, bold:false, color:'#4A4139', align:'center' },
+    { id:'f2', label:'Ingredientes', text:'',                  size:10, bold:false, color:'#4A4139', align:'left' },
+    { id:'f3', label:'Peso/Volumen', text:'',                  size:10, bold:false, color:'#4A4139', align:'left' },
+    { id:'f4', label:'Elaborador',   text:'',                  size:10, bold:false, color:'#4A4139', align:'left' },
+    { id:'f5', label:'Texto libre',  text:'',                  size:10, bold:false, color:'#4A4139', align:'left' }
+  ];
+  let lbFields = defaultLbFields.map(f => Object.assign({}, f));
+
+  window.setBgColor = (color) => { lbBgColor = color; lbRender(); };
+  window.setLayout  = (name, btn) => {
+    lbLayout = name;
+    document.querySelectorAll('[data-layout]').forEach(b => b.classList.toggle('active', b.dataset.layout === name));
+    lbRender();
+  };
+  window.lbLoadImg = (input) => {
+    const file = input.files[0]; if (!file) return;
+    const rd = new FileReader();
+    rd.onload = e => { const img = new Image(); img.onload = () => { lbImgObj = img; lbRender(); }; img.src = e.target.result; };
+    rd.readAsDataURL(file);
+  };
+  function lbWrap(ctx, text, maxW) {
+    const words = String(text).split(' '); let lines = [], cur = '';
+    words.forEach(w => {
+      const t = cur ? cur + ' ' + w : w;
+      if (ctx.measureText(t).width > maxW && cur) { lines.push(cur); cur = w; }
+      else cur = t;
+    });
+    if (cur) lines.push(cur);
+    return lines.length ? lines : [String(text)];
+  }
+  function lbDrawText(ctx, x, y, maxW, maxH, align) {
+    let cy = y + 8;
+    lbFields.forEach(f => {
+      if (!f.text || !f.text.trim()) return;
+      const fs = Math.max(7, f.size || 12);
+      ctx.font = (f.bold ? 'bold ' : '') + fs + 'px "DM Sans", Arial, sans-serif';
+      ctx.fillStyle = f.color || '#2E2A24';
+      ctx.textAlign = align || f.align || 'left';
+      lbWrap(ctx, f.text, maxW - 12).forEach(line => {
+        if (cy + fs > y + maxH) return;
+        ctx.fillText(line, align === 'center' ? x + maxW / 2 : x + 6, cy + fs);
+        cy += fs + 2;
+      });
+      cy += 4;
+    });
+  }
+  window.lbRender = function() {
+    const sl = document.getElementById('lb-img-size');
+    const sv = document.getElementById('lb-img-size-val');
+    if (sv && sl) sv.textContent = sl.value;
+    const canvas = document.getElementById('lb-canvas'); if (!canvas) return;
+    const { w, h } = lbGetDims();
+    canvas.width  = w * LB_SCALE;
+    canvas.height = h * LB_SCALE;
+    canvas.style.width  = Math.min(w, 460) + 'px';
+    canvas.style.height = Math.round(Math.min(w, 460) * h / w) + 'px';
+    const ctx = canvas.getContext('2d');
+    ctx.save();
+    ctx.scale(LB_SCALE, LB_SCALE);
+    const cw = w, ch = h;
+    const pct = sl ? Number(sl.value) / 100 : 0.4;
+    if (lbLayout === 'redondo') {
+      const r = Math.min(cw, ch) / 2;
+      ctx.beginPath(); ctx.arc(cw/2, ch/2, r, 0, Math.PI*2);
+      ctx.fillStyle = lbBgColor; ctx.fill(); ctx.clip();
+    } else {
+      ctx.fillStyle = lbBgColor; ctx.fillRect(0, 0, cw, ch);
+      ctx.strokeStyle = 'rgba(0,0,0,.14)'; ctx.lineWidth = 1;
+      ctx.strokeRect(.5, .5, cw-1, ch-1);
+    }
+    if (lbLayout === 'minimalista') {
+      if (lbImgObj) {
+        const iH = ch * pct * 1.4, iW = Math.min(cw * pct * 2, cw * .9);
+        ctx.drawImage(lbImgObj, (cw-iW)/2, 4, iW, iH);
+      }
+      lbDrawText(ctx, 0, lbImgObj ? ch * pct * 1.4 + 2 : 0, cw, ch - (lbImgObj ? ch * pct * 1.4 : 0), 'center');
+    } else if (lbLayout === 'clasico') {
+      const imgW = cw * 0.38;
+      if (lbImgObj) {
+        const iH = ch * pct * 2;
+        ctx.drawImage(lbImgObj, 4, (ch-iH)/2, imgW-8, iH);
+      }
+      ctx.strokeStyle = 'rgba(0,0,0,.1)'; ctx.lineWidth = 0.8;
+      ctx.beginPath(); ctx.moveTo(imgW, 8); ctx.lineTo(imgW, ch-8); ctx.stroke();
+      lbDrawText(ctx, imgW+6, 4, cw-imgW-10, ch-8, 'left');
+    } else {
+      if (lbImgObj) {
+        const s = Math.min(cw, ch) * pct;
+        ctx.drawImage(lbImgObj, (cw-s)/2, (ch-s)/2, s, s);
+      }
+      const f0 = lbFields.find(f => f.text && f.text.trim());
+      if (f0) {
+        const fs = Math.max(8, f0.size||12), r = Math.min(cw,ch)/2-fs-4;
+        ctx.font = (f0.bold?'bold ':'')+fs+'px "DM Sans",Arial,sans-serif';
+        ctx.fillStyle = f0.color||'#6B4F3A'; ctx.textAlign = 'center';
+        const chars = f0.text.split(''), n = chars.length;
+        chars.forEach((c, i) => {
+          const a = -Math.PI/2 + (i-(n-1)/2)*(Math.PI*1.4/Math.max(n-1,1));
+          ctx.save(); ctx.translate(cw/2+r*Math.cos(a), ch/2+r*Math.sin(a));
+          ctx.rotate(a+Math.PI/2); ctx.fillText(c,0,0); ctx.restore();
+        });
+      }
+    }
+    ctx.restore();
+  };
+  window.lbDownload = () => {
+    const canvas = document.getElementById('lb-canvas'); if (!canvas) return;
+    const a = document.createElement('a');
+    a.download = 'etiqueta-sernatural.png'; a.href = canvas.toDataURL('image/png'); a.click();
+  };
+  window.lbReset = () => {
+    lbBgColor = '#F7F2EC'; lbLayout = 'minimalista'; lbImgObj = null;
+    lbFields = defaultLbFields.map(f => Object.assign({}, f));
+    const w = document.getElementById('lb-w'); if(w) w.value = 80;
+    const h = document.getElementById('lb-h'); if(h) h.value = 50;
+    const s = document.getElementById('lb-img-size'); if(s) s.value = 40;
+    const fi = document.getElementById('lb-img-file'); if(fi) fi.value = '';
+    document.querySelectorAll('[data-layout]').forEach(b => b.classList.toggle('active', b.dataset.layout==='minimalista'));
+    lbBuildFields(); lbRender();
+  };
+  function lbBuildFields() {
+    const wrap = document.getElementById('lb-fields-wrap'); if (!wrap) return;
+    wrap.innerHTML = lbFields.map((f,i) =>
+      '<div style="background:var(--cream2);border-radius:10px;padding:10px;border:1px solid var(--cream2)">' +
+        '<div style="font-size:.72rem;font-weight:600;color:var(--bark);margin-bottom:6px">' + f.label + '</div>' +
+        '<textarea rows="2" placeholder="Texto..." ' +
+          'style="width:100%;border:1px solid #ddd;border-radius:8px;padding:6px;' +
+          'font-family:var(--font-body);font-size:.82rem;resize:vertical;margin-bottom:6px;box-sizing:border-box" ' +
+          'data-lbf="' + i + '" data-lbfield="text">' + (f.text||'')+'</textarea>' +
+        '<div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px;align-items:end">' +
+          '<div><label style="font-size:.7rem;display:block">Tamaño</label>' +
+          '<input type="range" min="7" max="40" value="' + (f.size||12) + '" ' +
+            'data-lbf="' + i + '" data-lbfield="size" style="width:100%" /></div>' +
+          '<div><label style="font-size:.7rem;display:block">Color</label>' +
+          '<input type="color" value="' + (f.color||'#2E2A24') + '" ' +
+            'data-lbf="' + i + '" data-lbfield="color" ' +
+            'style="width:100%;height:28px;border-radius:6px;border:1px solid #ddd;cursor:pointer" /></div>' +
+          '<div style="padding-bottom:2px"><label style="font-size:.7rem;display:flex;align-items:center;gap:4px;cursor:pointer">' +
+          '<input type="checkbox" ' + (f.bold?'checked ':'')+'data-lbf="' + i + '" data-lbfield="bold" /> Negrita</label></div>' +
+          '<div><label style="font-size:.7rem;display:block">Alineac.</label>' +
+          '<select data-lbf="' + i + '" data-lbfield="align" ' +
+            'style="width:100%;border:1px solid #ddd;border-radius:6px;padding:3px;font-size:.72rem;font-family:var(--font-body)">' +
+          '<option value="left"' + (f.align==='left'?' selected':'')+'>Izq</option>' +
+          '<option value="center"' + (f.align==='center'?' selected':'')+'>Centro</option>' +
+          '<option value="right"' + (f.align==='right'?' selected':'')+'>Der</option>' +
+          '</select></div>' +
+        '</div>' +
+      '</div>'
+    ).join('');
+    wrap.querySelectorAll('[data-lbf]').forEach(el => {
+      const ev = el.type==='checkbox'?'change':'input';
+      el.addEventListener(ev, function() {
+        const i = Number(this.dataset.lbf), field = this.dataset.lbfield;
+        if (field==='bold') lbFields[i][field] = this.checked;
+        else if (field==='size') lbFields[i][field] = Number(this.value);
+        else lbFields[i][field] = this.value;
+        lbRender();
+      });
+    });
+  }
+  // Init label builder when switching to tab
+  const _origST = window.switchTab;
+  window.switchTab = function(tab) {
+    _origST(tab);
+    if (tab === 'etiquetas') { lbBuildFields(); lbRender(); }
+  };
+
 </script>
 </body>

@@ -14,7 +14,7 @@
     :root {
       --cream:#F7F2EC; --cream2:#EDE7DC; --sage:#7A9E7E; --sage-dk:#4E7255;
       --bark:#6B4F3A; --bark-lt:#A0785A; --sand:#C9A97A;
-      --white:#FFFFFF; --text:#2E2A24; --text-lt:#6B6459;
+      --white:#FFFFFF; --text:#2E2A24; --text-lt:#4A4139;
       --wa:#25D366; --wa-dk:#1EB457;
       --font-display:'Playfair Display',Georgia,serif;
       --font-body:'DM Sans',sans-serif;
@@ -436,6 +436,20 @@
       .happy-grid { grid-template-columns:1fr 1fr; }
     }
     @media(max-width:480px) { .prod-modal-body { padding:18px 18px 22px; } }
+
+    /* -- PRESENTACIONES (variantes) -- */
+    .presentaciones-wrap { margin-bottom:14px; }
+    .presentaciones-label { font-size:.72rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--bark); margin-bottom:8px; }
+    .pres-pills { display:flex; flex-wrap:wrap; gap:6px; }
+    .pres-pill { border:1.5px solid var(--cream2); background:var(--white); border-radius:100px; padding:6px 16px; font-size:.82rem; font-weight:500; cursor:pointer; font-family:var(--font-body); color:var(--text); transition:all .18s; }
+    .pres-pill:hover:not(:disabled) { border-color:var(--sage); color:var(--sage-dk); }
+    .pres-pill.selected { background:var(--sage-dk); border-color:var(--sage-dk); color:#fff; }
+    .pres-pill:disabled { opacity:.45; cursor:not-allowed; text-decoration:line-through; }
+
+    /* -- BANNER ENVIO GRATIS -- */
+    .shipping-banner { display:none; margin:0 0 12px; border-radius:var(--r-sm); padding:10px 16px; font-size:.84rem; font-weight:500; text-align:center; }
+    .shipping-banner.free { background:#d4edda; color:#155724; border:1px solid #c3e6cb; display:block; }
+    .shipping-banner.almost { background:#fff3cd; color:#856404; border:1px solid #ffeeba; display:block; }
   </style>
 </head>
 <body>
@@ -757,6 +771,92 @@
   </div>
 </footer>
 
+
+<!-- ── CART OVERLAY ── -->
+<div class="cart-overlay" id="cart-overlay" onclick="closeCart()"></div>
+<div class="cart-drawer" id="cart-drawer">
+  <div class="cart-header">
+    <h3>Tu carrito</h3>
+    <button class="cart-close" onclick="closeCart()" aria-label="Cerrar carrito">&times;</button>
+  </div>
+  <div id="shipping-banner" class="shipping-banner"></div>
+  <div class="cart-items" id="cart-items"></div>
+  <div class="cart-footer" id="cart-footer" style="display:none">
+    <div class="cart-total-row">
+      <span class="cart-total-label">Total estimado</span>
+      <span class="cart-total-amount" id="cart-total">$ 0</span>
+    </div>
+    <p class="cart-total-note consultar-warn" id="consultar-warn" style="display:none">(*) Algunos productos tienen precio a confirmar</p>
+    <p class="cart-total-note">Los precios no incluyen envio</p>
+    <button class="btn-primary" style="width:100%;justify-content:center;margin-bottom:10px" onclick="sendToWhatsApp()">&#128722; Confirmar pedido</button>
+    <button class="btn-clear-cart" onclick="clearCart()">Vaciar carrito</button>
+  </div>
+</div>
+
+<!-- ── PRODUCT MODAL ── -->
+<div class="prod-modal-overlay" id="prod-modal-overlay" onclick="if(event.target===this)closeProdModal()">
+  <div class="prod-modal">
+    <button class="prod-modal-close" onclick="closeProdModal()" aria-label="Cerrar">&times;</button>
+    <div class="prod-modal-img-wrap" id="pm-img-wrap"></div>
+    <div class="prod-modal-body">
+      <div class="prod-modal-cat" id="pm-cat"></div>
+      <div class="prod-modal-name" id="pm-name"></div>
+      <div class="prod-modal-desc" id="pm-desc"></div>
+      <div class="presentaciones-wrap" id="pm-pres-wrap" style="display:none"></div>
+      <div class="prod-modal-extras" id="pm-extras" style="display:none"></div>
+      <div class="prod-modal-footer">
+        <div class="prod-modal-price" id="pm-price"></div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <div class="qty-ctrl">
+            <button class="qty-btn" onclick="modalQtyChange(-1)">&#8722;</button>
+            <span class="qty-num" id="modal-qty-num">1</span>
+            <button class="qty-btn" onclick="modalQtyChange(1)">+</button>
+          </div>
+          <button class="btn-primary" id="modal-add-btn" onclick="modalAddToCart()">&#128722; Agregar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── CHECKOUT OVERLAY ── -->
+<div class="checkout-overlay" id="checkout-overlay">
+  <div class="checkout-modal">
+    <button class="prod-modal-close" onclick="closeCheckout()" aria-label="Cerrar">&times;</button>
+    <div class="checkout-modal-title">&#128722; Confirmar pedido</div>
+    <p class="checkout-modal-sub">Completá tus datos y te redirigimos a WhatsApp con el detalle de tu pedido.</p>
+    <div class="checkout-summary" id="co-summary"></div>
+    <div class="checkout-total-row">
+      <span>Total estimado</span>
+      <strong id="co-total">$ 0</strong>
+    </div>
+    <div class="checkout-fields">
+      <div class="checkout-field"><label>Nombre y apellido *</label><input type="text" id="co-nombre" placeholder="María González" /></div>
+      <div class="checkout-field"><label>Localidad *</label><input type="text" id="co-localidad" placeholder="Buenos Aires" /></div>
+      <div class="checkout-field"><label>Provincia *</label>
+        <select id="co-provincia">
+          <option value="">Seleccioná tu provincia…</option>
+          <option>Buenos Aires</option><option>CABA</option><option>Córdoba</option>
+          <option>Santa Fe</option><option>Mendoza</option><option>Tucumán</option>
+          <option>Entre Ríos</option><option>Salta</option><option>Misiones</option>
+          <option>Chaco</option><option>Corrientes</option><option>Santiago del Estero</option>
+          <option>San Juan</option><option>Jujuy</option><option>Río Negro</option>
+          <option>Neuquén</option><option>Formosa</option><option>Chubut</option>
+          <option>San Luis</option><option>Catamarca</option><option>La Rioja</option>
+          <option>La Pampa</option><option>Santa Cruz</option><option>Tierra del Fuego</option>
+        </select>
+      </div>
+      <div class="checkout-field"><label>Código postal *</label><input type="text" id="co-cp" placeholder="1234" maxlength="8" /></div>
+      <div class="checkout-field"><label>Dirección <span class="opt">(opcional)</span></label><input type="text" id="co-direccion" placeholder="Av. Rivadavia 1234, Piso 2" /></div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:6px">
+      <button class="btn-back-cart" onclick="closeCheckout();openCart()">&#8592; Volver</button>
+      <button class="btn-primary" style="flex:1;justify-content:center" onclick="confirmOrder()">Enviar por WhatsApp &#128722;</button>
+    </div>
+    <p class="checkout-note">Te contactaremos para coordinar el envío y confirmar disponibilidad.</p>
+  </div>
+</div>
+
 <a href="https://wa.me/5491139014518" target="_blank" rel="noopener" class="wa-float" aria-label="WhatsApp">
   <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.122 1.532 5.849L.057 23.97l6.277-1.448A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.885 0-3.645-.517-5.152-1.415l-.369-.219-3.825.881.908-3.729-.24-.382A9.961 9.961 0 012 12C2 6.486 6.486 2 12 2s10 4.486 10 10-4.486 10-10 10z"/></svg>
 </a>
@@ -771,6 +871,7 @@
   let activeFilter  = 'todos';
   let cart          = {};
   const cardQty     = {};
+  const selectedPres = {}; // product id -> nombre de presentacion seleccionada
   let siteConfig    = { categorias:[], etiquetas:[], camposExtra:[], logoUrl:'' };
   let galleryData   = { inicio:[], proceso:[], final:[] };
   let reviewsData   = { opiniones:[], clientes:[] };
@@ -854,9 +955,29 @@
         : '<div class="prod-img-placeholder">' + (catEmoji[p.categoria] || '📦') + '</div>';
       const bdgEl = p.badge
         ? '<span class="prod-badge-tag ' + p.badge + '">' + etqLabel(p.badge) + '</span>' : '';
-      const priceEl = p.precio === 'consultar'
+      // Presentaciones: precio base o de la presentacion seleccionada
+      const pres   = p.presentaciones && p.presentaciones.length ? p.presentaciones : null;
+      const selPres = selectedPres[p.id] || null;
+      const activeP = pres ? (pres.find(x => x.nombre === selPres) || pres[0]) : null;
+      const activePrecio = activeP ? activeP.precio : p.precio;
+      const priceEl = activePrecio === 'consultar' || (!pres && p.precio === 'consultar')
         ? '<span style="font-size:.88rem;color:var(--sage-dk);font-weight:600">$ Consultar</span>'
-        : '$ ' + Number(p.precio).toLocaleString('es-AR');
+        : '$ ' + Number(activePrecio).toLocaleString('es-AR');
+      // Pills de presentaciones para la tarjeta
+      let presPillsHtml = '';
+      if (pres) {
+        presPillsHtml = '<div class="presentaciones-wrap">' +
+          '<div class="presentaciones-label">Presentación</div>' +
+          '<div class="pres-pills">' +
+          pres.map(pr => {
+            const noStock = (pr.stock !== undefined && pr.stock !== null && pr.stock !== '' && Number(pr.stock) === 0);
+            const isSel   = (!selPres && pr === pres[0]) || selPres === pr.nombre;
+            return '<button class="pres-pill' + (isSel ? ' selected' : '') + (noStock ? ' disabled-pill' : '') +
+              '" data-pid="' + p.id + '" data-pres="' + pr.nombre + '"' + (noStock ? ' disabled' : '') +
+              '>' + pr.nombre + (noStock ? ' <span class="pres-stock-badge">Sin stock</span>' : '') + '</button>';
+          }).join('') +
+          '</div></div>';
+      }
       const qty    = cardQty[p.id] || 1;
       const inCart = !!cart[p.id];
 
@@ -866,7 +987,8 @@
           '<div class="prod-cat">' + catLabel(p.categoria) + '</div>' +
           '<div class="prod-name modal-trigger" data-id="' + p.id + '" style="cursor:pointer">' + p.nombre + '</div>' +
           '<div class="prod-desc">' + p.descripcion + '</div>' +
-          '<div class="prod-price">' + priceEl + '</div>' +
+          presPillsHtml +
+          '<div class="prod-price" id="price-' + p.id + '">' + priceEl + '</div>' +
           '<div class="qty-row">' +
             '<div class="qty-ctrl">' +
               '<button class="qty-btn qty-minus" data-id="' + p.id + '">−</button>' +
@@ -894,6 +1016,26 @@
     grid.querySelectorAll('.add-cart-btn').forEach(el => {
       el.addEventListener('click', function(e) { e.stopPropagation(); addToCart(this.dataset.id); });
     });
+    grid.querySelectorAll('.pres-pill:not([disabled])').forEach(el => {
+      el.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const pid  = this.dataset.pid;
+        const pnom = this.dataset.pres;
+        selectedPres[pid] = pnom;
+        // Update pills UI
+        const card = document.getElementById('card-' + pid);
+        if (card) {
+          card.querySelectorAll('.pres-pill').forEach(b => b.classList.toggle('selected', b.dataset.pres === pnom));
+          // Update price display
+          const prod = allProducts.find(x => x.id === pid);
+          if (prod && prod.presentaciones) {
+            const ap = prod.presentaciones.find(x => x.nombre === pnom);
+            const pEl = document.getElementById('price-' + pid);
+            if (pEl && ap) pEl.textContent = '$ ' + Number(ap.precio).toLocaleString('es-AR');
+          }
+        }
+      });
+    });
   }
 
   // ── PRODUCT MODAL ────────────────────────────────────────────
@@ -911,11 +1053,46 @@
     document.getElementById('pm-name').textContent = p.nombre;
     document.getElementById('pm-desc').textContent = p.descripcion;
 
+    // Presentaciones en modal
+    const pmPresWrap = document.getElementById('pm-pres-wrap');
+    const modalPres = p.presentaciones && p.presentaciones.length ? p.presentaciones : null;
+    if (modalPres && pmPresWrap) {
+      pmPresWrap.style.display = 'block';
+      const curSel = selectedPres[id] || modalPres[0].nombre;
+      pmPresWrap.innerHTML = '<div class="presentaciones-label">Presentación</div>' +
+        '<div class="pres-pills">' +
+        modalPres.map(pr => {
+          const noStock = (pr.stock !== undefined && pr.stock !== null && pr.stock !== '' && Number(pr.stock) === 0);
+          const isSel = pr.nombre === curSel;
+          return '<button class="pres-pill' + (isSel ? ' selected' : '') + (noStock ? ' disabled-pill' : '') +
+            '" data-pid="' + id + '" data-pres="' + pr.nombre + '"' + (noStock ? ' disabled' : '') +
+            '>' + pr.nombre + (noStock ? ' <span class="pres-stock-badge">Sin stock</span>' : '') + '</button>';
+        }).join('') +
+        '</div>';
+      pmPresWrap.querySelectorAll('.pres-pill:not([disabled])').forEach(el => {
+        el.addEventListener('click', function() {
+          const pid = this.dataset.pid;
+          const pnom = this.dataset.pres;
+          selectedPres[pid] = pnom;
+          pmPresWrap.querySelectorAll('.pres-pill').forEach(b => b.classList.toggle('selected', b.dataset.pres === pnom));
+          const ap = modalPres.find(x => x.nombre === pnom);
+          if (ap) {
+            const prEl = document.getElementById('pm-price');
+            if (prEl) prEl.textContent = '$ ' + Number(ap.precio).toLocaleString('es-AR');
+          }
+        });
+      });
+    } else if (pmPresWrap) {
+      pmPresWrap.style.display = 'none';
+    }
+
     // Price
     const priceEl = document.getElementById('pm-price');
-    priceEl.textContent = p.precio === 'consultar'
+    const modalSelPres = selectedPres[id] ? (modalPres && modalPres.find(x => x.nombre === selectedPres[id])) : (modalPres && modalPres[0]);
+    const modalActivePrecio = modalSelPres ? modalSelPres.precio : p.precio;
+    priceEl.textContent = modalActivePrecio === 'consultar'
       ? '$ Consultar'
-      : '$ ' + Number(p.precio).toLocaleString('es-AR');
+      : '$ ' + Number(modalActivePrecio).toLocaleString('es-AR');
 
     // Extra fields
     const extrasWrap = document.getElementById('pm-extras');
@@ -975,7 +1152,17 @@
   window.addToCart = (id) => {
     const p = allProducts.find(x => x.id === id); if (!p) return;
     const qty = cardQty[id] || 1;
-    cart[id] ? (cart[id].qty += qty) : (cart[id] = { product:p, qty });
+    // Determinar precio segun presentacion seleccionada
+    let prodParaCart = p;
+    if (p.presentaciones && p.presentaciones.length) {
+      const nomSel = selectedPres[id] || p.presentaciones[0].nombre;
+      const ap = p.presentaciones.find(x => x.nombre === nomSel) || p.presentaciones[0];
+      prodParaCart = Object.assign({}, p, { precio: ap.precio, _presNombre: ap.nombre });
+    }
+    const cartKey = p.presentaciones && p.presentaciones.length
+      ? id + '__' + (selectedPres[id] || p.presentaciones[0].nombre)
+      : id;
+    cart[cartKey] ? (cart[cartKey].qty += qty) : (cart[cartKey] = { product: prodParaCart, qty });
     cardQty[id] = 1;
     const qEl = document.getElementById('qty-' + id); if (qEl) qEl.textContent = 1;
     const btn = document.getElementById('addbtn-' + id);
@@ -990,6 +1177,22 @@
     const total = items.reduce((s,i) => i.product.precio!=='consultar' ? s+Number(i.product.precio)*i.qty : s, 0);
     const hasC  = items.some(i => i.product.precio==='consultar');
     const count = items.reduce((s,i) => s+i.qty, 0);
+    // Banner envio gratis
+    const minEnvio = Number(siteConfig.envioGratisMin || 0);
+    const shipBanner = document.getElementById('shipping-banner');
+    if (shipBanner && minEnvio > 0 && !hasC) {
+      if (total >= minEnvio) {
+        shipBanner.className = 'shipping-banner free';
+        shipBanner.textContent = '✅ ¡Envío gratis en tu pedido!';
+      } else if (total > 0) {
+        shipBanner.className = 'shipping-banner almost';
+        shipBanner.textContent = 'Te faltan $ ' + (minEnvio - total).toLocaleString('es-AR') + ' para envío gratis';
+      } else {
+        shipBanner.className = 'shipping-banner';
+      }
+    } else if (shipBanner) {
+      shipBanner.className = 'shipping-banner';
+    }
 
     const badge = document.getElementById('cart-badge');
     if (badge) { badge.textContent=count; badge.classList.toggle('visible', count>0); }
@@ -1009,29 +1212,41 @@
       el.innerHTML = '<div class="cart-empty"><div class="cart-empty-icon">🛒</div><p>Tu carrito está vacío.</p></div>';
       return;
     }
-    el.innerHTML = items.map(({product:p, qty}) => {
+    el.innerHTML = Object.entries(cart).map(([key, {product:p, qty}]) => {
       const img = p.imagenURL
         ? '<div class="cart-item-img"><img src="'+p.imagenURL+'" alt="'+p.nombre+'" /></div>'
         : '<div class="cart-item-img">'+(catEmoji[p.categoria]||'📦')+'</div>';
       const pr = p.precio==='consultar'
         ? '<div class="cart-item-price consultar">Precio a consultar</div>'
         : '<div class="cart-item-price">$ '+(Number(p.precio)*qty).toLocaleString('es-AR')+'</div>';
-      return '<div class="cart-item" data-id="'+p.id+'">'+img+
-        '<div><div class="cart-item-name">'+p.nombre+'</div>'+pr+'</div>'+
+      const presLabel = p._presNombre ? ' <span style="font-size:.74rem;color:var(--text-lt)">('+p._presNombre+')</span>' : '';
+      return '<div class="cart-item" data-key="'+key+'">'+img+
+        '<div><div class="cart-item-name">'+p.nombre+presLabel+'</div>'+pr+'</div>'+
         '<div class="cart-item-qty">'+
-          '<button class="cq-btn cq-minus" data-id="'+p.id+'">−</button>'+
+          '<button class="cq-btn cq-minus" data-key="'+key+'">−</button>'+
           '<span class="cq-num">'+qty+'</span>'+
-          '<button class="cq-btn cq-plus" data-id="'+p.id+'">+</button>'+
+          '<button class="cq-btn cq-plus" data-key="'+key+'">+</button>'+
         '</div></div>';
     }).join('');
     el.querySelectorAll('.cq-minus').forEach(b => {
-      b.addEventListener('click', function() { cartChangeQty(this.dataset.id, -1); });
+      b.addEventListener('click', function() { cartChangeQtyByKey(this.dataset.key, -1); });
     });
     el.querySelectorAll('.cq-plus').forEach(b => {
-      b.addEventListener('click', function() { cartChangeQty(this.dataset.id, 1); });
-    });;
-    cart = {}; updateCartUI();
+      b.addEventListener('click', function() { cartChangeQtyByKey(this.dataset.key, 1); });
+    });
   };
+
+  function cartChangeQtyByKey(key, delta) {
+    if (!cart[key]) return;
+    cart[key].qty = Math.max(1, cart[key].qty + delta);
+    updateCartUI();
+  }
+
+  window.cartClearItem = (key) => {
+    delete cart[key]; updateCartUI();
+  };
+
+  window.clearCart = () => { cart = {}; updateCartUI(); };
 
   window.openCart = () => {
     document.getElementById('cart-drawer').classList.add('open');

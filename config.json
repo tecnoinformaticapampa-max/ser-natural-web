@@ -1,13 +1,29 @@
 {
   "categorias": [
-    { "id": "jabones",   "label": "Jabones artesanales" },
-    { "id": "cosmetica", "label": "Cosmetica natural" },
-    { "id": "bienestar", "label": "Bienestar" }
+    {
+      "id": "jabones",
+      "label": "Jabones artesanales"
+    },
+    {
+      "id": "cosmetica",
+      "label": "Cosmetica natural"
+    },
+    {
+      "id": "bienestar",
+      "label": "Bienestar"
+    }
   ],
   "etiquetas": [
-    { "id": "nuevo",   "label": "Nuevo" },
-    { "id": "popular", "label": "Popular" }
+    {
+      "id": "nuevo",
+      "label": "Nuevo"
+    },
+    {
+      "id": "popular",
+      "label": "Popular"
+    }
   ],
   "camposExtra": [],
-  "logoUrl": "https://i.postimg.cc/W16Cb2t6/395740464-122094653600094688-9024125943526889344-n.jpg"
+  "logoUrl": "https://i.postimg.cc/W16Cb2t6/395740464-122094653600094688-9024125943526889344-n.jpg",
+  "envioGratisMin": 0
 }
