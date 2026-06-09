@@ -151,6 +151,14 @@
     .spinner { display: inline-block; width: 16px; height: 16px; border: 2.5px solid rgba(255,255,255,.35); border-top-color: #fff; border-radius: 50%; animation: spin .7s linear infinite; vertical-align: middle; margin-right: 8px; }
     @keyframes spin { to { transform: rotate(360deg); } }
 
+    /* ── LABEL BUILDER RESPONSIVE ── */
+    .lb-builder-grid { display:grid; grid-template-columns:340px 1fr; gap:28px; align-items:flex-start; }
+    @media(max-width:900px) {
+      .lb-builder-grid { grid-template-columns:1fr; }
+      .lb-preview-col { position:static !important; order:-1; margin-bottom:16px; }
+      .lb-preview-col > div:first-child { display:none; }
+      #lb-canvas { max-width:min(340px,100%) !important; height:auto !important; }
+    }
     @media(max-width:768px) {
       .stats-bar { grid-template-columns: 1fr 1fr; }
       .form-grid { grid-template-columns: 1fr; }
@@ -160,6 +168,12 @@
       .prod-row > :nth-child(3),.prod-row > :nth-child(4),.prod-row > :nth-child(5) { display: none; }
       main { padding: 20px 16px; }
       header { padding: 0 16px; }
+      /* Etiquetas: grid de controles de texto en móvil */
+      #lb-fields-wrap [style*="grid-template-columns:1fr 1fr 1fr 1fr"] { grid-template-columns:1fr 1fr !important; }
+      /* Presentaciones: grid de 4 col → 2 col */
+      #pres-list [style*="grid-template-columns:1fr 120px 100px 36px"] { grid-template-columns:1fr 1fr !important; }
+      /* Config sections padding */
+      .config-section { padding:18px 16px; }
     }
 
     /* TABS NAV */
@@ -530,7 +544,7 @@
         <h3>&#127991; Generador de Etiquetas de Producto</h3>
         <p style="font-size:.82rem;color:var(--text-lt);margin-bottom:20px">Dise&#241;&#225; etiquetas para tus productos. Ajust&#225; medidas, carg&#225; imagen, editá textos y descarg&#225; en alta resoluci&#243;n.</p>
 
-        <div style="display:grid;grid-template-columns:340px 1fr;gap:28px;align-items:flex-start" id="label-builder">
+        <div style="display:grid;grid-template-columns:340px 1fr;gap:28px;align-items:flex-start" id="label-builder" class="lb-builder-grid">
 
           <!-- PANEL DE CONTROLES -->
           <div style="display:flex;flex-direction:column;gap:16px">
@@ -594,7 +608,7 @@
           </div><!-- fin controles -->
 
           <!-- PREVIEW -->
-          <div style="position:sticky;top:80px">
+          <div class="lb-preview-col" style="position:sticky;top:80px">
             <div style="font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--bark);margin-bottom:10px">Vista previa</div>
             <div style="background:#888;border-radius:12px;padding:16px;display:inline-block">
               <canvas id="lb-canvas" style="border-radius:8px;max-width:100%;display:block;box-shadow:0 4px 20px rgba(0,0,0,.3)"></canvas>
@@ -780,10 +794,26 @@
   // ── AUTH HEADERS ────────────────────────────────────────────
   function ah() { return { 'Content-Type': 'application/json', 'X-Session-Token': sessionToken }; }
 
+  // Wrapper de fetch que detecta token expirado (401) y muestra aviso
+  async function apiFetch(url, opts) {
+    const res = await fetch(url, opts);
+    if (res.status === 401) {
+      // Token expirado o sesión inválida — forzar re-login limpio
+      sessionStorage.clear();
+      sessionToken = null; sessionRole = null; sessionUser = null;
+      document.getElementById('app').style.display = 'none';
+      document.getElementById('login-screen').style.display = 'flex';
+      const err = document.getElementById('login-err');
+      if (err) err.textContent = 'Tu sesión expiró. Ingresá nuevamente.';
+      throw new Error('Sesión expirada');
+    }
+    return res;
+  }
+
   // ── CONFIG ──────────────────────────────────────────────────
   async function loadConfig() {
     try {
-      const res  = await fetch(WORKER_URL + '/config', { headers: ah(), cache: 'no-store' });
+      const res  = await apiFetch(WORKER_URL + '/config', { headers: ah(), cache: 'no-store' });
       const data = await res.json();
       siteConfig = data.config; configSHA = data.sha;
     } catch(e) {
@@ -804,7 +834,12 @@
   }
 
   async function saveConfig() {
-    const res = await fetch(WORKER_URL + '/config', {
+    // Siempre refrescar el SHA antes de guardar para evitar conflictos
+    try {
+      const fresh = await apiFetch(WORKER_URL + '/config', { headers: ah(), cache: 'no-store' });
+      if (fresh.ok) { const d = await fresh.json(); configSHA = d.sha; }
+    } catch(e) { /* si falla el GET, intentamos con el SHA en memoria */ }
+    const res = await apiFetch(WORKER_URL + '/config', {
       method: 'PUT', headers: ah(),
       body: JSON.stringify({ config: siteConfig, sha: configSHA }),
     });
@@ -982,7 +1017,7 @@
     btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Guardando…';
     try {
       if (siteConfig.logoUrl) {
-        await fetch(WORKER_URL + '/image', { method:'DELETE', headers:ah(), body:JSON.stringify({ url:siteConfig.logoUrl }) }).catch(() => {});
+        await apiFetch(WORKER_URL + '/image', { method:'DELETE', headers:ah(), body:JSON.stringify({ url:siteConfig.logoUrl }) }).catch(() => {});
       }
       siteConfig.logoUrl = await uploadToCloudinary(logoSelectedFile);
       await saveConfig();
@@ -1056,7 +1091,7 @@
   // ── USERS ─────────────────────────────────────────────────────
   async function loadUsersAdmin() {
     try {
-      const res  = await fetch(WORKER_URL + '/users', { headers: ah() });
+      const res  = await apiFetch(WORKER_URL + '/users', { headers: ah() });
       const data = await res.json();
       allUsersSHA = data.sha;
       const el = document.getElementById('users-table'); if (!el) return;
@@ -1090,10 +1125,10 @@
     try {
       const rawRes  = await fetch(GITHUB_RAW + '?t=' + Date.now());
       const full    = await rawRes.json();
-      const shaRes  = await fetch(WORKER_URL + '/users', { headers: ah() });
+      const shaRes  = await apiFetch(WORKER_URL + '/users', { headers: ah() });
       const shaData = await shaRes.json();
       const updated = full.map(u => u.user === user ? { ...u, pass: np } : u);
-      const putRes  = await fetch(WORKER_URL + '/users', {
+      const putRes  = await apiFetch(WORKER_URL + '/users', {
         method: 'PUT', headers: ah(),
         body: JSON.stringify({ users: updated, sha: shaData.sha }),
       });
@@ -1115,9 +1150,9 @@
       const full    = await rawRes.json();
       if (full.find(u => u.user === user)) { showToast('Ya existe ese usuario', true); return; }
       full.push({ user, pass, role });
-      const shaRes  = await fetch(WORKER_URL + '/users', { headers: ah() });
+      const shaRes  = await apiFetch(WORKER_URL + '/users', { headers: ah() });
       const shaData = await shaRes.json();
-      const putRes  = await fetch(WORKER_URL + '/users', {
+      const putRes  = await apiFetch(WORKER_URL + '/users', {
         method: 'PUT', headers: ah(),
         body: JSON.stringify({ users: full, sha: shaData.sha }),
       });
@@ -1132,7 +1167,7 @@
   // ── PRODUCTS ─────────────────────────────────────────────────
   async function loadProducts() {
     try {
-      const res  = await fetch(WORKER_URL + '/products', { headers: ah(), cache: 'no-store' });
+      const res  = await apiFetch(WORKER_URL + '/products', { headers: ah(), cache: 'no-store' });
       const data = await res.json();
       fileSHA = data.sha; products = data.products || [];
     } catch(e) { products = []; }
@@ -1140,7 +1175,12 @@
   }
 
   async function saveToWorker(updated) {
-    const res = await fetch(WORKER_URL + '/products', {
+    // Siempre refrescar el SHA antes de guardar para evitar conflictos
+    try {
+      const fresh = await apiFetch(WORKER_URL + '/products', { headers: ah(), cache: 'no-store' });
+      if (fresh.ok) { const d = await fresh.json(); fileSHA = d.sha; }
+    } catch(e) { /* si falla el GET, intentamos con el SHA en memoria */ }
+    const res = await apiFetch(WORKER_URL + '/products', {
       method: 'PUT', headers: ah(),
       body: JSON.stringify({ products: updated, sha: fileSHA }),
     });
@@ -1159,7 +1199,7 @@
     try {
       let imagenURL = editingOldImg || '';
       if (selectedFile) {
-        if (editingOldImg) await fetch(WORKER_URL + '/image', { method:'DELETE', headers:ah(), body:JSON.stringify({ url:editingOldImg }) }).catch(() => {});
+        if (editingOldImg) await apiFetch(WORKER_URL + '/image', { method:'DELETE', headers:ah(), body:JSON.stringify({ url:editingOldImg }) }).catch(() => {});
         imagenURL = await uploadToCloudinary(selectedFile);
       }
       // Collect extra fields
@@ -1197,7 +1237,7 @@
     if (!confirm('¿Eliminar este producto?')) return;
     const prod = products.find(p => p.id === id);
     try {
-      if (prod && prod.imagenURL) await fetch(WORKER_URL + '/image', { method:'DELETE', headers:ah(), body:JSON.stringify({ url:prod.imagenURL }) }).catch(() => {});
+      if (prod && prod.imagenURL) await apiFetch(WORKER_URL + '/image', { method:'DELETE', headers:ah(), body:JSON.stringify({ url:prod.imagenURL }) }).catch(() => {});
       await saveToWorker(products.filter(p => p.id !== id));
       renderList(); updateStats(); showToast('🗑 Producto eliminado');
     } catch(e) { showToast('Error: ' + e.message, true); }
@@ -1312,7 +1352,7 @@
   // ── GALLERY ──────────────────────────────────────────────────
   async function loadGalleryAdmin() {
     try {
-      const res  = await fetch(WORKER_URL + '/gallery', { headers: ah(), cache: 'no-store' });
+      const res  = await apiFetch(WORKER_URL + '/gallery', { headers: ah(), cache: 'no-store' });
       const data = await res.json();
       galFileSHA = data.sha;
       galleryData = data.gallery || { inicio:[], proceso:[], final:[] };
@@ -1383,13 +1423,16 @@
     const item = galleryData[tab][idx];
     galleryData[tab].splice(idx, 1);
     try {
-      if (item && item.url) await fetch(WORKER_URL + '/image', { method:'DELETE', headers:ah(), body:JSON.stringify({ url:item.url }) }).catch(() => {});
+      if (item && item.url) await apiFetch(WORKER_URL + '/image', { method:'DELETE', headers:ah(), body:JSON.stringify({ url:item.url }) }).catch(() => {});
       await saveGalleryWorker(); renderGalleryAdmin(tab); showToast('🗑 Foto eliminada');
     } catch(e) { showToast('Error: ' + e.message, true); }
   };
 
   async function saveGalleryWorker() {
-    const res = await fetch(WORKER_URL + '/gallery', {
+    const res = // Refresh SHA antes de guardar
+    try { const fg = await apiFetch(WORKER_URL + '/gallery', { headers: ah(), cache: 'no-store' });
+          if (fg.ok) { const dg = await fg.json(); gallerySHA = dg.sha || gallerySHA; } } catch(e) {}
+    await apiFetch(WORKER_URL + '/gallery', {
       method: 'PUT', headers: ah(),
       body: JSON.stringify({ gallery: galleryData, sha: galFileSHA }),
     });
@@ -1412,7 +1455,7 @@
   // ── REVIEWS ──────────────────────────────────────────────────
   async function loadReviews() {
     try {
-      const res  = await fetch(WORKER_URL + '/reviews', { headers: ah(), cache: 'no-store' });
+      const res  = await apiFetch(WORKER_URL + '/reviews', { headers: ah(), cache: 'no-store' });
       const data = await res.json();
       reviewsSHA  = data.sha;
       reviewsData = data.reviews || { opiniones:[], clientes:[] };
@@ -1423,7 +1466,10 @@
   }
 
   async function saveReviews() {
-    const res = await fetch(WORKER_URL + '/reviews', {
+    const res = // Refresh SHA antes de guardar
+    try { const fr = await apiFetch(WORKER_URL + '/reviews', { headers: ah(), cache: 'no-store' });
+          if (fr.ok) { const dr = await fr.json(); reviewsSHA = dr.sha || reviewsSHA; } } catch(e) {}
+    await apiFetch(WORKER_URL + '/reviews', {
       method: 'PUT', headers: ah(),
       body: JSON.stringify({ reviews: reviewsData, sha: reviewsSHA }),
     });
@@ -1466,7 +1512,7 @@
     const item = reviewsData.opiniones[idx];
     reviewsData.opiniones.splice(idx, 1);
     try {
-      if (item && item.fotoUrl) await fetch(WORKER_URL + '/image', { method:'DELETE', headers:ah(), body:JSON.stringify({ url:item.fotoUrl }) }).catch(() => {});
+      if (item && item.fotoUrl) await apiFetch(WORKER_URL + '/image', { method:'DELETE', headers:ah(), body:JSON.stringify({ url:item.fotoUrl }) }).catch(() => {});
       await saveReviews(); renderOpiniones(); showToast('🗑 Opinión eliminada');
     } catch(e) { showToast('Error: ' + e.message, true); }
   };
@@ -1532,7 +1578,7 @@
     const item = reviewsData.clientes[idx];
     reviewsData.clientes.splice(idx, 1);
     try {
-      if (item && item.url) await fetch(WORKER_URL + '/image', { method:'DELETE', headers:ah(), body:JSON.stringify({ url:item.url }) }).catch(() => {});
+      if (item && item.url) await apiFetch(WORKER_URL + '/image', { method:'DELETE', headers:ah(), body:JSON.stringify({ url:item.url }) }).catch(() => {});
       await saveReviews(); renderClientes(); showToast('🗑 Foto eliminada');
     } catch(e) { showToast('Error: ' + e.message, true); }
   };
