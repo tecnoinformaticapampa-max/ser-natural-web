@@ -21,7 +21,7 @@
     "id": "p_1779186002510",
     "nombre": "JABON DE LAVANDA",
     "categoria": "jabones",
-    "descripcion": "PROPIEDADES:\n Aceite esencial de lavanda calmante \nAceite de coco , manteca de cacao \n\nBENEFICIOS \nCalma piel irritada, picaduras, granitos leves \nRelaja por el aroma, ideal para un baño de noche  \nLimpia sin resecar, apto piel sensible\nAroma natural suave y duradero\nMODO DE USO:\nMasajea 30-60 seg, hasta lograr espuma,enjuaga.",
+    "descripcion": "PROPIEDADES:\n Aceite esencial de lavanda calmante \nAceite de coco , manteca de cacao \n\nBENEFICIOS \nCalma piel irritada, picaduras, granitos leves \nRelaja por el aroma, ideal para un baÃ±o de noche  \nLimpia sin resecar, apto piel sensible\nAroma natural suave y duradero\nMODO DE USO:\nMasajea 30-60 seg, hasta lograr espuma,enjuaga.",
     "precio": "consultar",
     "badge": "nuevo",
     "imagenURL": "https://res.cloudinary.com/ditz4ufas/image/upload/v1779186001/ser-natural/pbqiwx39smzslh7khm38.jpg",
@@ -32,13 +32,15 @@
   },
   {
     "id": "p_1776518496206",
-    "nombre": "JABÃÂÃÂN DE AVENA MIEL KARITE",
+    "nombre": "JABON DE AVENA MIEL KARITE",
     "categoria": "jabones",
-    "descripcion": "Beneficios:\nManteca de Karite: Hidrata ,repara barrera de la piel y suaviza zonas resecas.\nMiel :Humecta, es antibacteriana y deja la piel luminosa.\n\nAvena:Calma irritaciÃÂÃÂ³n, picor y exfolia suavemente.\nModo de uso:\nHumedece, haz espuma y masajea 30-60 seg. Enjuaga con agua tibia. Sirve para cara y cuerpo usar 1 ves al dia ideal para piel seca y sensible.",
+    "descripcion": "BENEFICIOS:\nManteca de Karite: Hidrata ,repara barrera de la piel y suaviza zonas resecas.\nMiel :Humecta, es antibacteriana .Avena suaviza \nMODO DE USO:\nHumedece, haz espuma y masajea 30-60 seg. Enjuaga con agua tibia. USO  facial y corporal ideal para piel seca y sensible.",
     "precio": "consultar",
     "badge": "nuevo",
     "imagenURL": "https://res.cloudinary.com/ditz4ufas/image/upload/v1779186957/ser-natural/nnclepvissm8chdevii8.jpg",
     "createdAt": "2026-04-18T13:21:36.206Z",
-    "updatedAt": "2026-05-19T12:20:02.153Z"
+    "updatedAt": "2026-06-09T00:25:10.020Z",
+    "extra": {},
+    "presentaciones": []
   }
 ]
