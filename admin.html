@@ -17,7 +17,7 @@
       --font-body: 'DM Sans', sans-serif;
       --shadow: 0 4px 24px rgba(74,60,43,.10);
     }
-    body { font-family: var(--font-body); background: var(--cream); color: var(--text); min-height: 100vh; }
+    body { font-family: var(--font-body); background: var(--cream); color: var(--text); min-height: 100vh; font-size:1rem; line-height:1.6; }
 
     /* LOGIN */
     #login-screen {
@@ -58,7 +58,7 @@
     .header-logo { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid var(--sage); }
     .header-title { font-family: var(--font-display); font-size: 1.2rem; color: var(--bark); }
     .header-title span { color: var(--sage-dk); }
-    .header-badge { background: rgba(122,158,126,.15); color: var(--sage-dk); font-size: .72rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; border-radius: 100px; padding: 3px 12px; }
+    .header-badge { background: rgba(122,158,126,.15); color: var(--sage-dk); font-size: .82rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; border-radius: 100px; padding: 3px 12px; }
     .logout-btn { background: none; border: 1.5px solid var(--cream2); color: var(--text-lt); border-radius: 100px; padding: 7px 18px; font-size: .84rem; font-weight: 500; cursor: pointer; font-family: var(--font-body); transition: all .2s; }
     .logout-btn:hover { border-color: var(--red); color: var(--red); }
     main { max-width: 1100px; margin: 0 auto; padding: 36px 24px; }
@@ -76,10 +76,10 @@
     .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
     .form-group { display: flex; flex-direction: column; gap: 7px; }
     .form-group.full { grid-column: span 2; }
-    .form-group label { font-size: .83rem; font-weight: 600; color: var(--bark); }
+    .form-group label { font-size: .9rem; font-weight: 600; color: var(--bark); }
     .form-group input, .form-group select, .form-group textarea {
       border: 1.5px solid var(--cream2); background: var(--cream); border-radius: 10px;
-      padding: 11px 14px; font-size: .9rem; font-family: var(--font-body); color: var(--text);
+      padding: 11px 14px; font-size: 1rem; font-family: var(--font-body); color: var(--text);
       outline: none; transition: border-color .2s, background .2s;
     }
     .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--sage); background: var(--white); }
@@ -118,20 +118,20 @@
     .progress-wrap { display: none; margin-top: 12px; }
     .progress-bar-bg { background: var(--cream2); border-radius: 100px; height: 6px; overflow: hidden; }
     .progress-bar-fill { background: var(--sage); height: 100%; border-radius: 100px; width: 0; transition: width .3s; }
-    .progress-label { font-size: .78rem; color: var(--text-lt); margin-top: 5px; }
+    .progress-label { font-size: .85rem; color: var(--text-lt); margin-top: 5px; }
 
     /* PRODUCTS TABLE */
     .products-table { background: var(--white); border-radius: 20px; border: 1px solid var(--cream2); overflow: hidden; box-shadow: var(--shadow); }
-    .table-header { display: grid; grid-template-columns: 64px 1fr 120px 120px 110px 110px; background: var(--cream2); padding: 12px 20px; font-size: .78rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--text-lt); }
+    .table-header { display: grid; grid-template-columns: 64px 1fr 120px 120px 110px 110px; background: var(--cream2); padding: 12px 20px; font-size: .85rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--text-lt); }
     .prod-row { display: grid; grid-template-columns: 64px 1fr 120px 120px 110px 110px; padding: 14px 20px; border-top: 1px solid var(--cream2); align-items: center; transition: background .15s; }
     .prod-row:hover { background: rgba(247,242,236,.6); }
     .prod-row-img { width: 48px; height: 48px; border-radius: 10px; background: var(--cream2); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; overflow: hidden; }
     .prod-row-img img { width: 100%; height: 100%; object-fit: cover; }
     .prod-row-name { font-weight: 500; font-size: .9rem; color: var(--bark); }
-    .prod-row-cat { font-size: .78rem; color: var(--text-lt); margin-top: 3px; }
-    .cat-chip { display: inline-block; font-size: .7rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; border-radius: 100px; padding: 3px 10px; background: rgba(122,158,126,.13); color: var(--sage-dk); }
+    .prod-row-cat { font-size: .85rem; color: var(--text-lt); margin-top: 3px; }
+    .cat-chip { display: inline-block; font-size: .8rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; border-radius: 100px; padding: 3px 10px; background: rgba(122,158,126,.13); color: var(--sage-dk); }
     .price-cell { font-family: var(--font-display); font-size: .95rem; color: var(--bark); font-weight: 700; }
-    .row-badge { display: inline-block; font-size: .68rem; font-weight: 700; border-radius: 100px; padding: 2px 9px; text-transform: uppercase; letter-spacing: .06em; }
+    .row-badge { display: inline-block; font-size: .8rem; font-weight: 700; border-radius: 100px; padding: 2px 9px; text-transform: uppercase; letter-spacing: .06em; }
     .rb-new { background: rgba(201,169,122,.25); color: var(--bark); }
     .rb-popular { background: rgba(78,114,85,.15); color: var(--sage-dk); }
     .row-actions { display: flex; gap: 8px; }
@@ -151,13 +151,22 @@
     .spinner { display: inline-block; width: 16px; height: 16px; border: 2.5px solid rgba(255,255,255,.35); border-top-color: #fff; border-radius: 50%; animation: spin .7s linear infinite; vertical-align: middle; margin-right: 8px; }
     @keyframes spin { to { transform: rotate(360deg); } }
 
+    /* ── LABEL BUILDER ── */
+    .lb-section-title { font-size:.8rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--bark); margin-bottom:8px; }
+    .lb-tpl-thumb { width:72px; height:72px; object-fit:cover; border-radius:10px; cursor:pointer; border:2.5px solid transparent; transition:all .18s; }
+    .lb-tpl-thumb.active { border-color:var(--sage-dk); box-shadow:0 0 0 2px var(--sage-dk); }
+    .lb-field-card { background:var(--cream2); border-radius:12px; padding:12px; border:1px solid var(--cream2); }
+    .lb-field-row { display:grid; grid-template-columns:1fr 80px 80px auto; gap:6px; align-items:center; margin-top:8px; }
+    @media(max-width:600px) { .lb-field-row { grid-template-columns:1fr 1fr; } }
     /* ── LABEL BUILDER RESPONSIVE ── */
     .lb-builder-grid { display:grid; grid-template-columns:340px 1fr; gap:28px; align-items:flex-start; }
     @media(max-width:900px) {
-      .lb-builder-grid { grid-template-columns:1fr; }
-      .lb-preview-col { position:static !important; order:-1; margin-bottom:16px; }
+      .lb-builder-grid { display:flex; flex-direction:column; gap:16px; }
+      .lb-preview-col { position:static !important; margin-bottom:0; }
+      .lb-controls-col { width:100%; }
+      #lb-canvas { max-width:100% !important; height:auto !important; width:100% !important; }
       .lb-preview-col > div:first-child { display:none; }
-      #lb-canvas { max-width:min(340px,100%) !important; height:auto !important; }
+      /* En movil el preview va arriba — lo manejamos con JS al init */
     }
     @media(max-width:768px) {
       .stats-bar { grid-template-columns: 1fr 1fr; }
@@ -178,7 +187,7 @@
 
     /* TABS NAV */
     .admin-tabs { display:flex; gap:4px; margin-bottom:32px; border-bottom:2px solid var(--cream2); padding-bottom:0; flex-wrap:wrap; }
-    .admin-tab-btn { background:none; border:none; border-bottom:3px solid transparent; margin-bottom:-2px; padding:10px 20px; font-size:.88rem; font-weight:500; cursor:pointer; font-family:var(--font-body); color:var(--text-lt); transition:all .2s; border-radius:8px 8px 0 0; }
+    .admin-tab-btn { background:none; border:none; border-bottom:3px solid transparent; margin-bottom:-2px; padding:10px 20px; font-size:.95rem; font-weight:500; cursor:pointer; font-family:var(--font-body); color:var(--text-lt); transition:all .2s; border-radius:8px 8px 0 0; }
     .admin-tab-btn:hover { color:var(--bark); background:var(--cream2); }
     .admin-tab-btn.active { color:var(--sage-dk); border-bottom-color:var(--sage-dk); background:rgba(122,158,126,.07); }
     .admin-tab-btn.superadmin-only { color:var(--sand); }
@@ -204,14 +213,14 @@
     .user-row { display:grid; grid-template-columns:1fr 120px auto; gap:12px; padding:14px 20px; border-top:1px solid var(--cream2); align-items:center; }
     .user-row:first-child { border-top:none; }
     .user-name { font-weight:500; font-size:.9rem; color:var(--bark); }
-    .user-role { font-size:.72rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; border-radius:100px; padding:3px 12px; }
+    .user-role { font-size:.82rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; border-radius:100px; padding:3px 12px; }
     .role-superadmin { background:rgba(201,169,122,.3); color:var(--bark); }
     .role-cliente { background:rgba(122,158,126,.15); color:var(--sage-dk); }
     .reset-info { background:rgba(201,169,122,.1); border:1px solid var(--sand); border-radius:12px; padding:14px 18px; font-size:.82rem; color:var(--bark); line-height:1.6; margin-top:16px; }
     .reset-info strong { display:block; margin-bottom:4px; }
 
     /* SUPERADMIN badge in header */
-    .role-badge { font-size:.68rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; border-radius:100px; padding:2px 10px; }
+    .role-badge { font-size:.8rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; border-radius:100px; padding:2px 10px; }
     .role-badge.superadmin { background:rgba(201,169,122,.3); color:var(--bark); }
     .role-badge.cliente { background:rgba(122,158,126,.15); color:var(--sage-dk); }
 
@@ -227,7 +236,7 @@
     .gallery-grid-admin { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:24px; }
     .gallery-admin-item { position:relative; border-radius:10px; overflow:hidden; background:var(--cream2); aspect-ratio:1/1; }
     .gallery-admin-item img { width:100%; height:100%; object-fit:cover; }
-    .gallery-admin-caption { font-size:.75rem; color:var(--text-lt); padding:6px 8px; background:var(--white); border-top:1px solid var(--cream2); line-height:1.4; }
+    .gallery-admin-caption { font-size:.84rem; color:var(--text-lt); padding:6px 8px; background:var(--white); border-top:1px solid var(--cream2); line-height:1.4; }
     .gallery-admin-del { position:absolute; top:6px; right:6px; background:rgba(224,82,82,.9); color:#fff; border:none; border-radius:50%; width:26px; height:26px; cursor:pointer; font-size:.85rem; display:flex; align-items:center; justify-content:center; transition:background .2s; }
     .gallery-admin-del:hover { background:var(--red); }
     .gallery-empty-admin { grid-column:1/-1; text-align:center; padding:40px 24px; color:var(--text-lt); font-size:.88rem; }
@@ -301,7 +310,7 @@
               <button class="btn-add-tag" onclick="toggleInlineManager('cats')" title="Gestionar categorías" style="padding:8px 12px;border-radius:8px;font-size:1rem;line-height:1">⚙️</button>
             </div>
             <div id="inline-cats" style="display:none;width:100%;background:var(--cream);border-radius:10px;padding:12px;border:1px solid var(--cream2)">
-              <div style="font-size:.75rem;font-weight:600;color:var(--bark);margin-bottom:8px;text-transform:uppercase;letter-spacing:.08em">Gestionar Categorías</div>
+              <div style="font-size:.84rem;font-weight:600;color:var(--bark);margin-bottom:8px;text-transform:uppercase;letter-spacing:.08em">Gestionar Categorías</div>
               <div class="tag-list" id="cats-list" style="margin-bottom:10px"></div>
               <div class="tag-add-row">
                 <input type="text" id="new-cat-label" placeholder="Nueva categoría…" maxlength="40" />
@@ -329,10 +338,10 @@
           <div style="display:flex;gap:8px;align-items:flex-start;flex-direction:column">
             <div class="badge-selector" id="badge-selector-wrap"></div>
             <div style="display:flex;gap:8px;width:100%;align-items:center;margin-top:4px">
-              <button class="btn-add-tag" onclick="toggleInlineManager('etiq')" style="font-size:.75rem;padding:6px 10px;border-radius:8px">⚙️ Gestionar etiquetas</button>
+              <button class="btn-add-tag" onclick="toggleInlineManager('etiq')" style="font-size:.84rem;padding:6px 10px;border-radius:8px">⚙️ Gestionar etiquetas</button>
             </div>
             <div id="inline-etiq" style="display:none;width:100%;background:var(--cream);border-radius:10px;padding:12px;border:1px solid var(--cream2)">
-              <div style="font-size:.75rem;font-weight:600;color:var(--bark);margin-bottom:8px;text-transform:uppercase;letter-spacing:.08em">Gestionar Etiquetas</div>
+              <div style="font-size:.84rem;font-weight:600;color:var(--bark);margin-bottom:8px;text-transform:uppercase;letter-spacing:.08em">Gestionar Etiquetas</div>
               <div class="tag-list" id="etiq-list" style="margin-bottom:10px"></div>
               <div class="tag-add-row">
                 <input type="text" id="new-etiq-label" placeholder="Nueva etiqueta…" maxlength="30" />
@@ -348,7 +357,7 @@
             <div id="upload-icon" class="img-upload-icon">📷</div>
             <div id="upload-text" class="img-upload-text">
               <strong>Hacé clic o arrastrá</strong> una imagen aquí<br>
-              <span style="font-size:.78rem">JPG, PNG, WEBP — máx. 5MB</span>
+              <span style="font-size:.85rem">JPG, PNG, WEBP — máx. 5MB</span>
             </div>
             <img id="img-preview" alt="preview" />
           </div>
@@ -362,9 +371,9 @@
       <div class="form-group full" id="presentaciones-section">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
           <label style="margin-bottom:0">&#127381; Presentaciones (variantes)</label>
-          <button class="btn-add-tag" id="btn-add-pres" style="font-size:.78rem;padding:6px 14px;border-radius:8px">+ Agregar</button>
+          <button class="btn-add-tag" id="btn-add-pres" style="font-size:.85rem;padding:6px 14px;border-radius:8px">+ Agregar</button>
         </div>
-        <p style="font-size:.78rem;color:var(--text-lt);margin-bottom:10px">Definí variantes con nombre, precio y stock opcional. Si no hay presentaciones, se usa el precio fijo del campo arriba.</p>
+        <p style="font-size:.85rem;color:var(--text-lt);margin-bottom:10px">Definí variantes con nombre, precio y stock opcional. Si no hay presentaciones, se usa el precio fijo del campo arriba.</p>
         <div id="pres-list" style="display:flex;flex-direction:column;gap:8px"></div>
       </div>
       <div class="form-actions">
@@ -377,11 +386,11 @@
     <div class="form-card" style="margin-top:-16px;border-top:none;border-radius:0 0 20px 20px;padding-top:16px">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
         <h3 style="font-family:var(--font-display);font-size:1rem;color:var(--bark)">📋 Campos extra del producto</h3>
-        <button class="btn-add-tag" onclick="toggleInlineManager('campos')" style="font-size:.75rem;padding:6px 12px;border-radius:8px">⚙️ Gestionar</button>
+        <button class="btn-add-tag" onclick="toggleInlineManager('campos')" style="font-size:.84rem;padding:6px 12px;border-radius:8px">⚙️ Gestionar</button>
       </div>
       <p style="font-size:.8rem;color:var(--text-lt);margin-bottom:12px">Campos opcionales que aparecen en el formulario. Ej: Modo de uso, Ingredientes.</p>
       <div id="inline-campos" style="display:none;background:var(--cream);border-radius:10px;padding:12px;border:1px solid var(--cream2)">
-        <div style="font-size:.75rem;font-weight:600;color:var(--bark);margin-bottom:8px;text-transform:uppercase;letter-spacing:.08em">Gestionar Campos Extra</div>
+        <div style="font-size:.84rem;font-weight:600;color:var(--bark);margin-bottom:8px;text-transform:uppercase;letter-spacing:.08em">Gestionar Campos Extra</div>
         <div class="tag-list" id="campos-list" style="margin-bottom:10px"></div>
         <div class="tag-add-row">
           <input type="text" id="new-campo-label" placeholder="Ej: Modo de uso, Ingredientes…" maxlength="40" />
@@ -431,7 +440,7 @@
             </div>
           </div>
           <div class="form-group full">
-            <label>Descripción <span style="color:var(--text-lt);font-weight:400;font-size:.75rem">(opcional)</span></label>
+            <label>Descripción <span style="color:var(--text-lt);font-weight:400;font-size:.84rem">(opcional)</span></label>
             <input type="text" id="gal-caption" placeholder="Ej: Seleccionando los mejores ingredientes…" maxlength="120" />
           </div>
         </div>
@@ -461,7 +470,7 @@
             <div class="form-group"><label>Calificación</label><select id="rev-stars"><option value="5">★★★★★</option><option value="4">★★★★☆</option><option value="3">★★★☆☆</option></select></div>
             <div class="form-group full"><label>Opinión *</label><textarea id="rev-texto" placeholder="Escribí la opinión del cliente…" maxlength="300"></textarea></div>
             <div class="form-group">
-              <label>Foto del cliente <span style="color:var(--text-lt);font-weight:400;font-size:.75rem">(opcional)</span></label>
+              <label>Foto del cliente <span style="color:var(--text-lt);font-weight:400;font-size:.84rem">(opcional)</span></label>
               <div class="gallery-upload-area" id="rev-drop-area">
                 <input type="file" id="rev-img" accept="image/*" onchange="revPreviewImage(this)" />
                 <div id="rev-upload-icon" style="font-size:1.8rem;margin-bottom:4px">📷</div>
@@ -469,7 +478,7 @@
                 <img id="rev-img-preview" alt="preview" style="display:none;max-height:120px;border-radius:8px;margin-top:8px;width:100%;object-fit:cover" />
               </div>
             </div>
-            <div class="form-group"><label>Ubicación <span style="color:var(--text-lt);font-weight:400;font-size:.75rem">(opcional)</span></label><input type="text" id="rev-loc" placeholder="Ej: Buenos Aires" maxlength="50" /></div>
+            <div class="form-group"><label>Ubicación <span style="color:var(--text-lt);font-weight:400;font-size:.84rem">(opcional)</span></label><input type="text" id="rev-loc" placeholder="Ej: Buenos Aires" maxlength="50" /></div>
           </div>
           <div class="form-actions"><button class="btn-save" id="rev-btn-save" onclick="saveOpinion()">Guardar opinión</button></div>
         </div>
@@ -489,7 +498,7 @@
                 <img id="cli-img-preview" alt="preview" style="display:none;max-height:180px;border-radius:10px;margin-top:10px;width:100%;object-fit:cover" />
               </div>
             </div>
-            <div class="form-group"><label>Nombre <span style="color:var(--text-lt);font-weight:400;font-size:.75rem">(opcional)</span></label><input type="text" id="cli-nombre" placeholder="Ej: @mariana.natural" maxlength="60" /></div>
+            <div class="form-group"><label>Nombre <span style="color:var(--text-lt);font-weight:400;font-size:.84rem">(opcional)</span></label><input type="text" id="cli-nombre" placeholder="Ej: @mariana.natural" maxlength="60" /></div>
           </div>
           <div class="form-actions"><button class="btn-save" id="cli-btn-save" onclick="saveClientePhoto()">Guardar foto</button></div>
         </div>
@@ -505,14 +514,14 @@
         <p style="font-size:.82rem;color:var(--text-lt);margin-bottom:16px">El logo que subas acá se mostrará en la navegación, el hero y el footer del sitio automáticamente.</p>
         <div id="logo-preview-wrap" style="margin-bottom:16px;display:none">
           <img id="logo-current-preview" src="" alt="Logo actual" style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:2px solid var(--sage);margin-bottom:8px;display:block" />
-          <p style="font-size:.78rem;color:var(--text-lt)">Logo actual</p>
+          <p style="font-size:.85rem;color:var(--text-lt)">Logo actual</p>
         </div>
         <div class="gallery-upload-area" id="logo-drop-area">
           <input type="file" id="logo-img" accept="image/*" onchange="logoPreviewImage(this)" />
           <div id="logo-upload-icon" style="font-size:2rem;margin-bottom:6px">🖼️</div>
           <div id="logo-upload-text" style="font-size:.85rem;color:var(--text-lt)">
             <strong style="color:var(--sage-dk)">Hacé clic o arrastrá</strong> el nuevo logo<br>
-            <span style="font-size:.75rem">Recomendado: imagen cuadrada, mínimo 200×200px</span>
+            <span style="font-size:.84rem">Recomendado: imagen cuadrada, mínimo 200×200px</span>
           </div>
           <img id="logo-img-preview" alt="preview" style="display:none;width:100%;max-height:160px;object-fit:cover;border-radius:10px;margin-top:10px" />
         </div>
@@ -541,83 +550,120 @@
     <!-- ═══ TAB: ETIQUETAS ═══ -->
     <div class="tab-panel" id="panel-etiquetas">
       <div class="config-section">
-        <h3>&#127991; Generador de Etiquetas de Producto</h3>
-        <p style="font-size:.82rem;color:var(--text-lt);margin-bottom:20px">Dise&#241;&#225; etiquetas para tus productos. Ajust&#225; medidas, carg&#225; imagen, editá textos y descarg&#225; en alta resoluci&#243;n.</p>
+        <h3>&#127991; Generador de Etiquetas</h3>
+        <p style="font-size:.88rem;color:var(--text-lt);margin-bottom:20px">Eleg&#237; la plantilla, ingres&#225; los textos y descarg&#225; en PNG o PDF A4 con m&#250;ltiples copias.</p>
 
-        <div style="display:grid;grid-template-columns:340px 1fr;gap:28px;align-items:flex-start" id="label-builder" class="lb-builder-grid">
+        <div class="lb-builder-grid" id="label-builder">
 
-          <!-- PANEL DE CONTROLES -->
-          <div style="display:flex;flex-direction:column;gap:16px">
+          <!-- ── CONTROLES ── -->
+          <div class="lb-controls-col" style="display:flex;flex-direction:column;gap:14px">
+
+            <!-- Plantilla -->
+            <div class="config-section" style="padding:16px;margin-bottom:0">
+              <div class="lb-section-title">&#127776; Plantilla</div>
+              <div id="lb-tpl-thumbs" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px"></div>
+            </div>
 
             <!-- Medidas -->
             <div class="config-section" style="padding:16px;margin-bottom:0">
-              <div style="font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--bark);margin-bottom:10px">&#128207; Medidas</div>
-              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-                <div class="form-group" style="margin-bottom:0"><label style="font-size:.75rem">Ancho (cm)</label><input type="number" id="lb-w" value="8" min="1" max="30" step="0.5" oninput="lbRender()" /></div>
-                <div class="form-group" style="margin-bottom:0"><label style="font-size:.75rem">Alto (cm)</label><input type="number" id="lb-h" value="5" min="1" max="30" step="0.5" oninput="lbRender()" /></div>
+              <div class="lb-section-title">&#128207; Medidas</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px">
+                <div class="form-group" style="margin-bottom:0">
+                  <label style="font-size:.82rem">Ancho (cm)</label>
+                  <input type="number" id="lb-w" value="8" min="1" max="30" step="0.5" oninput="lbRender()" />
+                </div>
+                <div class="form-group" style="margin-bottom:0">
+                  <label style="font-size:.82rem">Alto (cm)</label>
+                  <input type="number" id="lb-h" value="5" min="1" max="30" step="0.5" oninput="lbRender()" />
+                </div>
+              </div>
+              <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+                <button class="btn-add-tag" onclick="lbSetSize(8,5)" style="font-size:.8rem;padding:5px 12px">8 x 5 cm</button>
+                <button class="btn-add-tag" onclick="lbSetSize(4.5,7)" style="font-size:.8rem;padding:5px 12px">4.5 x 7 cm</button>
+                <button class="btn-add-tag" onclick="lbSetSize(6,6)" style="font-size:.8rem;padding:5px 12px">6 x 6 cm</button>
               </div>
             </div>
 
-            <!-- Layout -->
+            <!-- Logo -->
             <div class="config-section" style="padding:16px;margin-bottom:0">
-              <div style="font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--bark);margin-bottom:10px">&#127963; Layout</div>
-              <div style="display:flex;gap:6px;flex-wrap:wrap">
-                <button class="toggle-pill active" data-layout="minimalista" id="lpill-minimalista" onclick="setLayout('minimalista',this)">Minimalista</button>
-                <button class="toggle-pill" data-layout="clasico" id="lpill-clasico" onclick="setLayout('clasico',this)">Cl&#225;sico</button>
-                <button class="toggle-pill" data-layout="redondo" id="lpill-redondo" onclick="setLayout('redondo',this)">Redondo</button>
+              <div style="display:flex;align-items:center;justify-content:space-between">
+                <div class="lb-section-title" style="margin-bottom:0">&#127981; Logo</div>
+                <label style="display:flex;align-items:center;gap:6px;font-size:.85rem;cursor:pointer">
+                  <input type="checkbox" id="lb-logo-on" onchange="lbRender()" /> Mostrar
+                </label>
               </div>
-            </div>
-
-            <!-- Fondo -->
-            <div class="config-section" style="padding:16px;margin-bottom:0">
-              <div style="font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--bark);margin-bottom:10px">&#127912; Fondo</div>
-              <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
-                <button class="lb-color-swatch" data-color="#F7F2EC" onclick="setBgColor('#F7F2EC',this)" style="background:#F7F2EC;border:2px solid #ccc;width:28px;height:28px;border-radius:50%;cursor:pointer" title="Cream"></button>
-                <button class="lb-color-swatch" data-color="#EDE7DC" onclick="setBgColor('#EDE7DC',this)" style="background:#EDE7DC;border:2px solid #ccc;width:28px;height:28px;border-radius:50%;cursor:pointer" title="Cream 2"></button>
-                <button class="lb-color-swatch" data-color="#7A9E7E" onclick="setBgColor('#7A9E7E',this)" style="background:#7A9E7E;border:2px solid #ccc;width:28px;height:28px;border-radius:50%;cursor:pointer" title="Sage"></button>
-                <button class="lb-color-swatch" data-color="#4E7255" onclick="setBgColor('#4E7255',this)" style="background:#4E7255;border:2px solid #ccc;width:28px;height:28px;border-radius:50%;cursor:pointer" title="Sage Dark"></button>
-                <button class="lb-color-swatch" data-color="#6B4F3A" onclick="setBgColor('#6B4F3A',this)" style="background:#6B4F3A;border:2px solid #ccc;width:28px;height:28px;border-radius:50%;cursor:pointer" title="Bark"></button>
-                <button class="lb-color-swatch" data-color="#C9A97A" onclick="setBgColor('#C9A97A',this)" style="background:#C9A97A;border:2px solid #ccc;width:28px;height:28px;border-radius:50%;cursor:pointer" title="Sand"></button>
-                <button class="lb-color-swatch" data-color="#ffffff" onclick="setBgColor('#ffffff',this)" style="background:#fff;border:2px solid #ccc;width:28px;height:28px;border-radius:50%;cursor:pointer" title="Blanco"></button>
-              </div>
-              <input type="color" id="lb-bg-custom" value="#F7F2EC" oninput="setBgColor(this.value,null)" style="width:100%;height:32px;border-radius:8px;border:1.5px solid var(--cream2);cursor:pointer" />
-            </div>
-
-            <!-- Imagen -->
-            <div class="config-section" style="padding:16px;margin-bottom:0">
-              <div style="font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--bark);margin-bottom:10px">&#128247; Imagen del producto</div>
-              <input type="file" id="lb-img-file" accept="image/*" onchange="lbLoadImg(this)" style="font-size:.8rem;margin-bottom:8px;width:100%" />
-              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px">
-                <div class="form-group" style="margin-bottom:0"><label style="font-size:.75rem">Tama&#241;o img (%)</label><input type="range" id="lb-img-size" min="10" max="100" value="40" oninput="lbRender()" style="width:100%" /></div>
-                <div class="form-group" style="margin-bottom:0"><label style="font-size:.75rem">Valor: <span id="lb-img-size-val">40</span>%</label></div>
+              <div id="lb-logo-controls" style="margin-top:10px;display:none">
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+                  <div class="form-group" style="margin-bottom:0">
+                    <label style="font-size:.82rem">Tama&#241;o (%)</label>
+                    <input type="range" id="lb-logo-size" min="5" max="60" value="20" oninput="lbRender()" style="width:100%" />
+                  </div>
+                  <div class="form-group" style="margin-bottom:0">
+                    <label style="font-size:.82rem">Pos. vertical (%)</label>
+                    <input type="range" id="lb-logo-y" min="0" max="95" value="5" oninput="lbRender()" style="width:100%" />
+                  </div>
+                </div>
+                <div class="form-group" style="margin-bottom:0;margin-top:8px">
+                  <label style="font-size:.82rem">Alineaci&#243;n</label>
+                  <select id="lb-logo-align" onchange="lbRender()" style="font-size:.88rem">
+                    <option value="center">Centrado</option>
+                    <option value="left">Izquierda</option>
+                    <option value="right">Derecha</option>
+                  </select>
+                </div>
               </div>
             </div>
 
             <!-- Campos de texto -->
             <div class="config-section" style="padding:16px;margin-bottom:0">
-              <div style="font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--bark);margin-bottom:10px">&#128221; Textos</div>
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+                <div class="lb-section-title" style="margin-bottom:0">&#128221; Textos</div>
+                <button class="btn-add-tag" id="lb-add-field-btn" style="font-size:.8rem;padding:5px 12px">+ Campo</button>
+              </div>
               <div id="lb-fields-wrap" style="display:flex;flex-direction:column;gap:10px"></div>
             </div>
 
             <!-- Acciones -->
-            <div style="display:flex;gap:10px">
-              <button class="btn-save" onclick="lbDownload()" style="flex:1">&#8595; Descargar PNG</button>
-              <button class="btn-cancel" onclick="lbReset()" style="display:block">Nueva etiqueta</button>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="btn-save" onclick="lbDownloadPNG()" style="flex:1;justify-content:center;min-width:120px">&#8595; PNG</button>
+              <button class="btn-save" onclick="lbShowPdfModal()" style="flex:1;justify-content:center;min-width:120px;background:var(--bark)">&#128196; PDF A4</button>
+              <button class="btn-cancel" onclick="lbReset()" style="display:block">Nueva</button>
             </div>
 
           </div><!-- fin controles -->
 
-          <!-- PREVIEW -->
+          <!-- ── PREVIEW ── -->
           <div class="lb-preview-col" style="position:sticky;top:80px">
-            <div style="font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--bark);margin-bottom:10px">Vista previa</div>
-            <div style="background:#888;border-radius:12px;padding:16px;display:inline-block">
-              <canvas id="lb-canvas" style="border-radius:8px;max-width:100%;display:block;box-shadow:0 4px 20px rgba(0,0,0,.3)"></canvas>
+            <div class="lb-section-title">Vista previa</div>
+            <div style="background:#888;border-radius:12px;padding:14px;display:inline-block;width:100%;box-sizing:border-box">
+              <canvas id="lb-canvas" style="border-radius:6px;width:100%;display:block;box-shadow:0 4px 16px rgba(0,0,0,.3)"></canvas>
             </div>
-            <p style="font-size:.73rem;color:var(--text-lt);margin-top:8px">La descarga es 3x (alta resoluci&#243;n)</p>
+            <p style="font-size:.8rem;color:var(--text-lt);margin-top:8px">La descarga PNG es 3&times; (alta resoluci&#243;n). El PDF calcula cuántas entran por hoja A4.</p>
           </div>
 
         </div>
       </div>
+
+      <!-- Modal PDF -->
+      <div id="lb-pdf-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;align-items:center;justify-content:center">
+        <div style="background:var(--white);border-radius:20px;padding:28px;max-width:360px;width:90%;box-shadow:0 8px 40px rgba(0,0,0,.2)">
+          <h3 style="margin:0 0 16px;color:var(--bark)">&#128196; Generar PDF A4</h3>
+          <p style="font-size:.88rem;color:var(--text-lt);margin-bottom:16px">El PDF acomoda las etiquetas en hojas A4 con margen de corte.</p>
+          <div class="form-group">
+            <label>Cantidad de etiquetas</label>
+            <input type="number" id="lb-pdf-qty" value="20" min="1" max="500" style="max-width:140px" />
+          </div>
+          <div class="form-group">
+            <label>Margen entre etiquetas (mm)</label>
+            <input type="number" id="lb-pdf-margin" value="3" min="0" max="10" style="max-width:140px" />
+          </div>
+          <div style="display:flex;gap:10px;margin-top:8px">
+            <button class="btn-cancel" onclick="document.getElementById('lb-pdf-modal').style.display='none'" style="display:block">Cancelar</button>
+            <button class="btn-save" onclick="lbGeneratePDF()" style="flex:1;justify-content:center">Generar PDF</button>
+          </div>
+        </div>
+      </div>
+
     </div><!-- end panel-etiquetas -->
 
     <div class="tab-panel" id="panel-usuarios">
@@ -911,10 +957,10 @@
     const campos = siteConfig.camposExtra || [];
     if (!campos.length) { wrap.style.display = 'none'; return; }
     wrap.style.display = 'block';
-    wrap.innerHTML = '<div style="font-size:.78rem;font-weight:600;color:var(--bark);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;grid-column:span 2">Campos adicionales</div>' +
+    wrap.innerHTML = '<div style="font-size:.85rem;font-weight:600;color:var(--bark);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px;grid-column:span 2">Campos adicionales</div>' +
       campos.map(c =>
         '<div class="form-group full">' +
-        '<label>' + c.label + ' <span style="color:var(--text-lt);font-weight:400;font-size:.75rem">(opcional)</span></label>' +
+        '<label>' + c.label + ' <span style="color:var(--text-lt);font-weight:400;font-size:.84rem">(opcional)</span></label>' +
         '<textarea id="ef-' + c.id + '" placeholder="' + c.label + '…" style="min-height:72px"></textarea>' +
         '</div>'
       ).join('');
@@ -1046,7 +1092,7 @@
   function renderPresList() {
     const wrap = document.getElementById('pres-list'); if (!wrap) return;
     if (!currentPres.length) {
-      wrap.innerHTML = '<p style="font-size:.78rem;color:var(--text-lt)">Sin presentaciones. Se usará el precio fijo del producto.</p>';
+      wrap.innerHTML = '<p style="font-size:.85rem;color:var(--text-lt)">Sin presentaciones. Se usará el precio fijo del producto.</p>';
       return;
     }
     wrap.innerHTML = currentPres.map((pr, i) =>
@@ -1527,7 +1573,7 @@
       '<div class="gallery-admin-item" style="aspect-ratio:auto;padding:14px">' +
       (r.fotoUrl ? '<img src="' + r.fotoUrl + '" style="width:44px;height:44px;border-radius:50%;object-fit:cover;float:left;margin-right:10px" />' : '') +
       '<div style="font-weight:600;font-size:.88rem;color:var(--bark)">' + r.nombre + '</div>' +
-      '<div style="font-size:.75rem;color:var(--sand)">' + '★'.repeat(r.stars || 5) + '</div>' +
+      '<div style="font-size:.84rem;color:var(--sand)">' + '★'.repeat(r.stars || 5) + '</div>' +
       '<div style="font-size:.8rem;color:var(--text-lt);margin-top:4px;clear:left">' + r.texto.substring(0, 80) + '…</div>' +
       '<button class="gallery-admin-del" data-idx="' + i + '">✕</button>' +
       '</div>'
@@ -1688,190 +1734,353 @@
     });
   });
 
-  // ════ GENERADOR DE ETIQUETAS ════
-  let lbBgColor = '#F7F2EC', lbLayout = 'minimalista', lbImgObj = null;
-  const LB_SCALE = 3;
-  function lbCmToPx(cm) { return Math.round((cm / 2.54) * 96); }
-  function lbGetDims() {
-    return {
-      w: lbCmToPx(Math.max(1, Number(document.getElementById('lb-w').value) || 8)),
-      h: lbCmToPx(Math.max(1, Number(document.getElementById('lb-h').value) || 5))
-    };
-  }
-  const defaultLbFields = [
-    { id:'f0', label:'Nombre',       text:'SerNatural',        size:22, bold:true,  color:'#6B4F3A', align:'center' },
-    { id:'f1', label:'Descripción',   text:'Cosmética artesanal', size:13, bold:false, color:'#4A4139', align:'center' },
-    { id:'f2', label:'Ingredientes', text:'',                  size:10, bold:false, color:'#4A4139', align:'left' },
-    { id:'f3', label:'Peso/Volumen', text:'',                  size:10, bold:false, color:'#4A4139', align:'left' },
-    { id:'f4', label:'Elaborador',   text:'',                  size:10, bold:false, color:'#4A4139', align:'left' },
-    { id:'f5', label:'Texto libre',  text:'',                  size:10, bold:false, color:'#4A4139', align:'left' }
-  ];
-  let lbFields = defaultLbFields.map(f => Object.assign({}, f));
+  // ════ GENERADOR DE ETIQUETAS v2 — PLANTILLAS ════════════════════
 
-  window.setBgColor = (color) => { lbBgColor = color; lbRender(); };
-  window.setLayout  = (name, btn) => {
-    lbLayout = name;
-    document.querySelectorAll('[data-layout]').forEach(b => b.classList.toggle('active', b.dataset.layout === name));
-    lbRender();
+  const LB_SCALE = 3;
+  const LB_DPI   = 96;
+
+  // Plantillas predefinidas (URL Cloudinary)
+  const LB_TEMPLATES = [
+    { id:'tpl1', name:'Verde cl\u00e1sico',   url:'https://res.cloudinary.com/ditz4ufas/image/upload/v1781216029/template_1_a5ifma.png',  shape:'square' },
+    { id:'tpl2', name:'Hojas verdes', url:'https://res.cloudinary.com/ditz4ufas/image/upload/v1781216016/template_2_c02ofe.png',  shape:'square' },
+    { id:'tpl3', name:'Bot\u00e1nico', url:'https://res.cloudinary.com/ditz4ufas/image/upload/v1781216044/template_3_odgho4.png', shape:'horizontal' }
+  ];
+
+  // Cache de im\u00e1genes cargadas
+  const lbImgCache = {};
+
+  // Estado
+  let lbState = {
+    tplId:   'tpl1',
+    wCm:     8,
+    hCm:     5,
+    fields:  [],
+    logoOn:  false,
+    logoSize: 20,
+    logoY:   5,
+    logoAlign: 'center'
   };
-  window.lbLoadImg = (input) => {
-    const file = input.files[0]; if (!file) return;
-    const rd = new FileReader();
-    rd.onload = e => { const img = new Image(); img.onload = () => { lbImgObj = img; lbRender(); }; img.src = e.target.result; };
-    rd.readAsDataURL(file);
-  };
-  function lbWrap(ctx, text, maxW) {
-    const words = String(text).split(' '); let lines = [], cur = '';
-    words.forEach(w => {
-      const t = cur ? cur + ' ' + w : w;
-      if (ctx.measureText(t).width > maxW && cur) { lines.push(cur); cur = w; }
-      else cur = t;
-    });
-    if (cur) lines.push(cur);
-    return lines.length ? lines : [String(text)];
-  }
-  function lbDrawText(ctx, x, y, maxW, maxH, forceAlign) {
-    let cy = y + 8;
-    lbFields.forEach(f => {
-      if (!f.text || !f.text.trim()) return;
-      const fs = Math.max(7, f.size || 12);
-      ctx.font = (f.bold ? 'bold ' : '') + fs + 'px "DM Sans", Arial, sans-serif';
-      ctx.fillStyle = f.color || '#2E2A24';
-      // forceAlign solo para layouts que lo requieren (minimalista centra todo)
-      // en 'clasico' y 'redondo' usamos el align individual de cada campo
-      const fieldAlign = forceAlign || f.align || 'left';
-      ctx.textAlign = fieldAlign;
-      // Calcular X según alineación
-      const tx = fieldAlign === 'center' ? x + maxW / 2
-               : fieldAlign === 'right'  ? x + maxW - 4
-               : x + 4; // left
-      lbWrap(ctx, f.text, maxW - 12).forEach(line => {
-        if (cy + fs > y + maxH) return;
-        ctx.fillText(line, tx, cy + fs);
-        cy += fs + 2;
-      });
-      cy += 4;
+
+  // Campos base predefinidos
+  const LB_BASE_FIELDS = [
+    { label:'Nombre del producto', text:'',   size:22, bold:true,  color:'#3B5E2B', align:'center', yPct:42 },
+    { label:'Presentaci\u00f3n / cantidad', text:'',   size:14, bold:false, color:'#4A4139', align:'center', yPct:58 },
+    { label:'Subt\u00edtulo / variante',   text:'',   size:13, bold:false, color:'#4E7255', align:'center', yPct:68 },
+    { label:'Elaborador / datos',   text:'',   size:10, bold:false, color:'#6B6459', align:'center', yPct:86 }
+  ];
+
+  function lbCmToPx(cm) { return Math.round((cm / 2.54) * LB_DPI); }
+
+  // ── Cargar imagen (con cache) ──────────────────────────────────
+  function lbLoadImage(url) {
+    if (lbImgCache[url]) return Promise.resolve(lbImgCache[url]);
+    return new Promise((res, rej) => {
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload  = () => { lbImgCache[url] = img; res(img); };
+      img.onerror = rej;
+      img.src = url;
     });
   }
-  window.lbRender = function() {
-    const sl = document.getElementById('lb-img-size');
-    const sv = document.getElementById('lb-img-size-val');
-    if (sv && sl) sv.textContent = sl.value;
+
+  // ── Render principal ──────────────────────────────────────────
+  window.lbRender = async function() {
     const canvas = document.getElementById('lb-canvas'); if (!canvas) return;
-    const { w, h } = lbGetDims();
+    const wCm = Math.max(1, Number(document.getElementById('lb-w').value) || 8);
+    const hCm = Math.max(1, Number(document.getElementById('lb-h').value) || 5);
+    const w = lbCmToPx(wCm), h = lbCmToPx(hCm);
     canvas.width  = w * LB_SCALE;
     canvas.height = h * LB_SCALE;
-    canvas.style.width  = Math.min(w, 460) + 'px';
-    canvas.style.height = Math.round(Math.min(w, 460) * h / w) + 'px';
+    canvas.style.width  = '100%';
+    canvas.style.height = 'auto';
     const ctx = canvas.getContext('2d');
     ctx.save();
     ctx.scale(LB_SCALE, LB_SCALE);
-    const cw = w, ch = h;
-    const pct = sl ? Number(sl.value) / 100 : 0.4;
-    if (lbLayout === 'redondo') {
-      const r = Math.min(cw, ch) / 2;
-      ctx.beginPath(); ctx.arc(cw/2, ch/2, r, 0, Math.PI*2);
-      ctx.fillStyle = lbBgColor; ctx.fill(); ctx.clip();
-    } else {
-      ctx.fillStyle = lbBgColor; ctx.fillRect(0, 0, cw, ch);
-      ctx.strokeStyle = 'rgba(0,0,0,.14)'; ctx.lineWidth = 1;
-      ctx.strokeRect(.5, .5, cw-1, ch-1);
+
+    // Fondo blanco base
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillRect(0, 0, w, h);
+
+    // Imagen plantilla en modo cover
+    const tpl = LB_TEMPLATES.find(t => t.id === lbState.tplId);
+    if (tpl) {
+      try {
+        const img = await lbLoadImage(tpl.url);
+        lbDrawCover(ctx, img, 0, 0, w, h);
+      } catch(e) { /* si no carga, fondo blanco */ }
     }
-    if (lbLayout === 'minimalista') {
-      if (lbImgObj) {
-        const iH = ch * pct * 1.4, iW = Math.min(cw * pct * 2, cw * .9);
-        ctx.drawImage(lbImgObj, (cw-iW)/2, 4, iW, iH);
-      }
-      lbDrawText(ctx, 0, lbImgObj ? ch * pct * 1.4 + 2 : 0, cw, ch - (lbImgObj ? ch * pct * 1.4 : 0), null);
-    } else if (lbLayout === 'clasico') {
-      const imgW = cw * 0.38;
-      if (lbImgObj) {
-        const iH = ch * pct * 2;
-        ctx.drawImage(lbImgObj, 4, (ch-iH)/2, imgW-8, iH);
-      }
-      ctx.strokeStyle = 'rgba(0,0,0,.1)'; ctx.lineWidth = 0.8;
-      ctx.beginPath(); ctx.moveTo(imgW, 8); ctx.lineTo(imgW, ch-8); ctx.stroke();
-      lbDrawText(ctx, imgW+6, 4, cw-imgW-10, ch-8, null);
-    } else {
-      if (lbImgObj) {
-        const s = Math.min(cw, ch) * pct;
-        ctx.drawImage(lbImgObj, (cw-s)/2, (ch-s)/2, s, s);
-      }
-      const f0 = lbFields.find(f => f.text && f.text.trim());
-      if (f0) {
-        const fs = Math.max(8, f0.size||12), r = Math.min(cw,ch)/2-fs-4;
-        ctx.font = (f0.bold?'bold ':'')+fs+'px "DM Sans",Arial,sans-serif';
-        ctx.fillStyle = f0.color||'#6B4F3A'; ctx.textAlign = 'center';
-        const chars = f0.text.split(''), n = chars.length;
-        chars.forEach((c, i) => {
-          const a = -Math.PI/2 + (i-(n-1)/2)*(Math.PI*1.4/Math.max(n-1,1));
-          ctx.save(); ctx.translate(cw/2+r*Math.cos(a), ch/2+r*Math.sin(a));
-          ctx.rotate(a+Math.PI/2); ctx.fillText(c,0,0); ctx.restore();
-        });
-      }
+
+    // Logo
+    const logoOn = document.getElementById('lb-logo-on').checked;
+    if (logoOn && siteConfig.logoUrl) {
+      try {
+        const logoImg  = await lbLoadImage(siteConfig.logoUrl);
+        const logoSize = Number(document.getElementById('lb-logo-size').value) / 100;
+        const logoY    = Number(document.getElementById('lb-logo-y').value) / 100;
+        const logoAlign= document.getElementById('lb-logo-align').value;
+        const lw = w * logoSize;
+        const lh = lw * (logoImg.height / logoImg.width);
+        const ly = h * logoY;
+        let lx = (w - lw) / 2;
+        if (logoAlign === 'left')  lx = w * 0.05;
+        if (logoAlign === 'right') lx = w - lw - w * 0.05;
+        ctx.drawImage(logoImg, lx, ly, lw, lh);
+      } catch(e) {}
     }
+
+    // Campos de texto
+    lbState.fields.forEach(f => {
+      if (!f.text || !f.text.trim()) return;
+      const fs = Math.max(7, f.size || 14);
+      ctx.font = (f.bold ? 'bold ' : '') + fs + 'px "Playfair Display", serif';
+      ctx.fillStyle = f.color || '#2E2A24';
+      const yPos = (f.yPct / 100) * h;
+      const maxW = w * 0.85;
+      ctx.textAlign = f.align || 'center';
+      const tx = f.align === 'left' ? w * 0.08
+               : f.align === 'right' ? w * 0.92
+               : w / 2;
+      // Wrap
+      const words = String(f.text).split(' ');
+      let lines = [], cur = '';
+      words.forEach(word => {
+        const test = cur ? cur + ' ' + word : word;
+        if (ctx.measureText(test).width > maxW && cur) { lines.push(cur); cur = word; }
+        else cur = test;
+      });
+      if (cur) lines.push(cur);
+      const lineH = fs * 1.3;
+      const totalH = lines.length * lineH;
+      lines.forEach((line, i) => {
+        ctx.fillText(line, tx, yPos - totalH / 2 + i * lineH + fs);
+      });
+    });
+
     ctx.restore();
   };
-  window.lbDownload = () => {
-    const canvas = document.getElementById('lb-canvas'); if (!canvas) return;
-    const a = document.createElement('a');
-    a.download = 'etiqueta-sernatural.png'; a.href = canvas.toDataURL('image/png'); a.click();
+
+  // Imagen en modo cover (recorte centrado)
+  function lbDrawCover(ctx, img, x, y, w, h) {
+    const imgAR = img.width / img.height;
+    const canAR = w / h;
+    let sx, sy, sw, sh;
+    if (imgAR > canAR) {
+      sh = img.height; sw = sh * canAR;
+      sx = (img.width - sw) / 2; sy = 0;
+    } else {
+      sw = img.width; sh = sw / canAR;
+      sx = 0; sy = (img.height - sh) / 2;
+    }
+    ctx.drawImage(img, sx, sy, sw, sh, x, y, w, h);
+  }
+
+  // ── Thumbnails de plantillas ──────────────────────────────────
+  function lbRenderThumbs() {
+    const wrap = document.getElementById('lb-tpl-thumbs'); if (!wrap) return;
+    wrap.innerHTML = LB_TEMPLATES.map(t =>
+      '<div style="display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer" onclick="lbSelectTpl(\'' + t.id + '\')">' +
+        '<img src="' + t.url + '" class="lb-tpl-thumb' + (lbState.tplId === t.id ? ' active' : '') + '" id="thumb-' + t.id + '" alt="' + t.name + '" />' +
+        '<span style="font-size:.75rem;color:var(--text-lt)">' + t.name + '</span>' +
+      '</div>'
+    ).join('');
+  }
+
+  window.lbSelectTpl = function(id) {
+    lbState.tplId = id;
+    document.querySelectorAll('.lb-tpl-thumb').forEach(el => el.classList.toggle('active', el.id === 'thumb-' + id));
+    lbRender();
   };
-  window.lbReset = () => {
-    lbBgColor = '#F7F2EC'; lbLayout = 'minimalista'; lbImgObj = null;
-    lbFields = defaultLbFields.map(f => Object.assign({}, f));
-    const w = document.getElementById('lb-w'); if(w) w.value = 8;
-    const h = document.getElementById('lb-h'); if(h) h.value = 5;
-    const s = document.getElementById('lb-img-size'); if(s) s.value = 40;
-    const fi = document.getElementById('lb-img-file'); if(fi) fi.value = '';
-    document.querySelectorAll('[data-layout]').forEach(b => b.classList.toggle('active', b.dataset.layout==='minimalista'));
-    lbBuildFields(); lbRender();
+
+  window.lbSetSize = function(w, h) {
+    document.getElementById('lb-w').value = w;
+    document.getElementById('lb-h').value = h;
+    lbRender();
   };
-  function lbBuildFields() {
+
+  // ── Campos de texto ───────────────────────────────────────────
+  function lbRenderFields() {
     const wrap = document.getElementById('lb-fields-wrap'); if (!wrap) return;
-    wrap.innerHTML = lbFields.map((f,i) =>
-      '<div style="background:var(--cream2);border-radius:10px;padding:10px;border:1px solid var(--cream2)">' +
-        '<div style="font-size:.72rem;font-weight:600;color:var(--bark);margin-bottom:6px">' + f.label + '</div>' +
-        '<textarea rows="2" placeholder="Texto..." ' +
-          'style="width:100%;border:1px solid #ddd;border-radius:8px;padding:6px;' +
-          'font-family:var(--font-body);font-size:.82rem;resize:vertical;margin-bottom:6px;box-sizing:border-box" ' +
-          'data-lbf="' + i + '" data-lbfield="text">' + (f.text||'')+'</textarea>' +
-        '<div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px;align-items:end">' +
-          '<div><label style="font-size:.7rem;display:block">Tamaño</label>' +
-          '<input type="range" min="7" max="40" value="' + (f.size||12) + '" ' +
-            'data-lbf="' + i + '" data-lbfield="size" style="width:100%" /></div>' +
-          '<div><label style="font-size:.7rem;display:block">Color</label>' +
-          '<input type="color" value="' + (f.color||'#2E2A24') + '" ' +
-            'data-lbf="' + i + '" data-lbfield="color" ' +
-            'style="width:100%;height:28px;border-radius:6px;border:1px solid #ddd;cursor:pointer" /></div>' +
-          '<div style="padding-bottom:2px"><label style="font-size:.7rem;display:flex;align-items:center;gap:4px;cursor:pointer">' +
-          '<input type="checkbox" ' + (f.bold?'checked ':'')+'data-lbf="' + i + '" data-lbfield="bold" /> Negrita</label></div>' +
-          '<div><label style="font-size:.7rem;display:block">Alineac.</label>' +
-          '<select data-lbf="' + i + '" data-lbfield="align" ' +
-            'style="width:100%;border:1px solid #ddd;border-radius:6px;padding:3px;font-size:.72rem;font-family:var(--font-body)">' +
-          '<option value="left"' + (f.align==='left'?' selected':'')+'>Izq</option>' +
-          '<option value="center"' + (f.align==='center'?' selected':'')+'>Centro</option>' +
-          '<option value="right"' + (f.align==='right'?' selected':'')+'>Der</option>' +
-          '</select></div>' +
+    if (!lbState.fields.length) {
+      wrap.innerHTML = '<p style="font-size:.85rem;color:var(--text-lt)">Sin campos. Pres\u00e1 + Campo para agregar.</p>';
+      return;
+    }
+    wrap.innerHTML = lbState.fields.map((f, i) =>
+      '<div class="lb-field-card">' +
+        '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">' +
+          '<span style="font-size:.82rem;font-weight:600;color:var(--bark)">' + (f.label || 'Campo ' + (i+1)) + '</span>' +
+          '<button style="background:none;border:none;cursor:pointer;color:var(--text-lt);font-size:1rem;padding:0 2px" data-del="' + i + '">&#10005;</button>' +
+        '</div>' +
+        '<textarea rows="2" placeholder="Texto..." style="width:100%;border:1px solid var(--cream2);border-radius:8px;padding:8px;font-family:var(--font-body);font-size:.95rem;resize:vertical;box-sizing:border-box" data-fi="' + i + '" data-ff="text">' + (f.text || '') + '</textarea>' +
+        '<div class="lb-field-row">' +
+          '<div>' +
+            '<label style="font-size:.78rem;display:block;color:var(--bark)">Tama\u00f1o</label>' +
+            '<input type="range" min="7" max="48" value="' + (f.size||14) + '" data-fi="' + i + '" data-ff="size" style="width:100%" />' +
+          '</div>' +
+          '<div>' +
+            '<label style="font-size:.78rem;display:block;color:var(--bark)">Color</label>' +
+            '<input type="color" value="' + (f.color||'#2E2A24') + '" data-fi="' + i + '" data-ff="color" style="width:100%;height:32px;border-radius:8px;border:1px solid var(--cream2);cursor:pointer" />' +
+          '</div>' +
+          '<div>' +
+            '<label style="font-size:.78rem;display:block;color:var(--bark)">Alinea.</label>' +
+            '<select data-fi="' + i + '" data-ff="align" style="width:100%;border:1px solid var(--cream2);border-radius:8px;padding:6px;font-size:.85rem;font-family:var(--font-body)">' +
+              '<option value="center"' + (f.align==='center'?' selected':'') + '>Centro</option>' +
+              '<option value="left"'   + (f.align==='left'  ?' selected':'') + '>Izq</option>' +
+              '<option value="right"'  + (f.align==='right' ?' selected':'') + '>Der</option>' +
+            '</select>' +
+          '</div>' +
+          '<div style="display:flex;flex-direction:column;gap:4px">' +
+            '<label style="font-size:.78rem;color:var(--bark)">Negrita</label>' +
+            '<input type="checkbox" ' + (f.bold?'checked ':'') + 'data-fi="' + i + '" data-ff="bold" style="width:18px;height:18px;cursor:pointer" />' +
+          '</div>' +
+        '</div>' +
+        '<div style="margin-top:8px">' +
+          '<label style="font-size:.78rem;color:var(--bark);display:block">Posici\u00f3n vertical: <span id="lb-ypct-' + i + '">' + Math.round(f.yPct||50) + '</span>%</label>' +
+          '<input type="range" min="5" max="95" value="' + (f.yPct||50) + '" data-fi="' + i + '" data-ff="yPct" style="width:100%" />' +
         '</div>' +
       '</div>'
     ).join('');
-    wrap.querySelectorAll('[data-lbf]').forEach(el => {
-      const ev = el.type==='checkbox'?'change':'input';
+
+    // Event delegation
+    wrap.querySelectorAll('[data-fi]').forEach(el => {
+      const ev = el.type === 'checkbox' ? 'change' : 'input';
       el.addEventListener(ev, function() {
-        const i = Number(this.dataset.lbf), field = this.dataset.lbfield;
-        if (field==='bold') lbFields[i][field] = this.checked;
-        else if (field==='size') lbFields[i][field] = Number(this.value);
-        else lbFields[i][field] = this.value;
+        const i = Number(this.dataset.fi), ff = this.dataset.ff;
+        if (ff === 'bold') lbState.fields[i][ff] = this.checked;
+        else if (ff === 'size' || ff === 'yPct') {
+          lbState.fields[i][ff] = Number(this.value);
+          if (ff === 'yPct') {
+            const span = document.getElementById('lb-ypct-' + i);
+            if (span) span.textContent = Math.round(this.value);
+          }
+        }
+        else lbState.fields[i][ff] = this.value;
         lbRender();
       });
     });
+    wrap.querySelectorAll('[data-del]').forEach(btn => {
+      btn.addEventListener('click', function() {
+        lbState.fields.splice(Number(this.dataset.del), 1);
+        lbRenderFields(); lbRender();
+      });
+    });
   }
-  // Init label builder when switching to tab
+
+  // ── Logo toggle ───────────────────────────────────────────────
+  document.addEventListener('DOMContentLoaded', () => {
+    const logoCheck = document.getElementById('lb-logo-on');
+    if (logoCheck) {
+      logoCheck.addEventListener('change', function() {
+        const ctrl = document.getElementById('lb-logo-controls');
+        if (ctrl) ctrl.style.display = this.checked ? 'block' : 'none';
+        lbRender();
+      });
+    }
+    const addBtn = document.getElementById('lb-add-field-btn');
+    if (addBtn) {
+      addBtn.addEventListener('click', () => {
+        const label = prompt('Nombre del campo (ej: Ingredientes, Modo de uso, Lote...):');
+        if (!label || !label.trim()) return;
+        lbState.fields.push({ label: label.trim(), text:'', size:12, bold:false, color:'#2E2A24', align:'center', yPct: Math.min(90, 20 + lbState.fields.length * 15) });
+        lbRenderFields(); lbRender();
+      });
+    }
+  });
+
+  // ── Descarga PNG ──────────────────────────────────────────────
+  window.lbDownloadPNG = function() {
+    const canvas = document.getElementById('lb-canvas'); if (!canvas) return;
+    const a = document.createElement('a');
+    a.download = 'etiqueta-sernatural.png';
+    a.href = canvas.toDataURL('image/png');
+    a.click();
+  };
+
+  // ── PDF A4 con jsPDF ─────────────────────────────────────────
+  window.lbShowPdfModal = function() {
+    document.getElementById('lb-pdf-modal').style.display = 'flex';
+  };
+
+  window.lbGeneratePDF = async function() {
+    const qty    = Math.max(1, Number(document.getElementById('lb-pdf-qty').value) || 20);
+    const margin = Number(document.getElementById('lb-pdf-margin').value) || 3;
+    document.getElementById('lb-pdf-modal').style.display = 'none';
+
+    // Cargar jsPDF dinámicamente
+    if (!window.jspdf) {
+      await new Promise((res, rej) => {
+        const s = document.createElement('script');
+        s.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+        s.onload = res; s.onerror = rej;
+        document.head.appendChild(s);
+      });
+    }
+
+    const wCm = Math.max(1, Number(document.getElementById('lb-w').value) || 8);
+    const hCm = Math.max(1, Number(document.getElementById('lb-h').value) || 5);
+    const marginCm = margin / 10;
+
+    // A4: 21 x 29.7 cm, margen de hoja 0.5 cm
+    const pageW = 21, pageH = 29.7, pageMargin = 0.5;
+    const usableW = pageW - pageMargin * 2;
+    const usableH = pageH - pageMargin * 2;
+    const cols = Math.max(1, Math.floor((usableW + marginCm) / (wCm + marginCm)));
+    const rows = Math.max(1, Math.floor((usableH + marginCm) / (hCm + marginCm)));
+    const perPage = cols * rows;
+
+    // Generar imagen PNG del canvas actual
+    const canvas = document.getElementById('lb-canvas');
+    const pngData = canvas.toDataURL('image/png');
+
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ unit:'cm', format:'a4', orientation:'portrait' });
+
+    let placed = 0, page = 1;
+    while (placed < qty) {
+      if (placed > 0 && placed % perPage === 0) { doc.addPage(); page++; }
+      const posInPage = placed % perPage;
+      const col = posInPage % cols;
+      const row = Math.floor(posInPage / cols);
+      const x = pageMargin + col * (wCm + marginCm);
+      const y = pageMargin + row * (hCm + marginCm);
+      doc.addImage(pngData, 'PNG', x, y, wCm, hCm);
+      placed++;
+    }
+
+    doc.save('etiquetas-sernatural-' + qty + 'u.pdf');
+    showToast('\u2705 PDF con ' + qty + ' etiquetas generado');
+  };
+
+  // ── Reset ─────────────────────────────────────────────────────
+  window.lbReset = function() {
+    lbState = { tplId:'tpl1', wCm:8, hCm:5, fields:[], logoOn:false, logoSize:20, logoY:5, logoAlign:'center' };
+    const w = document.getElementById('lb-w'); if(w) w.value = 8;
+    const h = document.getElementById('lb-h'); if(h) h.value = 5;
+    const lo = document.getElementById('lb-logo-on'); if(lo) lo.checked = false;
+    const lc = document.getElementById('lb-logo-controls'); if(lc) lc.style.display = 'none';
+    lbRenderThumbs();
+    lbRenderFields();
+    lbRender();
+  };
+
+  // ── Init al abrir la solapa ───────────────────────────────────
   const _origST = window.switchTab;
   window.switchTab = function(tab) {
     _origST(tab);
-    if (tab === 'etiquetas') { lbBuildFields(); lbRender(); }
+    if (tab === 'etiquetas') {
+      // Cargar campos base si es la primera vez
+      if (!lbState.fields.length) {
+        lbState.fields = LB_BASE_FIELDS.map(f => Object.assign({}, f));
+      }
+      if (window.innerWidth <= 900) {
+        const grid    = document.getElementById('label-builder');
+        const preview = document.querySelector('.lb-preview-col');
+        const ctrl    = document.querySelector('.lb-controls-col');
+        if (grid && preview && ctrl) grid.insertBefore(preview, ctrl);
+      }
+      lbRenderThumbs();
+      lbRenderFields();
+      lbRender();
+    }
   };
 
 </script>
