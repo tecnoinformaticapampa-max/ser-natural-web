@@ -155,6 +155,7 @@
     .lb-section-title { font-size:.8rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--bark); margin-bottom:8px; }
     .lb-tpl-thumb { width:72px; height:72px; object-fit:cover; border-radius:10px; cursor:pointer; border:2.5px solid transparent; transition:all .18s; }
     .lb-tpl-thumb.active { border-color:var(--sage-dk); box-shadow:0 0 0 2px var(--sage-dk); }
+    .lb-tpl-thumb.replacing { border-color:var(--bark); box-shadow:0 0 0 2px var(--bark); opacity:.7; }
     .lb-field-card { background:var(--cream2); border-radius:12px; padding:12px; border:1px solid var(--cream2); }
     .lb-field-row { display:grid; grid-template-columns:1fr 80px 80px auto; gap:6px; align-items:center; margin-top:8px; }
     @media(max-width:600px) { .lb-field-row { grid-template-columns:1fr 1fr; } }
@@ -560,8 +561,14 @@
 
             <!-- Plantilla -->
             <div class="config-section" style="padding:16px;margin-bottom:0">
-              <div class="lb-section-title">&#127776; Plantilla</div>
-              <div id="lb-tpl-thumbs" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px"></div>
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+                <div class="lb-section-title" style="margin-bottom:0">&#127776; Plantilla</div>
+                <button class="btn-add-tag" id="lb-tpl-add-btn" style="font-size:.8rem;padding:5px 12px;display:none" onclick="lbShowAddTpl()">+ Agregar</button>
+              </div>
+              <div id="lb-tpl-thumbs" style="display:flex;gap:10px;flex-wrap:wrap"></div>
+              <div id="lb-tpl-limit-msg" style="display:none;font-size:.8rem;color:var(--text-lt);margin-top:8px">
+                Límite de 9 plantillas alcanzado. Hacé click en una plantilla y luego en &#128260; para reemplazarla.
+              </div>
             </div>
 
             <!-- Medidas -->
@@ -675,6 +682,27 @@
             <p style="font-size:.8rem;color:var(--text-lt);margin-top:8px">La descarga PNG es 3&times; (alta resoluci&#243;n). El PDF calcula cuántas entran por hoja A4.</p>
           </div>
 
+        </div>
+      </div>
+
+      <!-- Modal agregar/reemplazar plantilla -->
+      <div id="lb-tpl-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;align-items:center;justify-content:center">
+        <div style="background:var(--white);border-radius:20px;padding:28px;max-width:380px;width:90%;box-shadow:0 8px 40px rgba(0,0,0,.2)">
+          <h3 style="margin:0 0 6px;color:var(--bark)" id="lb-tpl-modal-title">&#127916; Agregar plantilla</h3>
+          <p style="font-size:.85rem;color:var(--text-lt);margin-bottom:16px" id="lb-tpl-modal-sub">Sube una imagen para usarla como plantilla de fondo.</p>
+          <div class="form-group">
+            <label>Nombre de la plantilla</label>
+            <input type="text" id="lb-tpl-name-input" placeholder="Ej: Flores de primavera" maxlength="30" />
+          </div>
+          <div class="form-group">
+            <label>Imagen (JPG o PNG, cuadrada recomendada)</label>
+            <input type="file" id="lb-tpl-file" accept="image/*" style="font-size:.9rem" />
+          </div>
+          <div id="lb-tpl-uploading" style="display:none;font-size:.85rem;color:var(--sage-dk);padding:6px 0">&#8987; Subiendo imagen…</div>
+          <div style="display:flex;gap:10px;margin-top:8px">
+            <button class="btn-cancel" onclick="document.getElementById('lb-tpl-modal').style.display='none'" style="display:block">Cancelar</button>
+            <button class="btn-save" onclick="lbConfirmAddTpl()" style="flex:1;justify-content:center">Guardar plantilla</button>
+          </div>
         </div>
       </div>
 
@@ -1774,11 +1802,17 @@
   const LB_DPI   = 96;
 
   // Plantillas predefinidas (URL Cloudinary)
-  const LB_TEMPLATES = [
-    { id:'tpl1', name:'Verde cl\u00e1sico',   url:'https://res.cloudinary.com/ditz4ufas/image/upload/v1781216029/template_1_a5ifma.png',  shape:'square' },
-    { id:'tpl2', name:'Hojas verdes', url:'https://res.cloudinary.com/ditz4ufas/image/upload/v1781216016/template_2_c02ofe.png',  shape:'square' },
-    { id:'tpl3', name:'Bot\u00e1nico', url:'https://res.cloudinary.com/ditz4ufas/image/upload/v1781216044/template_3_odgho4.png', shape:'horizontal' }
+  const LB_FIXED = [
+    { id:'tpl1', name:'Verde clásico',   url:'https://res.cloudinary.com/ditz4ufas/image/upload/v1781216029/template_1_a5ifma.png' },
+    { id:'tpl2', name:'Hojas verdes', url:'https://res.cloudinary.com/ditz4ufas/image/upload/v1781216016/template_2_c02ofe.png' },
+    { id:'tpl3', name:'Botánico',       url:'https://res.cloudinary.com/ditz4ufas/image/upload/v1781216044/template_3_odgho4.png' }
   ];
+  const LB_MAX = 9;
+  function lbGetTemplates() {
+    const extras = (siteConfig.plantillasExtra || []).map((t,i) => ({ id:'tplx'+i, name:t.name, url:t.url, custom:true, cfgIdx:i }));
+    return [...LB_FIXED, ...extras];
+  }
+  let lbReplaceIdx = null;
 
   // Cache de im\u00e1genes cargadas
   const lbImgCache = {};
@@ -1838,7 +1872,7 @@
     ctx.fillRect(0, 0, w, h);
 
     // Imagen plantilla en modo cover
-    const tpl = LB_TEMPLATES.find(t => t.id === lbState.tplId);
+    const tpl = lbGetTemplates().find(t => t.id === lbState.tplId);
     if (tpl) {
       try {
         const img = await lbLoadImage(tpl.url);
@@ -1919,18 +1953,86 @@
   // ── Thumbnails de plantillas ──────────────────────────────────
   function lbRenderThumbs() {
     const wrap = document.getElementById('lb-tpl-thumbs'); if (!wrap) return;
-    wrap.innerHTML = LB_TEMPLATES.map(t =>
-      '<div style="display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer" onclick="lbSelectTpl(\'' + t.id + '\')">' +
-        '<img src="' + t.url + '" class="lb-tpl-thumb' + (lbState.tplId === t.id ? ' active' : '') + '" id="thumb-' + t.id + '" alt="' + t.name + '" />' +
-        '<span style="font-size:.75rem;color:var(--text-lt)">' + t.name + '</span>' +
-      '</div>'
-    ).join('');
+    const tpls   = lbGetTemplates();
+    const total  = tpls.length;
+    const addBtn = document.getElementById('lb-tpl-add-btn');
+    const limMsg = document.getElementById('lb-tpl-limit-msg');
+    if (addBtn) addBtn.style.display  = total < LB_MAX ? 'block' : 'none';
+    if (limMsg) limMsg.style.display  = total >= LB_MAX ? 'block' : 'none';
+    wrap.innerHTML = tpls.map(t => {
+      const isActive  = lbState.tplId === t.id;
+      const replBtn   = t.custom
+        ? '<button onclick="lbAskReplace(' + t.cfgIdx + ')" title="Reemplazar"'
+          + ' style="position:absolute;top:-6px;right:-6px;background:var(--bark);color:#fff;'
+          + 'border:none;border-radius:50%;width:20px;height:20px;font-size:.7rem;cursor:pointer;">'
+          + '&#8635;</button>'
+        : '';
+      return '<div style="display:flex;flex-direction:column;align-items:center;gap:4px">'
+        + '<div style="position:relative">'
+        + '<img src="' + t.url + '" class="lb-tpl-thumb' + (isActive ? ' active' : '') + '"'
+        + ' id="thumb-' + t.id + '" alt="' + t.name + '" onclick="lbSelectTpl(\'' + t.id + '\')" style="cursor:pointer" />'
+        + replBtn
+        + '</div>'
+        + '<span style="font-size:.75rem;color:var(--text-lt);max-width:70px;text-align:center;'
+        + 'overflow:hidden;white-space:nowrap;text-overflow:ellipsis">' + t.name + '</span>'
+        + '</div>';
+    }).join('');
   }
 
   window.lbSelectTpl = function(id) {
     lbState.tplId = id;
+    lbReplaceIdx  = null;
     document.querySelectorAll('.lb-tpl-thumb').forEach(el => el.classList.toggle('active', el.id === 'thumb-' + id));
     lbRender();
+  };
+
+  window.lbShowAddTpl = function() {
+    lbReplaceIdx = null;
+    document.getElementById('lb-tpl-modal-title').textContent = 'Agregar plantilla';
+    document.getElementById('lb-tpl-modal-sub').textContent   = 'Sube una imagen para usarla como fondo de etiqueta.';
+    document.getElementById('lb-tpl-name-input').value = '';
+    document.getElementById('lb-tpl-file').value = '';
+    document.getElementById('lb-tpl-modal').style.display = 'flex';
+  };
+
+  window.lbAskReplace = function(cfgIdx) {
+    lbReplaceIdx = cfgIdx;
+    const tpl = (siteConfig.plantillasExtra || [])[cfgIdx];
+    document.getElementById('lb-tpl-modal-title').textContent = 'Reemplazar plantilla';
+    document.getElementById('lb-tpl-modal-sub').textContent   = 'Reemplazando: ' + (tpl ? tpl.name : '');
+    document.getElementById('lb-tpl-name-input').value = tpl ? tpl.name : '';
+    document.getElementById('lb-tpl-file').value = '';
+    document.getElementById('lb-tpl-modal').style.display = 'flex';
+  };
+
+  window.lbConfirmAddTpl = async function() {
+    const nameEl = document.getElementById('lb-tpl-name-input');
+    const fileEl = document.getElementById('lb-tpl-file');
+    const name   = (nameEl.value || '').trim();
+    if (!name)           { showToast('Ingresá un nombre para la plantilla', true); return; }
+    if (!fileEl.files[0]){ showToast('Elegí una imagen', true); return; }
+    const upDiv = document.getElementById('lb-tpl-uploading');
+    if (upDiv) upDiv.style.display = 'block';
+    try {
+      const url = await uploadToCloudinary(fileEl.files[0]);
+      if (!siteConfig.plantillasExtra) siteConfig.plantillasExtra = [];
+      if (lbReplaceIdx !== null) {
+        siteConfig.plantillasExtra[lbReplaceIdx] = { name, url };
+        showToast('✅ Plantilla reemplazada');
+      } else {
+        if (lbGetTemplates().length >= LB_MAX) { showToast('Límite de ' + LB_MAX + ' plantillas alcanzado', true); return; }
+        siteConfig.plantillasExtra.push({ name, url });
+        showToast('✅ Plantilla agregada');
+      }
+      await saveConfig();
+      lbReplaceIdx = null;
+      document.getElementById('lb-tpl-modal').style.display = 'none';
+      lbRenderThumbs();
+    } catch(e) {
+      showToast('Error: ' + e.message, true);
+    } finally {
+      if (upDiv) upDiv.style.display = 'none';
+    }
   };
 
   window.lbSetSize = function(w, h) {
@@ -2169,6 +2271,7 @@
     const fi2 = document.getElementById('lb-logo-file'); if(fi2) fi2.value = '';
     const sw2 = document.getElementById('lb-logo-site-thumb-wrap');   if(sw2) sw2.style.borderColor = 'var(--sage-dk)';
     const cw2 = document.getElementById('lb-logo-custom-thumb-wrap'); if(cw2) cw2.style.borderColor = 'var(--cream2)';
+    lbReplaceIdx = null;
     lbRenderThumbs();
     lbRenderFields();
     lbRender();
@@ -2183,6 +2286,7 @@
       if (!lbState.fields.length) {
         lbState.fields = LB_BASE_FIELDS.map(f => Object.assign({}, f));
       }
+      if (!siteConfig.plantillasExtra) siteConfig.plantillasExtra = [];
       // Cargar thumbnails de logos
       setTimeout(() => {
         // Thumb logo del sitio
