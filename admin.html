@@ -589,10 +589,47 @@
               <div style="display:flex;align-items:center;justify-content:space-between">
                 <div class="lb-section-title" style="margin-bottom:0">&#127981; Logo</div>
                 <label style="display:flex;align-items:center;gap:6px;font-size:.85rem;cursor:pointer">
-                  <input type="checkbox" id="lb-logo-on" onchange="lbRender()" /> Mostrar
+                  <input type="checkbox" id="lb-logo-on" /> Mostrar
                 </label>
               </div>
-              <div id="lb-logo-controls" style="margin-top:10px;display:none">
+              <div id="lb-logo-controls" style="margin-top:12px;display:none">
+
+                <!-- Selector de fuente del logo -->
+                <div style="display:flex;gap:6px;margin-bottom:12px">
+                  <button class="toggle-pill active" id="lb-logo-src-site" onclick="lbLogoSrc('site',this)">Logo del sitio</button>
+                  <button class="toggle-pill" id="lb-logo-src-custom" onclick="lbLogoSrc('custom',this)">Subir imagen</button>
+                </div>
+
+                <!-- Uploader logo alternativo (PNG sin fondo) -->
+                <div id="lb-logo-upload-wrap" style="display:none;margin-bottom:10px">
+                  <label style="font-size:.82rem;display:block;margin-bottom:4px;color:var(--bark)">
+                    Imagen sin fondo (PNG transparente recomendado)
+                  </label>
+                  <div id="lb-logo-preview-wrap" style="display:none;margin-bottom:8px;padding:10px;background:var(--cream2);border-radius:10px">
+                    <div style="display:flex;align-items:center;gap:10px">
+                      <img id="lb-logo-preview" style="max-height:56px;max-width:100px;border-radius:6px;object-fit:contain" alt="logo etiqueta" />
+                      <div style="flex:1;min-width:0">
+                        <div style="font-size:.8rem;color:var(--sage-dk);font-weight:600">&#10003; Logo guardado</div>
+                        <div id="lb-logo-url-short" style="font-size:.72rem;color:var(--text-lt);word-break:break-all"></div>
+                      </div>
+                      <button onclick="lbClearCustomLogo()" style="background:none;border:none;cursor:pointer;color:var(--text-lt);font-size:1.1rem;padding:2px 6px;flex-shrink:0" title="Quitar">&#10005;</button>
+                    </div>
+                  </div>
+                  <div id="lb-logo-upload-btn-wrap">
+                    <input type="file" id="lb-logo-file" accept="image/*" style="display:none" />
+                    <button class="btn-add-tag" id="lb-logo-pick-btn" style="width:100%;justify-content:center;padding:10px">
+                      &#8593; Elegir imagen y subir a Cloudinary
+                    </button>
+                    <p style="font-size:.78rem;color:var(--text-lt);margin-top:6px">
+                      Se sube una sola vez y queda guardada. Recomendado: PNG con fondo transparente.
+                    </p>
+                  </div>
+                  <div id="lb-logo-uploading" style="display:none;font-size:.85rem;color:var(--sage-dk);padding:8px 0">
+                    &#8987; Subiendo imagen a Cloudinary…
+                  </div>
+                </div>
+
+                <!-- Controles posición/tamaño -->
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
                   <div class="form-group" style="margin-bottom:0">
                     <label style="font-size:.82rem">Tama&#241;o (%)</label>
@@ -866,7 +903,7 @@
       siteConfig = {
         categorias: [{ id:'jabones', label:'Jabones artesanales' }, { id:'cosmetica', label:'Cosmetica natural' }, { id:'bienestar', label:'Bienestar' }],
         etiquetas:  [{ id:'nuevo', label:'Nuevo' }, { id:'popular', label:'Popular' }],
-        camposExtra: [], logoUrl: ''
+        camposExtra: [], logoUrl: '', logoEtiquetaUrl: ''
       };
     }
     renderCatSelect();
@@ -1758,7 +1795,9 @@
     logoOn:  false,
     logoSize: 20,
     logoY:   5,
-    logoAlign: 'center'
+    logoAlign: 'center',
+    customLogoDataUrl: null,
+    logoSrc: 'site'
   };
 
   // Campos base predefinidos
@@ -1812,20 +1851,24 @@
 
     // Logo
     const logoOn = document.getElementById('lb-logo-on').checked;
-    if (logoOn && siteConfig.logoUrl) {
-      try {
-        const logoImg  = await lbLoadImage(siteConfig.logoUrl);
-        const logoSize = Number(document.getElementById('lb-logo-size').value) / 100;
-        const logoY    = Number(document.getElementById('lb-logo-y').value) / 100;
-        const logoAlign= document.getElementById('lb-logo-align').value;
-        const lw = w * logoSize;
-        const lh = lw * (logoImg.height / logoImg.width);
-        const ly = h * logoY;
-        let lx = (w - lw) / 2;
-        if (logoAlign === 'left')  lx = w * 0.05;
-        if (logoAlign === 'right') lx = w - lw - w * 0.05;
-        ctx.drawImage(logoImg, lx, ly, lw, lh);
-      } catch(e) {}
+    if (logoOn) {
+      // Usar logo alternativo (subido) o el del sitio
+      const logoUrl = lbState.customLogoDataUrl || siteConfig.logoEtiquetaUrl || siteConfig.logoUrl;
+      if (logoUrl) {
+        try {
+          const logoImg  = await lbLoadImage(logoUrl);
+          const logoSize = Number(document.getElementById('lb-logo-size').value) / 100;
+          const logoY    = Number(document.getElementById('lb-logo-y').value) / 100;
+          const logoAlign= document.getElementById('lb-logo-align').value;
+          const lw = w * logoSize;
+          const lh = lw * (logoImg.height / logoImg.width);
+          const ly = h * logoY;
+          let lx = (w - lw) / 2;
+          if (logoAlign === 'left')  lx = w * 0.05;
+          if (logoAlign === 'right') lx = w - lw - w * 0.05;
+          ctx.drawImage(logoImg, lx, ly, lw, lh);
+        } catch(e) {}
+      }
     }
 
     // Campos de texto
@@ -1966,15 +2009,80 @@
   }
 
   // ── Logo toggle ───────────────────────────────────────────────
+  // Alternar fuente del logo
+  window.lbLogoSrc = function(src, btn) {
+    lbState.logoSrc = src;
+    document.getElementById('lb-logo-src-site').classList.toggle('active', src === 'site');
+    document.getElementById('lb-logo-src-custom').classList.toggle('active', src === 'custom');
+    const upWrap = document.getElementById('lb-logo-upload-wrap');
+    if (upWrap) upWrap.style.display = src === 'custom' ? 'block' : 'none';
+    if (src === 'site') lbState.customLogoDataUrl = null;
+    lbRender();
+  };
+
+  window.lbClearCustomLogo = async function() {
+    lbState.customLogoDataUrl = null;
+    siteConfig.logoEtiquetaUrl = '';
+    try { await saveConfig(); } catch(e) {}
+    const fi = document.getElementById('lb-logo-file');
+    if (fi) fi.value = '';
+    const pw = document.getElementById('lb-logo-preview-wrap');
+    if (pw) pw.style.display = 'none';
+    const bw = document.getElementById('lb-logo-upload-btn-wrap');
+    if (bw) bw.style.display = 'block';
+    lbRender();
+  };
+
   document.addEventListener('DOMContentLoaded', () => {
     const logoCheck = document.getElementById('lb-logo-on');
     if (logoCheck) {
       logoCheck.addEventListener('change', function() {
         const ctrl = document.getElementById('lb-logo-controls');
         if (ctrl) ctrl.style.display = this.checked ? 'block' : 'none';
-        lbRender();
+        // Resetear a 'site' si se activa de nuevo
+        if (this.checked) lbLogoSrc('site', null);
+        else lbRender();
       });
     }
+    // Botón elegir imagen → dispara el file input oculto
+    const logoPickBtn = document.getElementById('lb-logo-pick-btn');
+    const logoFile    = document.getElementById('lb-logo-file');
+    if (logoPickBtn && logoFile) {
+      logoPickBtn.addEventListener('click', () => logoFile.click());
+      logoFile.addEventListener('change', async function() {
+        const file = this.files[0]; if (!file) return;
+        // Mostrar estado subiendo
+        const uploading = document.getElementById('lb-logo-uploading');
+        const btnWrap   = document.getElementById('lb-logo-upload-btn-wrap');
+        if (uploading) uploading.style.display = 'block';
+        if (btnWrap)   btnWrap.style.display   = 'none';
+        try {
+          const url = await uploadToCloudinary(file);
+          // Guardar en config
+          siteConfig.logoEtiquetaUrl = url;
+          await saveConfig();
+          // Actualizar estado y cache
+          lbState.customLogoDataUrl = url;
+          delete lbImgCache[url];
+          // Mostrar preview
+          const pw  = document.getElementById('lb-logo-preview-wrap');
+          const pi  = document.getElementById('lb-logo-preview');
+          const pus = document.getElementById('lb-logo-url-short');
+          if (pw)  pw.style.display  = 'flex';
+          if (pi)  pi.src = url;
+          if (pus) pus.textContent = url.split('/').pop().substring(0, 40);
+          showToast('✅ Logo guardado en Cloudinary');
+          lbRender();
+        } catch(e) {
+          showToast('Error al subir el logo: ' + e.message, true);
+        } finally {
+          if (uploading) uploading.style.display = 'none';
+          if (btnWrap)   btnWrap.style.display   = 'block';
+          this.value = '';
+        }
+      });
+    }
+
     const addBtn = document.getElementById('lb-add-field-btn');
     if (addBtn) {
       addBtn.addEventListener('click', () => {
@@ -2057,6 +2165,14 @@
     const h = document.getElementById('lb-h'); if(h) h.value = 5;
     const lo = document.getElementById('lb-logo-on'); if(lo) lo.checked = false;
     const lc = document.getElementById('lb-logo-controls'); if(lc) lc.style.display = 'none';
+    lbState.customLogoDataUrl = null; lbState.logoSrc = 'site';
+    const fi2 = document.getElementById('lb-logo-file'); if(fi2) fi2.value = '';
+    const pw2 = document.getElementById('lb-logo-preview-wrap'); if(pw2) pw2.style.display = 'none';
+    const srcSite = document.getElementById('lb-logo-src-site');
+    const srcCustom = document.getElementById('lb-logo-src-custom');
+    if(srcSite) srcSite.classList.add('active');
+    if(srcCustom) srcCustom.classList.remove('active');
+    const upWrap = document.getElementById('lb-logo-upload-wrap'); if(upWrap) upWrap.style.display = 'none';
     lbRenderThumbs();
     lbRenderFields();
     lbRender();
@@ -2070,6 +2186,21 @@
       // Cargar campos base si es la primera vez
       if (!lbState.fields.length) {
         lbState.fields = LB_BASE_FIELDS.map(f => Object.assign({}, f));
+      }
+      // Restaurar logo guardado si existe
+      if (siteConfig.logoEtiquetaUrl && !lbState.customLogoDataUrl) {
+        lbState.customLogoDataUrl = siteConfig.logoEtiquetaUrl;
+        // Mostrar preview del logo guardado
+        setTimeout(() => {
+          const pw  = document.getElementById('lb-logo-preview-wrap');
+          const pi  = document.getElementById('lb-logo-preview');
+          const pus = document.getElementById('lb-logo-url-short');
+          const bw  = document.getElementById('lb-logo-upload-btn-wrap');
+          if (pw)  pw.style.display  = 'flex';
+          if (pi)  pi.src = siteConfig.logoEtiquetaUrl;
+          if (pus) pus.textContent = siteConfig.logoEtiquetaUrl.split('/').pop().substring(0, 40);
+          if (bw)  bw.style.display = 'none';
+        }, 50);
       }
       if (window.innerWidth <= 900) {
         const grid    = document.getElementById('label-builder');
