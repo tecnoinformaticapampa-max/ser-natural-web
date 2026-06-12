@@ -185,7 +185,7 @@ export default {
         }
       }
 
-      // ── CONFIG — GET any auth, PUT superadmin ───────────────
+      // ── CONFIG — any auth ────────────────────────────────────
       if (path==='/config') {
         const { fail } = auth();
         if (fail) return fail;
@@ -194,8 +194,6 @@ export default {
           return j({ config:{ ...DEFAULT_CONFIG, ...(data||{}) }, sha }, 200, { ...c, 'Cache-Control':'no-cache' });
         }
         if (method==='PUT') {
-          const { fail:f2 } = auth('superadmin');
-          if (f2) return f2;
           const { config, sha } = await request.json();
           const newSha = await ghWrite(env, FILES.config, config, sha, `Config actualizada — ${now}`);
           return j({ ok:true, sha:newSha }, 200, c);
