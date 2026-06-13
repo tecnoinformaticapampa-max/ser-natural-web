@@ -1,27 +1,83 @@
 {
   "name": "SerNatural — Cosmética Artesanal",
   "short_name": "SerNatural",
-  "description": "Productos naturales y cosméticos artesanales",
+  "description": "Cosmética artesanal y productos naturales. Jabones, cremas y más.",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#F7F2EC",
   "theme_color": "#4E7255",
   "orientation": "portrait-primary",
-  "lang": "es",
+  "lang": "es-AR",
+  "categories": [
+    "shopping",
+    "lifestyle"
+  ],
   "icons": [
     {
-      "src": "https://res.cloudinary.com/ditz4ufas/image/upload/w_192,h_192,c_fill,r_20/v1781216029/template_1_a5ifma.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
+      "src": "https://res.cloudinary.com/ditz4ufas/image/upload/w_72,h_72,c_pad,b_rgb:F7F2EC/v1781260405/ser-natural/hqodr27dlfzqyczfkqf6.png",
+      "sizes": "72x72",
+      "type": "image/png"
     },
     {
-      "src": "https://res.cloudinary.com/ditz4ufas/image/upload/w_512,h_512,c_fill,r_40/v1781216029/template_1_a5ifma.png",
+      "src": "https://res.cloudinary.com/ditz4ufas/image/upload/w_96,h_96,c_pad,b_rgb:F7F2EC/v1781260405/ser-natural/hqodr27dlfzqyczfkqf6.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    },
+    {
+      "src": "https://res.cloudinary.com/ditz4ufas/image/upload/w_128,h_128,c_pad,b_rgb:F7F2EC/v1781260405/ser-natural/hqodr27dlfzqyczfkqf6.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    },
+    {
+      "src": "https://res.cloudinary.com/ditz4ufas/image/upload/w_192,h_192,c_pad,b_rgb:F7F2EC/v1781260405/ser-natural/hqodr27dlfzqyczfkqf6.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "https://res.cloudinary.com/ditz4ufas/image/upload/w_192,h_192,c_pad,b_rgb:4E7255/v1781260405/ser-natural/hqodr27dlfzqyczfkqf6.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "https://res.cloudinary.com/ditz4ufas/image/upload/w_512,h_512,c_pad,b_rgb:F7F2EC/v1781260405/ser-natural/hqodr27dlfzqyczfkqf6.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "https://res.cloudinary.com/ditz4ufas/image/upload/w_512,h_512,c_pad,b_rgb:4E7255/v1781260405/ser-natural/hqodr27dlfzqyczfkqf6.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ],
-  "categories": ["shopping", "lifestyle"],
-  "screenshots": []
+  "shortcuts": [
+    {
+      "name": "Ver productos",
+      "short_name": "Productos",
+      "description": "Ver catálogo de productos",
+      "url": "/#catalogo",
+      "icons": [
+        {
+          "src": "https://res.cloudinary.com/ditz4ufas/image/upload/v1781260405/ser-natural/hqodr27dlfzqyczfkqf6.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Contacto WhatsApp",
+      "short_name": "WhatsApp",
+      "description": "Consultar por WhatsApp",
+      "url": "/#contacto",
+      "icons": [
+        {
+          "src": "https://res.cloudinary.com/ditz4ufas/image/upload/v1781260405/ser-natural/hqodr27dlfzqyczfkqf6.png",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ]
 }
