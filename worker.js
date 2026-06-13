@@ -70,7 +70,10 @@ async function ghRead(env, file) {
   );
   if (res.status === 404) return { data:null, sha:null };
   const raw = await res.json();
-  return { data: JSON.parse(atob(raw.content.replace(/\n/g,''))), sha: raw.sha };
+  const decoded = decodeURIComponent(
+    escape(atob(raw.content.replace(/\n/g,'')))
+  );
+  return { data: JSON.parse(decoded), sha: raw.sha };
 }
 
 async function ghWrite(env, file, content, sha, msg) {

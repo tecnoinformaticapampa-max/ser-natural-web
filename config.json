@@ -25,32 +25,5 @@
   ],
   "camposExtra": [],
   "logoUrl": "https://i.postimg.cc/W16Cb2t6/395740464-122094653600094688-9024125943526889344-n.jpg",
-  "envioGratisMin": 0,
-  "plantillasExtra": [
-    {
-      "name": "Flores Pastel",
-      "url": "https://res.cloudinary.com/ditz4ufas/image/upload/v1781296918/ser-natural/lu57eiexjik4y8tcisut.png"
-    },
-    {
-      "name": "Flores Rosa",
-      "url": "https://res.cloudinary.com/ditz4ufas/image/upload/v1781296652/ser-natural/ucxhw69jbhsdxqqm8ode.png"
-    },
-    {
-      "name": "Flores Verde",
-      "url": "https://res.cloudinary.com/ditz4ufas/image/upload/v1781296691/ser-natural/yh7jvvtz5nkpfsyupq1o.png"
-    },
-    {
-      "name": "Rozado",
-      "url": "https://res.cloudinary.com/ditz4ufas/image/upload/v1781296716/ser-natural/nbanjkgcbjz0zt179kwh.png"
-    },
-    {
-      "name": "Rozado Gramillar",
-      "url": "https://res.cloudinary.com/ditz4ufas/image/upload/v1781296983/ser-natural/gdvfx6nej8apetdws55j.png"
-    },
-    {
-      "name": "rozado bis",
-      "url": "https://res.cloudinary.com/ditz4ufas/image/upload/v1781297013/ser-natural/qgr36i0kujniywkexys2.png"
-    }
-  ],
-  "logoEtiquetaUrl": "https://res.cloudinary.com/ditz4ufas/image/upload/v1781297047/ser-natural/f3bicnzr9nzxzmihp6ua.png"
+  "envioGratisMin": 0
 }

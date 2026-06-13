@@ -5,6 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SerNatural — Productos Naturales</title>
   <meta name="description" content="SerNatural — Cosmética artesanal y productos naturales. Jabones artesanales. Productos seleccionados para un estilo de vida consciente." />
+  <meta name="theme-color" content="#4E7255" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="SerNatural" />
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="apple-touch-icon" href="https://res.cloudinary.com/ditz4ufas/image/upload/w_192,h_192,c_fill/v1781216029/template_1_a5ifma.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
@@ -50,7 +57,7 @@
     /* HERO */
     .hero { padding-top:140px; padding-bottom:90px; overflow:hidden; position:relative; background:radial-gradient(ellipse 80% 60% at 70% 40%,rgba(122,158,126,.18) 0%,transparent 65%),radial-gradient(ellipse 50% 40% at 10% 80%,rgba(201,169,122,.20) 0%,transparent 60%),var(--cream); }
     .hero::before { content:''; position:absolute; inset:0; background-image:radial-gradient(circle,rgba(122,158,126,.08) 1px,transparent 1px); background-size:32px 32px; pointer-events:none; }
-    .hero-inner { display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center; }
+    .hero-inner { display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center;  position:relative; z-index:1; }
     .hero-eyebrow { display:flex; align-items:center; gap:10px; margin-bottom:20px; }
     .hero-dot { width:8px; height:8px; border-radius:50%; background:var(--sage); }
     .hero-eyebrow-text { font-size:.8rem; letter-spacing:.15em; text-transform:uppercase; font-weight:500; color:var(--sage-dk); }
@@ -118,8 +125,8 @@
     .prod-badge-tag.popular { background:var(--sage-dk); color:#fff; }
     .prod-info { padding:18px 18px 20px; flex:1; display:flex; flex-direction:column; }
     .prod-cat { font-size:.82rem; color:var(--sage-dk); text-transform:uppercase; letter-spacing:.1em; font-weight:500; margin-bottom:6px; }
-    .prod-name { font-family:var(--font-display); font-size:1rem; color:var(--bark); margin-bottom:6px; line-height:1.3; }
-    .prod-desc { font-size:.82rem; color:var(--text-lt); line-height:1.55; margin-bottom:14px; flex:1; }
+    .prod-name { font-family:var(--font-display); font-size:1.08rem; color:var(--bark); margin-bottom:6px; line-height:1.35; font-weight:600; }
+    .prod-desc { font-size:.9rem; color:var(--text-lt); line-height:1.65; margin-bottom:14px; flex:1; }
     .prod-footer { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:auto; }
     .prod-price { font-family:var(--font-display); font-size:1.1rem; color:var(--bark); font-weight:700; }
     .prod-price .pn { font-family:var(--font-body); font-size:.82rem; color:var(--text-lt); font-weight:400; display:block; }
@@ -490,6 +497,7 @@
 
 <!-- HERO -->
 <section class="hero" id="inicio">
+    <canvas id="hero-canvas" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:.45;z-index:0"></canvas>
   <div class="container hero-inner">
     <div class="fade-in">
       <div class="hero-eyebrow"><div class="hero-dot"></div><span class="hero-eyebrow-text">100% Natural · Hecho con amor</span></div>
@@ -1447,5 +1455,79 @@
   }
 
   init();
+
+  // ── Hero Canvas — partículas botánicas ──────────────────
+  (function() {
+    const canvas = document.getElementById('hero-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let W, H, particles = [];
+    const COLORS = ['#7A9E7E','#4E7255','#C9A97A','#6B4F3A','#a8c5a0'];
+    const SHAPES = ['circle','leaf','dot'];
+    function resize() {
+      W = canvas.width  = canvas.offsetWidth;
+      H = canvas.height = canvas.offsetHeight;
+    }
+    function mkParticle() {
+      return {
+        x: Math.random() * W,
+        y: Math.random() * H,
+        r: 2 + Math.random() * 5,
+        vx: (Math.random() - .5) * .35,
+        vy: -.15 - Math.random() * .35,
+        alpha: .15 + Math.random() * .35,
+        color: COLORS[Math.floor(Math.random() * COLORS.length)],
+        shape: SHAPES[Math.floor(Math.random() * SHAPES.length)],
+        rot: Math.random() * Math.PI * 2,
+        rotV: (Math.random() - .5) * .015
+      };
+    }
+    function drawLeaf(ctx, x, y, r, rot) {
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate(rot);
+      ctx.beginPath();
+      ctx.moveTo(0, -r*1.6);
+      ctx.bezierCurveTo(r, -r, r, r, 0, r*1.6);
+      ctx.bezierCurveTo(-r, r, -r, -r, 0, -r*1.6);
+      ctx.fill();
+      ctx.restore();
+    }
+    function tick() {
+      ctx.clearRect(0, 0, W, H);
+      particles.forEach((p, i) => {
+        p.x  += p.vx; p.y += p.vy; p.rot += p.rotV;
+        if (p.y < -20) { particles[i] = mkParticle(); particles[i].y = H + 10; }
+        ctx.globalAlpha = p.alpha;
+        ctx.fillStyle   = p.color;
+        if (p.shape === 'leaf') {
+          drawLeaf(ctx, p.x, p.y, p.r, p.rot);
+        } else if (p.shape === 'circle') {
+          ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2); ctx.fill();
+        } else {
+          ctx.beginPath(); ctx.arc(p.x, p.y, p.r*.5, 0, Math.PI*2); ctx.fill();
+        }
+      });
+      ctx.globalAlpha = 1;
+      requestAnimationFrame(tick);
+    }
+    resize();
+    window.addEventListener('resize', resize);
+    for (let i = 0; i < 55; i++) { const p = mkParticle(); p.y = Math.random()*H; particles.push(p); }
+    tick();
+    // Pausar cuando no es visible (performance)
+    const heroObs = new IntersectionObserver(entries => {
+      canvas.style.animationPlayState = entries[0].isIntersecting ? 'running' : 'paused';
+    });
+    heroObs.observe(canvas);
+  })();
+
+  // ── PWA Service Worker ──
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js')
+        .catch(() => {});
+    });
+  }
 </script>
 </body>
