@@ -11,11 +11,12 @@
     "presentaciones": [
       {
         "nombre": "100ml",
-        "precio": 18000
+        "precio": 18000,
+        "stock": 15
       }
     ],
     "createdAt": "2026-06-19T10:18:21.362Z",
-    "updatedAt": "2026-06-19T10:18:21.362Z"
+    "updatedAt": "2026-06-19T10:23:03.245Z"
   },
   {
     "id": "p_1779192808029",
