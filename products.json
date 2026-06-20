@@ -3,7 +3,7 @@
     "id": "p_1781864301369",
     "nombre": "AGUA MICELAR DE ROSAS",
     "categoria": "cosmetica",
-    "descripcion": "INGREDIENTES: Agua desmineralizada;rosas ;glicerina BENEFICIOS:  Viene en vidrio y tenes respuesto  Saca el maquillaje.\nHidrata ;calma rojeceses y no reseca. Apto pieles sensibles \nMODO DE USO:\nEmpapá un algodón o pad reutilizable.\nPasalo suave por cara, ojos y labios. Sin fregar.\nCambiá de algodón si se ensucia mucho.\nNo se enjuaga. Incluso lo podes usar como tónico ..",
+    "descripcion": "INGREDIENTES: Agua de rosas ;betaina de coco ;glicerina .BENEFICIOS: Limpia rostro no iirita \nHidrata ;calma rojeceses y no reseca. Apto pieles sensibles \nMODO DE USO:\nEmpapá un algodón o pad reutilizable.\nPasalo suave por cara, ojos y labios. Sin fregar.\nCambiá de algodón si se ensucia mucho.\nNo se enjuaga. Incluso lo podes usar como tónico ..",
     "precio": "consultar",
     "badge": "",
     "imagenURL": "https://res.cloudinary.com/ditz4ufas/image/upload/v1781930830/ser-natural/tymd6ekrrl1vz2v32oyu.jpg",
@@ -11,12 +11,12 @@
     "presentaciones": [
       {
         "nombre": "100ml",
-        "precio": 18000,
+        "precio": 19000,
         "stock": 15
       }
     ],
     "createdAt": "2026-06-19T10:18:21.362Z",
-    "updatedAt": "2026-06-20T04:47:11.059Z"
+    "updatedAt": "2026-06-20T04:53:32.218Z"
   },
   {
     "id": "p_1779192808029",
