@@ -1,5 +1,25 @@
 [
   {
+    "id": "p_1781932636126",
+    "nombre": "CREMA DE JOJOBA  Y MANTECA KARITE",
+    "categoria": "cosmetica",
+    "descripcion": "INGREDIENTES: Manteca de karite ,aceite de coco ;aceite de jojoba ;vitamina E.\n\nMODO DE USO: Usar de noche \nDe día solo si tenés piel seca, porque el karité puede brillar.\n\nTenerlimpia y húmeda. Lavate y sin secar del todo. La piel húmeda agarra mejor la crema.\nPoca cantidad: Calentá entre dedos 3 seg.\nPresioná, no frotes: Apoyá en mejillas, frente, mentón. Toquecitos suaves hasta que se absorba.\nZona T con menos: Si sos mixta, \nponé menos en frente/nariz.",
+    "precio": "consultar",
+    "badge": "popular",
+    "imagenURL": "https://res.cloudinary.com/ditz4ufas/image/upload/v1781932635/ser-natural/o8xrrqnyzy0jjnraj5py.png",
+    "extra": {
+      "envase-de-vidrio-y-respuesto-pet-": "ENVASE DE VIDRIO"
+    },
+    "presentaciones": [
+      {
+        "nombre": "30grs",
+        "precio": 15000
+      }
+    ],
+    "createdAt": "2026-06-20T05:17:16.113Z",
+    "updatedAt": "2026-06-20T05:17:16.113Z"
+  },
+  {
     "id": "p_1781864301369",
     "nombre": "AGUA MICELAR DE ROSAS",
     "categoria": "cosmetica",
