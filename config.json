@@ -13,12 +13,7 @@
       "label": "Bienestar"
     }
   ],
-  "etiquetas": [
-    {
-      "id": "popular",
-      "label": "Popular"
-    }
-  ],
+  "etiquetas": [],
   "camposExtra": [],
   "logoUrl": "https://i.postimg.cc/W16Cb2t6/395740464-122094653600094688-9024125943526889344-n.jpg",
   "envioGratisMin": 0
