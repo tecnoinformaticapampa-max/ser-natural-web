@@ -15,10 +15,6 @@
   ],
   "etiquetas": [
     {
-      "id": "nuevo",
-      "label": "Nuevo"
-    },
-    {
       "id": "popular",
       "label": "Popular"
     }
