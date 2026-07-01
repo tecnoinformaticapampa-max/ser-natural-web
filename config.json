@@ -22,6 +22,11 @@
   ],
   "logoUrl": "https://res.cloudinary.com/ditz4ufas/image/upload/v1782902185/ser-natural/wzrp1izrph6ylypa0l9n.jpg",
   "envioGratisMin": 180000,
-  "plantillasExtra": [],
+  "plantillasExtra": [
+    {
+      "name": "Rosa mosqueta",
+      "url": "https://res.cloudinary.com/ditz4ufas/image/upload/v1782902435/ser-natural/irjspnz524y79uz6jpb2.jpg"
+    }
+  ],
   "logoEtiquetaUrl": "https://res.cloudinary.com/ditz4ufas/image/upload/v1782902348/ser-natural/psskffxrvaihroquark1.png"
 }
