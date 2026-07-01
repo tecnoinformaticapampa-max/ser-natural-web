@@ -1,5 +1,20 @@
 [
   {
+    "id": "p_1782901883688",
+    "nombre": "ACEITE MEDICINAL DE CANNABIS",
+    "categoria": "bienestar",
+    "descripcion": "Aceite medicinal de cannabis",
+    "precio": "15000",
+    "badge": "",
+    "imagenURL": "https://res.cloudinary.com/ditz4ufas/image/upload/v1782901882/ser-natural/rkf6fkxlgodbano6kvky.jpg",
+    "extra": {
+      "consultar": "Consultar"
+    },
+    "presentaciones": [],
+    "createdAt": "2026-07-01T10:31:23.675Z",
+    "updatedAt": "2026-07-01T10:31:23.675Z"
+  },
+  {
     "id": "p_1781932636126",
     "nombre": "CREMA DE JOJOBA  Y MANTECA KARITE",
     "categoria": "cosmetica",
