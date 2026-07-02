@@ -492,6 +492,35 @@
     }
     @media(max-width:480px) { .prod-modal-body { padding:18px 18px 22px; } }
 
+    /* -- LIGHTBOX -- */
+    .lightbox-overlay { position:fixed; inset:0; background:rgba(0,0,0,.88); z-index:600; display:none; align-items:center; justify-content:center; flex-direction:column; padding:16px; }
+    .lightbox-overlay.open { display:flex; }
+    .lightbox-img-wrap { position:relative; max-width:min(700px,100%); }
+    .lightbox-img-wrap img { max-width:100%; max-height:80vh; border-radius:12px; object-fit:contain; display:block; box-shadow:0 8px 40px rgba(0,0,0,.5); }
+    .lightbox-close { position:fixed; top:16px; right:20px; background:rgba(255,255,255,.15); border:none; color:#fff; font-size:1.6rem; width:40px; height:40px; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; backdrop-filter:blur(4px); transition:background .2s; }
+    .lightbox-close:hover { background:rgba(255,255,255,.28); }
+    .lightbox-thumbs { display:flex; gap:8px; margin-top:12px; flex-wrap:wrap; justify-content:center; }
+    .lightbox-thumb { width:52px; height:52px; border-radius:8px; object-fit:cover; cursor:pointer; border:2px solid rgba(255,255,255,.25); transition:border-color .18s; opacity:.7; }
+    .lightbox-thumb.active { border-color:#fff; opacity:1; }
+    .lightbox-nav { position:absolute; top:50%; transform:translateY(-50%); background:rgba(255,255,255,.15); border:none; color:#fff; font-size:1.4rem; width:40px; height:40px; border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center; backdrop-filter:blur(4px); transition:background .2s; }
+    .lightbox-nav:hover { background:rgba(255,255,255,.28); }
+    .lightbox-prev { left:-52px; } .lightbox-next { right:-52px; }
+    @media(max-width:600px) { .lightbox-prev { left:4px; } .lightbox-next { right:4px; } }
+    .prod-img-counter { position:absolute; bottom:8px; right:8px; background:rgba(0,0,0,.5); color:#fff; font-size:.7rem; font-weight:600; padding:2px 7px; border-radius:100px; pointer-events:none; }
+
+    /* -- BUSCADOR -- */
+    .search-bar-wrap { margin-bottom:20px; display:flex; flex-direction:column; gap:10px; }
+    .search-input-wrap { position:relative; }
+    .search-input { width:100%; padding:12px 44px 12px 16px; border:1.5px solid var(--cream2); border-radius:100px; font-size:.95rem; font-family:var(--font-body); color:var(--text); background:var(--white); outline:none; transition:border-color .2s, box-shadow .2s; }
+    .search-input:focus { border-color:var(--sage); box-shadow:0 0 0 3px rgba(122,158,126,.15); }
+    .search-icon { position:absolute; right:14px; top:50%; transform:translateY(-50%); font-size:1.1rem; pointer-events:none; color:var(--text-lt); }
+    .search-clear { position:absolute; right:14px; top:50%; transform:translateY(-50%); font-size:1rem; border:none; background:none; cursor:pointer; color:var(--text-lt); display:none; padding:0; }
+    .sort-bar { display:flex; gap:6px; flex-wrap:wrap; align-items:center; }
+    .sort-label { font-size:.82rem; color:var(--text-lt); white-space:nowrap; }
+    .sort-btn { font-size:.8rem; padding:5px 14px; border-radius:100px; border:1.5px solid var(--cream2); background:var(--white); color:var(--text); cursor:pointer; font-family:var(--font-body); transition:all .18s; white-space:nowrap; }
+    .sort-btn.active { background:var(--sage-dk); border-color:var(--sage-dk); color:#fff; }
+    .search-results-count { font-size:.82rem; color:var(--text-lt); margin-top:2px; }
+
     /* -- PRESENTACIONES (variantes) -- */
     .presentaciones-wrap { margin-bottom:14px; }
     .presentaciones-label { font-size:.82rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--bark); margin-bottom:8px; }
@@ -542,6 +571,17 @@
     <a href="https://wa.me/5491139014518" target="_blank" rel="noopener" class="wa-mob">💬 Escribinos por WhatsApp</a>
   </div>
 </nav>
+
+<!-- ── LIGHTBOX ── -->
+<div class="lightbox-overlay" id="lightbox-overlay">
+  <button class="lightbox-close" id="lb-close" aria-label="Cerrar">&times;</button>
+  <div class="lightbox-img-wrap">
+    <button class="lightbox-nav lightbox-prev" id="lb-prev" aria-label="Anterior">&#8249;</button>
+    <img id="lb-main-img" src="" alt="" />
+    <button class="lightbox-nav lightbox-next" id="lb-next" aria-label="Siguiente">&#8250;</button>
+  </div>
+  <div class="lightbox-thumbs" id="lb-thumbs"></div>
+</div>
 
 <!-- PWA Install Button flotante -->
 <div class="pwa-install-tooltip" id="pwa-tooltip">&#128640; Instalar app</div>
@@ -617,8 +657,24 @@
       <h2 class="section-title">Nuestros productos</h2>
       <p class="section-sub" style="margin:10px auto 24px">Consultanos por WhatsApp para disponibilidad y precios actualizados.</p>
     </div>
-    <div class="catalog-filters fade-in" id="filter-bar">
-      <button class="filter-btn active" id="fbtn-todos"     onclick="filterCatalog('todos',this)">Todos</button>
+    <div class="search-bar-wrap">
+  <div class="search-input-wrap">
+    <input type="search" class="search-input" id="prod-search" placeholder="Buscar producto…" autocomplete="off" />
+    <span class="search-icon">&#128269;</span>
+    <button class="search-clear" id="search-clear" aria-label="Limpiar">&times;</button>
+  </div>
+  <div class="sort-bar">
+    <span class="sort-label">Ordenar:</span>
+    <button class="sort-btn active" data-sort="default">Destacados</button>
+    <button class="sort-btn" data-sort="az">A → Z</button>
+    <button class="sort-btn" data-sort="za">Z → A</button>
+    <button class="sort-btn" data-sort="asc">Menor precio</button>
+    <button class="sort-btn" data-sort="desc">Mayor precio</button>
+  </div>
+  <div class="search-results-count" id="search-count"></div>
+</div>
+<div class="catalog-filters fade-in" id="filter-bar">
+<button class="filter-btn active" id="fbtn-todos"todos"     onclick="filterCatalog('todos',this)">Todos</button>
       <button class="filter-btn"        id="fbtn-jabones"   onclick="filterCatalog('jabones',this)">Jabones artesanales</button>
       <button class="filter-btn"        id="fbtn-cosmetica" onclick="filterCatalog('cosmetica',this)">Cosmética natural</button>
       <button class="filter-btn"        id="fbtn-bienestar" onclick="filterCatalog('bienestar',this)">Bienestar</button>
@@ -932,6 +988,8 @@
   // ── STATE ──────────────────────────────────────────────────
   let allProducts   = [];
   let activeFilter  = 'todos';
+  let searchQuery   = '';
+  let activeSort    = 'default';
   let cart          = {};
   const cardQty     = {};
   const selectedPres = {}; // product id -> nombre de presentacion seleccionada
@@ -947,6 +1005,95 @@
   };
 
   // ── INIT ────────────────────────────────────────────────────
+  // ── LIGHTBOX ──────────────────────────────────────────────
+  let lbCurrentProduct = null;
+  let lbCurrentIdx     = 0;
+
+  function openLightbox(prod, startIdx) {
+    const imgs = prod.imagenes && prod.imagenes.length ? prod.imagenes : (prod.imagenURL ? [{ url: prod.imagenURL }] : []);
+    if (!imgs.length) return;
+    lbCurrentProduct = prod;
+    lbCurrentIdx     = startIdx || 0;
+    const overlay = document.getElementById('lightbox-overlay');
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    lbShowImg(lbCurrentIdx);
+  }
+
+  function lbShowImg(idx) {
+    const prod = lbCurrentProduct; if (!prod) return;
+    const imgs = prod.imagenes && prod.imagenes.length ? prod.imagenes : [{ url: prod.imagenURL }];
+    lbCurrentIdx = Math.max(0, Math.min(idx, imgs.length - 1));
+    const mainEl  = document.getElementById('lb-main-img');
+    const thumbsEl= document.getElementById('lb-thumbs');
+    if (mainEl) { mainEl.src = imgs[lbCurrentIdx].url; mainEl.alt = prod.nombre; }
+    if (thumbsEl && imgs.length > 1) {
+      thumbsEl.innerHTML = imgs.map((img, i) =>
+        '<img src="' + img.url + '" class="lightbox-thumb' + (i === lbCurrentIdx ? ' active' : '') + '" data-lbi="' + i + '" />'
+      ).join('');
+      thumbsEl.querySelectorAll('.lightbox-thumb').forEach(th => {
+        th.addEventListener('click', () => lbShowImg(Number(th.dataset.lbi)));
+      });
+    } else if (thumbsEl) thumbsEl.innerHTML = '';
+    // Mostrar/ocultar flechas
+    const prev = document.getElementById('lb-prev');
+    const next = document.getElementById('lb-next');
+    if (prev) prev.style.display = imgs.length > 1 ? 'flex' : 'none';
+    if (next) next.style.display = imgs.length > 1 ? 'flex' : 'none';
+  }
+
+  function closeLightbox() {
+    const overlay = document.getElementById('lightbox-overlay');
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+    lbCurrentProduct = null;
+  }
+
+  document.getElementById('lb-close').addEventListener('click', closeLightbox);
+  document.getElementById('lb-prev').addEventListener('click', () => lbShowImg(lbCurrentIdx - 1));
+  document.getElementById('lb-next').addEventListener('click', () => lbShowImg(lbCurrentIdx + 1));
+  document.getElementById('lightbox-overlay').addEventListener('click', function(e) {
+    if (e.target === this) closeLightbox();
+  });
+  document.addEventListener('keydown', e => {
+    if (!document.getElementById('lightbox-overlay').classList.contains('open')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') lbShowImg(lbCurrentIdx - 1);
+    if (e.key === 'ArrowRight') lbShowImg(lbCurrentIdx + 1);
+  });
+
+  // ── BUSCADOR + ORDENAMIENTO ────────────────────────────────
+  document.addEventListener('DOMContentLoaded', () => {
+    const searchEl = document.getElementById('prod-search');
+    const clearBtn = document.getElementById('search-clear');
+    if (searchEl) {
+      searchEl.addEventListener('input', function() {
+        searchQuery = this.value.trim();
+        if (clearBtn) clearBtn.style.display = searchQuery ? 'block' : 'none';
+        const icon = this.parentNode.querySelector('.search-icon');
+        if (icon) icon.style.display = searchQuery ? 'none' : 'block';
+        renderProducts();
+      });
+    }
+    if (clearBtn) {
+      clearBtn.addEventListener('click', () => {
+        searchQuery = '';
+        if (searchEl) { searchEl.value = ''; searchEl.focus(); }
+        clearBtn.style.display = 'none';
+        const icon = searchEl && searchEl.parentNode.querySelector('.search-icon');
+        if (icon) icon.style.display = 'block';
+        renderProducts();
+      });
+    }
+    document.querySelectorAll('.sort-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        activeSort = this.dataset.sort;
+        document.querySelectorAll('.sort-btn').forEach(b => b.classList.toggle('active', b === this));
+        renderProducts();
+      });
+    });
+  });
+
   async function init() {
     try { await loadConfig(); } catch(e) {}
     await Promise.all([
@@ -1003,18 +1150,60 @@
 
   function renderProducts() {
     const grid = document.getElementById('products-grid');
-    const filtered = activeFilter === 'todos'
-      ? allProducts
+
+    // 1. Filtrar por categoria
+    let filtered = activeFilter === 'todos'
+      ? allProducts.slice()
       : allProducts.filter(p => p.categoria === activeFilter);
 
+    // 2. Filtrar por busqueda
+    if (searchQuery) {
+      const q = searchQuery.toLowerCase();
+      filtered = filtered.filter(p =>
+        (p.nombre || '').toLowerCase().includes(q) ||
+        (p.descripcion || '').toLowerCase().includes(q) ||
+        (p.categoria || '').toLowerCase().includes(q)
+      );
+    }
+
+    // 3. Ordenar
+    if (activeSort === 'az') filtered.sort((a,b) => a.nombre.localeCompare(b.nombre, 'es'));
+    else if (activeSort === 'za') filtered.sort((a,b) => b.nombre.localeCompare(a.nombre, 'es'));
+    else if (activeSort === 'asc') filtered.sort((a,b) => {
+      const pa = a.precio === 'consultar' ? Infinity : Number(a.precio);
+      const pb = b.precio === 'consultar' ? Infinity : Number(b.precio);
+      return pa - pb;
+    });
+    else if (activeSort === 'desc') filtered.sort((a,b) => {
+      const pa = a.precio === 'consultar' ? -Infinity : Number(a.precio);
+      const pb = b.precio === 'consultar' ? -Infinity : Number(b.precio);
+      return pb - pa;
+    });
+
+    // Contador de resultados
+    const countEl = document.getElementById('search-count');
+    if (countEl) {
+      countEl.textContent = searchQuery
+        ? filtered.length + ' resultado' + (filtered.length !== 1 ? 's' : '') + ' para "' + searchQuery + '"'
+        : '';
+    }
+
     if (!filtered.length) {
-      grid.innerHTML = '<div class="catalog-empty"><div class="ce-icon">🌿</div><p>Pr\u00F3ximamente nuevos productos.<br>Consult\u00E1nos por WhatsApp.</p></div>';
+      grid.innerHTML = '<div class="catalog-empty"><div class="ce-icon">🌿</div><p>' +
+        (searchQuery ? 'Sin resultados para "' + searchQuery + '".<br>Probá con otro término.' :
+        'Próximamente nuevos productos.<br>Consultános por WhatsApp.') + '</p></div>';
       return;
     }
 
     grid.innerHTML = filtered.map(p => {
-      const imgEl = p.imagenURL
-        ? '<img src="' + p.imagenURL + '" alt="' + p.nombre + '" loading="lazy" />'
+      // Imagen principal: soporta imagenes[] y imagenURL legacy
+      const imgs = p.imagenes && p.imagenes.length ? p.imagenes : (p.imagenURL ? [{ url: p.imagenURL, main: true }] : []);
+      const mainImg = imgs.find(i => i.main) || imgs[0];
+      const mainUrl = mainImg ? mainImg.url : null;
+      const imgCount = imgs.length;
+      const imgEl = mainUrl
+        ? '<img src="' + mainUrl + '" alt="' + p.nombre + '" loading="lazy" />' +
+          (imgCount > 1 ? '<span class="prod-img-counter">' + imgCount + ' 📷</span>' : '')
         : '<div class="prod-img-placeholder">' + (catEmoji[p.categoria] || '📦') + '</div>';
       const bdgEl = p.badge
         ? '<span class="prod-badge-tag ' + p.badge + '">' + etqLabel(p.badge) + '</span>' : '';
@@ -1108,9 +1297,26 @@
 
     // Image
     const imgWrap = document.getElementById('pm-img-wrap');
-    imgWrap.innerHTML = p.imagenURL
-      ? '<img src="' + p.imagenURL + '" alt="' + p.nombre + '" />'
-      : '<div class="pm-emoji">' + (catEmoji[p.categoria] || '📦') + '</div>';
+    const pImgs = p.imagenes && p.imagenes.length ? p.imagenes : (p.imagenURL ? [{ url: p.imagenURL, main: true }] : []);
+    const pMainImg = pImgs.find(i => i.main) || pImgs[0];
+    if (pMainImg) {
+      imgWrap.innerHTML = '<img src="' + pMainImg.url + '" alt="' + p.nombre + '" style="cursor:' + (pImgs.length > 0 ? 'zoom-in' : 'default') + '" />';
+      // Click en imagen del modal abre lightbox
+      imgWrap.querySelector('img').addEventListener('click', () => openLightbox(p, 0));
+      // Miniaturas si hay múltiples
+      if (pImgs.length > 1) {
+        const thumbRow = '<div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap">' +
+          pImgs.map((img, i) =>
+            '<img src="' + img.url + '" data-lidx="' + i + '" style="width:44px;height:44px;object-fit:cover;border-radius:6px;cursor:pointer;border:2px solid ' + (img.main ? 'var(--sage-dk)' : 'var(--cream2)') + ';opacity:' + (img.main ? '1' : '.7') + '" />'
+          ).join('') + '</div>';
+        imgWrap.insertAdjacentHTML('beforeend', thumbRow);
+        imgWrap.querySelectorAll('[data-lidx]').forEach(th => {
+          th.addEventListener('click', () => openLightbox(p, Number(th.dataset.lidx)));
+        });
+      }
+    } else {
+      imgWrap.innerHTML = '<div class="pm-emoji">' + (catEmoji[p.categoria] || '📦') + '</div>';
+    }
 
     document.getElementById('pm-cat').textContent  = catLabel(p.categoria);
     document.getElementById('pm-name').textContent = p.nombre;

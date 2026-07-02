@@ -96,6 +96,15 @@
     .img-upload-text { font-size: .88rem; color: var(--text-lt); }
     .img-upload-text strong { color: var(--sage-dk); }
     #img-preview { display: none; width: 100%; max-height: 200px; object-fit: cover; border-radius: 10px; margin-top: 12px; }
+    .multi-img-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(90px,1fr)); gap:8px; margin-top:10px; }
+    .multi-img-item { position:relative; border-radius:10px; overflow:hidden; border:2px solid var(--cream2); aspect-ratio:1; background:var(--cream); }
+    .multi-img-item img { width:100%; height:100%; object-fit:cover; display:block; }
+    .multi-img-item.is-main { border-color:var(--sage-dk); }
+    .multi-img-item.is-main::after { content:"Principal"; position:absolute; bottom:0; left:0; right:0; background:var(--sage-dk); color:#fff; font-size:.62rem; font-weight:700; text-align:center; padding:2px 0; }
+    .multi-img-del { position:absolute; top:3px; right:3px; background:rgba(0,0,0,.55); color:#fff; border:none; border-radius:50%; width:20px; height:20px; font-size:.7rem; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+    .multi-img-set-main { position:absolute; top:3px; left:3px; background:rgba(255,255,255,.85); border:none; border-radius:50%; width:20px; height:20px; font-size:.7rem; cursor:pointer; display:flex; align-items:center; justify-content:center; title:"Principal"; }
+    .multi-img-add { border:2px dashed var(--cream2); border-radius:10px; aspect-ratio:1; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:1.6rem; color:var(--text-lt); transition:border-color .2s; background:var(--cream); }
+    .multi-img-add:hover { border-color:var(--sage); color:var(--sage-dk); }
 
     /* PRICE TOGGLE */
     .toggle-pill { padding: 6px 16px; border-radius: 100px; font-size: .82rem; font-weight: 500; cursor: pointer; border: 1.5px solid var(--cream2); background: var(--white); font-family: var(--font-body); transition: all .2s; color: var(--text-lt); }
@@ -352,15 +361,15 @@
           </div>
         </div>
         <div class="form-group full">
-          <label>Imagen del producto</label>
-          <div class="img-upload-area" id="drop-area">
-            <input type="file" id="f-img" accept="image/*" onchange="previewImage(this)" />
-            <div id="upload-icon" class="img-upload-icon">📷</div>
-            <div id="upload-text" class="img-upload-text">
-              <strong>Hacé clic o arrastrá</strong> una imagen aquí<br>
-              <span style="font-size:.85rem">JPG, PNG, WEBP — máx. 5MB</span>
+          <label>Fotos del producto</label>
+          <div id="multi-img-section">
+            <div style="font-size:.82rem;color:var(--text-lt);margin-bottom:8px">
+              Hasta 5 fotos. Tap &#9733; para marcar la principal. La primera es la principal por defecto.
             </div>
-            <img id="img-preview" alt="preview" />
+            <div class="multi-img-grid" id="multi-img-grid">
+              <div class="multi-img-add" id="multi-img-add-btn" title="Agregar foto">+</div>
+            </div>
+            <input type="file" id="f-img" accept="image/*" style="display:none" multiple />
           </div>
           <div class="progress-wrap" id="progress-wrap">
             <div class="progress-bar-bg"><div class="progress-bar-fill" id="progress-fill"></div></div>
@@ -774,6 +783,10 @@
   let sessionToken = null, sessionRole = null, sessionUser = null;
   let products = [], editingId = null, editingOldImg = null;
   let pricePill = 'consultar', badgeVal = '', selectedFile = null, fileSHA = null;
+  // Multi-imagen
+  let prodImagenes   = []; // [{ url, main }]
+  let pendingFiles   = []; // archivos a subir al guardar
+  const MAX_IMGS     = 5;
   let siteConfig = { categorias:[], etiquetas:[], camposExtra:[], logoUrl:'' }, configSHA = null;
   let galleryData = { inicio:[], proceso:[], final:[] }, galFileSHA = null;
   let activeGalleryTab = 'inicio', galSelectedFile = null;
@@ -1305,11 +1318,16 @@
     const btn = document.getElementById('btn-save');
     btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Guardando…';
     try {
-      let imagenURL = editingOldImg || '';
-      if (selectedFile) {
-        if (editingOldImg) await apiFetch(WORKER_URL + '/image', { method:'DELETE', headers:ah(), body:JSON.stringify({ url:editingOldImg }) }).catch(() => {});
-        imagenURL = await uploadToCloudinary(selectedFile);
+      // Subir imágenes pendientes a Cloudinary
+      for (const pf of pendingFiles) {
+        const url = await uploadToCloudinary(pf.file);
+        if (prodImagenes[pf.idx]) prodImagenes[pf.idx].url = url;
       }
+      pendingFiles = [];
+      // imagenURL = imagen principal (compatibilidad)
+      const mainImg = prodImagenes.find(i => i.main) || prodImagenes[0];
+      const imagenURL = mainImg ? mainImg.url : (editingOldImg || '');
+      const imagenes  = prodImagenes.filter(i => i.url).map(i => ({ url: i.url, main: !!i.main }));
       // Collect extra fields
       const extra = {};
       (siteConfig.camposExtra || []).forEach(c => {
@@ -1329,11 +1347,11 @@
       let updated;
       if (editingId) {
         updated = products.map(p => p.id === editingId
-          ? { ...p, nombre, categoria:cat, descripcion:desc, precio, badge:badgeVal, imagenURL, extra, presentaciones, updatedAt:now }
+          ? { ...p, nombre, categoria:cat, descripcion:desc, precio, badge:badgeVal, imagenURL, imagenes, extra, presentaciones, updatedAt:now }
           : p);
         showToast('✅ Producto actualizado');
       } else {
-        updated = [{ id:'p_'+Date.now(), nombre, categoria:cat, descripcion:desc, precio, badge:badgeVal, imagenURL, extra, presentaciones, createdAt:now, updatedAt:now }, ...products];
+        updated = [{ id:'p_'+Date.now(), nombre, categoria:cat, descripcion:desc, precio, badge:badgeVal, imagenURL, imagenes, extra, presentaciones, createdAt:now, updatedAt:now }, ...products];
         showToast('✅ Producto agregado');
       }
       await saveToWorker(updated); renderList(); updateStats(); resetForm();
@@ -1345,7 +1363,15 @@
     if (!confirm('¿Eliminar este producto?')) return;
     const prod = products.find(p => p.id === id);
     try {
-      if (prod && prod.imagenURL) await apiFetch(WORKER_URL + '/image', { method:'DELETE', headers:ah(), body:JSON.stringify({ url:prod.imagenURL }) }).catch(() => {});
+      // Borrar todas las imágenes del producto de Cloudinary
+      if (prod) {
+        const urls = prod.imagenes && prod.imagenes.length
+          ? prod.imagenes.map(i => i.url || i).filter(Boolean)
+          : (prod.imagenURL ? [prod.imagenURL] : []);
+        for (const url of urls) {
+          await apiFetch(WORKER_URL + '/image', { method:'DELETE', headers:ah(), body:JSON.stringify({ url }) }).catch(() => {});
+        }
+      }
       await saveToWorker(products.filter(p => p.id !== id));
       renderList(); updateStats(); showToast('🗑 Producto eliminado');
     } catch(e) { showToast('Error: ' + e.message, true); }
@@ -1373,12 +1399,20 @@
       stock:  pr.stock  !== undefined ? String(pr.stock)  : ''
     }));
     renderPresList();
-    if (p.imagenURL) {
-      const prev = document.getElementById('img-preview');
-      prev.src = p.imagenURL; prev.style.display = 'block';
-      document.getElementById('upload-icon').style.display = 'none';
-      document.getElementById('upload-text').style.display = 'none';
+    // Restaurar imágenes
+    prodImagenes = [];
+    if (p.imagenes && p.imagenes.length) {
+      prodImagenes = p.imagenes.map(img => (typeof img === 'string'
+        ? { url: img, main: img === (p.imagenURL || p.imagenes[0]) }
+        : { url: img.url, main: !!img.main }
+      ));
+      if (!prodImagenes.some(i => i.main)) prodImagenes[0].main = true;
+    } else if (p.imagenURL) {
+      // Compatibilidad con productos de una sola foto
+      prodImagenes = [{ url: p.imagenURL, main: true }];
     }
+    pendingFiles = [];
+    renderMultiImgGrid();
     document.getElementById('form-title').textContent   = '✏️ Editando: ' + p.nombre;
     document.getElementById('btn-save').textContent     = 'Actualizar producto';
     document.getElementById('btn-cancel').style.display = 'inline-block';
@@ -1398,7 +1432,8 @@
     el.innerHTML = products.map(p => {
       const catL  = ((siteConfig.categorias || []).find(c => c.id === p.categoria) || {}).label || p.categoria;
       const etqL  = ((siteConfig.etiquetas  || []).find(e => e.id === p.badge)     || {}).label;
-      const imgEl = p.imagenURL ? '<div class="prod-row-img"><img src="' + p.imagenURL + '" alt="' + p.nombre + '" /></div>' : '<div class="prod-row-img">📦</div>';
+      const mainUrl = (p.imagenes && p.imagenes.find(i => i.main || i === p.imagenes[0]))?.url || p.imagenURL;
+      const imgEl = mainUrl ? '<div class="prod-row-img"><img src="' + mainUrl + '" alt="' + p.nombre + '" /></div>' : '<div class="prod-row-img">📦</div>';
       const bdg   = etqL ? '<span class="row-badge rb-' + p.badge + '">' + etqL + '</span>' : '—';
       const pr    = p.precio === 'consultar' ? '$ Consultar' : '$ ' + p.precio;
       return '<div class="prod-row" data-id="' + p.id + '">' + imgEl +
@@ -1760,6 +1795,7 @@
     document.getElementById('upload-text').style.display = 'block';
     const fi = document.getElementById('f-img'); if (fi) fi.value = '';
     currentPres = []; renderPresList();
+    prodImagenes = []; pendingFiles = []; renderMultiImgGrid();
     document.getElementById('form-title').textContent   = '➕ Agregar producto';
     document.getElementById('btn-save').textContent     = 'Guardar producto';
     document.getElementById('btn-cancel').style.display = 'none';
@@ -1774,24 +1810,75 @@
     toastTimer = setTimeout(() => { t.className = ''; }, 3500);
   }
 
-  // ── DRAG & DROP ───────────────────────────────────────────────
+  // ── MULTI-IMAGEN ──────────────────────────────────────────────
+  function renderMultiImgGrid() {
+    const grid = document.getElementById('multi-img-grid'); if (!grid) return;
+    grid.innerHTML = '';
+    prodImagenes.forEach((img, i) => {
+      const div = document.createElement('div');
+      div.className = 'multi-img-item' + (img.main ? ' is-main' : '');
+      div.innerHTML =
+        '<img src="' + (img.preview || img.url) + '" alt="foto ' + (i+1) + '" />' +
+        '<button class="multi-img-del" data-idx="' + i + '" title="Eliminar">&#10005;</button>' +
+        (!img.main ? '<button class="multi-img-set-main" data-idx="' + i + '" title="Marcar como principal">&#9733;</button>' : '');
+      grid.appendChild(div);
+    });
+    // Botón agregar (si hay menos de MAX)
+    if (prodImagenes.length < MAX_IMGS) {
+      const add = document.createElement('div');
+      add.className = 'multi-img-add'; add.id = 'multi-img-add-btn'; add.title = 'Agregar foto';
+      add.textContent = '+';
+      add.addEventListener('click', () => document.getElementById('f-img').click());
+      grid.appendChild(add);
+    }
+    // Event delegation sobre botones del grid
+    grid.querySelectorAll('.multi-img-del').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const i = Number(this.dataset.idx);
+        const img = prodImagenes[i];
+        // Si ya tiene URL en Cloudinary, borrarla
+        if (img.url) {
+          apiFetch(WORKER_URL + '/image', { method:'DELETE', headers:ah(), body:JSON.stringify({ url:img.url }) }).catch(() => {});
+        }
+        prodImagenes.splice(i, 1);
+        // Si se eliminó la principal, el primero pasa a ser principal
+        if (img.main && prodImagenes.length) prodImagenes[0].main = true;
+        renderMultiImgGrid();
+      });
+    });
+    grid.querySelectorAll('.multi-img-set-main').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const i = Number(this.dataset.idx);
+        prodImagenes.forEach((img, j) => { img.main = (j === i); });
+        renderMultiImgGrid();
+      });
+    });
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
-    const dropArea = document.getElementById('drop-area'); if (!dropArea) return;
-    dropArea.addEventListener('dragover', e => { e.preventDefault(); dropArea.classList.add('drag'); });
-    dropArea.addEventListener('dragleave', () => dropArea.classList.remove('drag'));
-    dropArea.addEventListener('drop', e => {
-      e.preventDefault(); dropArea.classList.remove('drag');
-      const file = e.dataTransfer.files[0];
-      if (file && file.type.startsWith('image/')) {
-        selectedFile = file;
-        const r = new FileReader();
-        r.onload = ev => {
-          const p = document.getElementById('img-preview');
-          p.src = ev.target.result; p.style.display = 'block';
-          document.getElementById('upload-icon').style.display = 'none';
-          document.getElementById('upload-text').style.display = 'none';
-        };
-        r.readAsDataURL(file);
+    const fileInput = document.getElementById('f-img');
+    if (fileInput) {
+      fileInput.addEventListener('change', function() {
+        const files = Array.from(this.files).slice(0, MAX_IMGS - prodImagenes.length);
+        files.forEach(file => {
+          const reader = new FileReader();
+          reader.onload = e => {
+            const isFirst = prodImagenes.length === 0;
+            prodImagenes.push({ url: null, preview: e.target.result, file, main: isFirst });
+            pendingFiles.push({ file, idx: prodImagenes.length - 1 });
+            renderMultiImgGrid();
+          };
+          reader.readAsDataURL(file);
+        });
+        this.value = '';
+      });
+    }
+    // Conectar el botón inicial del grid
+    document.getElementById('multi-img-grid') && document.getElementById('multi-img-grid').addEventListener('click', e => {
+      if (e.target.id === 'multi-img-add-btn' || e.target.closest('#multi-img-add-btn')) {
+        document.getElementById('f-img').click();
       }
     });
   });
