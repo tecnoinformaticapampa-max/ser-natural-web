@@ -13,7 +13,12 @@
       "label": "Bienestar"
     }
   ],
-  "etiquetas": [],
+  "etiquetas": [
+    {
+      "id": "desodorante-100natural-",
+      "label": "DESODORANTE 100%NATURAL 🌿"
+    }
+  ],
   "camposExtra": [
     {
       "id": "consultar",
