@@ -17,12 +17,7 @@
       "label": "Higiene Personal"
     }
   ],
-  "etiquetas": [
-    {
-      "id": "100natural",
-      "label": "100%natural"
-    }
-  ],
+  "etiquetas": [],
   "camposExtra": [],
   "logoUrl": "https://res.cloudinary.com/ditz4ufas/image/upload/v1782902185/ser-natural/wzrp1izrph6ylypa0l9n.jpg",
   "envioGratisMin": 180000,
