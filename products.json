@@ -148,7 +148,7 @@
     "badge": "popular",
     "imagenURL": "https://res.cloudinary.com/ditz4ufas/image/upload/v1779192807/ser-natural/h3esrff91dppgx05socd.jpg",
     "createdAt": "2026-05-19T12:13:28.028Z",
-    "updatedAt": "2026-08-14T02:23:15.551Z",
+    "updatedAt": "2026-08-14T02:24:56.312Z",
     "extra": {},
     "presentaciones": [
       {
@@ -163,10 +163,6 @@
       },
       {
         "url": "https://res.cloudinary.com/ditz4ufas/image/upload/v1786668656/ser-natural/ijcsagnuk0b9zz6auokn.jpg",
-        "main": false
-      },
-      {
-        "url": "https://res.cloudinary.com/ditz4ufas/image/upload/v1786674194/ser-natural/flaayflpkhrjchhf0ins.heic",
         "main": false
       }
     ]
