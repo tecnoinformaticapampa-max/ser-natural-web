@@ -18,14 +18,9 @@
       }
     ],
     "extra": {},
-    "presentaciones": [
-      {
-        "nombre": "110grs",
-        "precio": 4500
-      }
-    ],
+    "presentaciones": [],
     "createdAt": "2026-08-14T00:28:54.370Z",
-    "updatedAt": "2026-08-14T00:54:34.859Z"
+    "updatedAt": "2026-08-14T00:55:45.580Z"
   },
   {
     "id": "p_1786666606495",
