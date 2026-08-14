@@ -21,10 +21,6 @@
   ],
   "camposExtra": [
     {
-      "id": "consultar",
-      "label": "Consultar"
-    },
-    {
       "id": "modo-de-uso-aplicar-una-pequena-canti",
       "label": "MODO de USO:   Aplicar una pequeña canti"
     }
