@@ -40,7 +40,7 @@
     "descripcion": "INGREDIENTES: Agua de rosas ;betaina de coco ;glicerina .BENEFICIOS: Limpia rostro no iirita \nHidrata ;calma rojeceses y no reseca. Apto pieles sensibles \nMODO DE USO:\nEmpapá un algodón o pad reutilizable.\nPasalo suave por cara, ojos y labios. Sin fregar.\nCambiá de algodón si se ensucia mucho.\nNo se enjuaga. Incluso lo podes usar como tónico ..",
     "precio": "consultar",
     "badge": "",
-    "imagenURL": "https://res.cloudinary.com/ditz4ufas/image/upload/v1781930830/ser-natural/tymd6ekrrl1vz2v32oyu.jpg",
+    "imagenURL": "https://res.cloudinary.com/ditz4ufas/image/upload/v1786665606/ser-natural/a4unbxz0miwkp2tcaqff.jpg",
     "extra": {},
     "presentaciones": [
       {
@@ -50,7 +50,13 @@
       }
     ],
     "createdAt": "2026-06-19T10:18:21.362Z",
-    "updatedAt": "2026-07-01T17:23:50.955Z"
+    "updatedAt": "2026-08-14T00:00:08.421Z",
+    "imagenes": [
+      {
+        "url": "https://res.cloudinary.com/ditz4ufas/image/upload/v1786665606/ser-natural/a4unbxz0miwkp2tcaqff.jpg",
+        "main": true
+      }
+    ]
   },
   {
     "id": "p_1779192808029",
