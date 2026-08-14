@@ -11,6 +11,10 @@
     {
       "id": "bienestar",
       "label": "Bienestar"
+    },
+    {
+      "id": "higiene-personal",
+      "label": "Higiene Personal"
     }
   ],
   "etiquetas": [
