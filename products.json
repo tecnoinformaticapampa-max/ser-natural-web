@@ -124,12 +124,26 @@
     "badge": "popular",
     "imagenURL": "https://res.cloudinary.com/ditz4ufas/image/upload/v1779192807/ser-natural/h3esrff91dppgx05socd.jpg",
     "createdAt": "2026-05-19T12:13:28.028Z",
-    "updatedAt": "2026-06-09T00:07:35.892Z",
+    "updatedAt": "2026-08-14T00:50:58.528Z",
     "extra": {},
     "presentaciones": [
       {
         "nombre": "110gramos",
         "precio": 4500
+      }
+    ],
+    "imagenes": [
+      {
+        "url": "https://res.cloudinary.com/ditz4ufas/image/upload/v1779192807/ser-natural/h3esrff91dppgx05socd.jpg",
+        "main": true
+      },
+      {
+        "url": "https://res.cloudinary.com/ditz4ufas/image/upload/v1786668656/ser-natural/ijcsagnuk0b9zz6auokn.jpg",
+        "main": false
+      },
+      {
+        "url": "https://res.cloudinary.com/ditz4ufas/image/upload/v1786668657/ser-natural/dh0dm77v8s2ze0kiqeun.heic",
+        "main": false
       }
     ]
   },
