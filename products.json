@@ -156,7 +156,7 @@
     "badge": "nuevo",
     "imagenURL": "https://res.cloudinary.com/ditz4ufas/image/upload/v1779186001/ser-natural/pbqiwx39smzslh7khm38.jpg",
     "createdAt": "2026-05-19T10:20:02.502Z",
-    "updatedAt": "2026-08-14T00:30:05.938Z",
+    "updatedAt": "2026-08-14T00:51:38.123Z",
     "extra": {},
     "presentaciones": [
       {
@@ -171,10 +171,6 @@
       },
       {
         "url": "https://res.cloudinary.com/ditz4ufas/image/upload/v1786667402/ser-natural/r1zvax8ifwc2ksyrtkcw.jpg",
-        "main": false
-      },
-      {
-        "url": "https://res.cloudinary.com/ditz4ufas/image/upload/v1786667404/ser-natural/orjvsy8fp8bcdyumngvt.jpg",
         "main": false
       },
       {
