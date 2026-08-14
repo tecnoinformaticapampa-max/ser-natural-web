@@ -17,7 +17,12 @@
       "label": "Higiene Personal"
     }
   ],
-  "etiquetas": [],
+  "etiquetas": [
+    {
+      "id": "rosa-mosqueta-",
+      "label": "ROSA MOSQUETA 💯"
+    }
+  ],
   "camposExtra": [],
   "logoUrl": "https://res.cloudinary.com/ditz4ufas/image/upload/v1782902185/ser-natural/wzrp1izrph6ylypa0l9n.jpg",
   "envioGratisMin": 180000,
