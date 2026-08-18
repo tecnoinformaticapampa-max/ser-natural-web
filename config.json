@@ -18,7 +18,12 @@
     }
   ],
   "etiquetas": [],
-  "camposExtra": [],
+  "camposExtra": [
+    {
+      "id": "modo-de-uso",
+      "label": "MODO DE USO"
+    }
+  ],
   "logoUrl": "https://res.cloudinary.com/ditz4ufas/image/upload/v1782902185/ser-natural/wzrp1izrph6ylypa0l9n.jpg",
   "envioGratisMin": 180000,
   "plantillasExtra": [
