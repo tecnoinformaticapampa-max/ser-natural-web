@@ -11,12 +11,20 @@
       {
         "url": "https://res.cloudinary.com/ditz4ufas/image/upload/v1787020902/ser-natural/s3amdx7rnauwcs2avey7.jpg",
         "main": true
+      },
+      {
+        "url": "https://res.cloudinary.com/ditz4ufas/image/upload/v1787022335/ser-natural/wxt0yw4binapit9g88ve.jpg",
+        "main": false
+      },
+      {
+        "url": "https://res.cloudinary.com/ditz4ufas/image/upload/v1787022336/ser-natural/jdjtx0w4dadvewiradaw.jpg",
+        "main": false
       }
     ],
     "extra": {},
     "presentaciones": [],
     "createdAt": "2026-08-18T02:41:44.046Z",
-    "updatedAt": "2026-08-18T02:41:44.046Z"
+    "updatedAt": "2026-08-18T03:05:36.978Z"
   },
   {
     "id": "p_1786678572897",
