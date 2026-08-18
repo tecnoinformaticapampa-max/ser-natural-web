@@ -1,5 +1,24 @@
 [
   {
+    "id": "p_1787039911998",
+    "nombre": "ACEITE MEDICINAL DE CANNABIS",
+    "categoria": "bienestar",
+    "descripcion": "Modo de uso general 🌿\n\nVía sublingual - La más usada \n  Cómo: 1 a 3 gotas debajo de la lengua\n Esperar: 60 segundos antes de tragar\n Cuándo: 1 a 3veces por día, o cada 12 hs\n   Para: el  Dolor, ansiedad, insomnio, inflamación\n\nEn comida o bebida\n Cómo: Mezclar las gotas en té, jugo o sobre la comida\n   Nota: Tarda más en hacer efecto, 45-90 min, pero dura más tiempo.\n \n  USO TÓPICO \n   Mezclar las  gotas con tu pomada o aceite base y aplicar en zona de dolor/músculos\n   Para  Dolores localizados \nRegla de oro para empezar: Empezar bajo e ir subiendo.\n\n1. *Día 1-3*: 1 gota sublingual a la noche\n2. *Si va bien*: Subir a 1 gota mañana y 1 noche\nAjustar*: Ir subiendo de a 1 gota cada 3 días hasta encontrar tu dosis\n\n*Importante: No mezclar* con alcohol ni con otros sedantes sin consultar\nConducir*: Esperar a ver cómo te pega\nEmbarazo, lactancia, niños*: Consultar siempre al médico\n-Medicamentos:Si tomás anticoagulantes, ansiolíticos o para la presión, consultá antes ; con su medico.",
+    "precio": "consultar",
+    "badge": "",
+    "imagenURL": "https://res.cloudinary.com/ditz4ufas/image/upload/v1787039911/ser-natural/j5vzhe7mgb2lutlaatno.jpg",
+    "imagenes": [
+      {
+        "url": "https://res.cloudinary.com/ditz4ufas/image/upload/v1787039911/ser-natural/j5vzhe7mgb2lutlaatno.jpg",
+        "main": true
+      }
+    ],
+    "extra": {},
+    "presentaciones": [],
+    "createdAt": "2026-08-18T07:58:31.986Z",
+    "updatedAt": "2026-08-18T07:58:31.986Z"
+  },
+  {
     "id": "p_1787020904058",
     "nombre": "POMADA ANALGÉSICA DE CANNABIS",
     "categoria": "bienestar",
