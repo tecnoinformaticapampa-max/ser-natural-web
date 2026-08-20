@@ -178,7 +178,7 @@
     "extra": {},
     "presentaciones": [
       {
-        "nombre": "70ml",
+        "nombre": "70ml y 100ml",
         "precio": 15000,
         "stock": 15
       },
@@ -188,7 +188,7 @@
       }
     ],
     "createdAt": "2026-08-14T00:16:46.495Z",
-    "updatedAt": "2026-08-14T00:16:46.495Z"
+    "updatedAt": "2026-08-20T14:59:00.401Z"
   },
   {
     "id": "p_1782901883688",
