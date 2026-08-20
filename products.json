@@ -82,7 +82,7 @@
     "nombre": "CREMA DE ROSA MOSQUETA DIA Y NOCHE",
     "categoria": "cosmetica",
     "descripcion": "CREMA DE ROSA MOSQUETA DÍA. Crema facial liviana de día con aceite de rosa mosqueta. Hidratación rápida.\nBENEFICIOS:\nHidrata, ilumina y protege. Antioxidante. Unifica el tono.  Piel hidrante y fresca todo el día \n\n POMADA  NUTRITIVA NOCHE -  \nPomada de noche con aceite de rosa mosqueta primera prensada en frío;Aceite de jojoba  y cera de abejas. Reparación intensiva.          Para un mejor resultado usar todas las noches y a partir del 3°mes veras hermosos resultados tu piel mas clara y reluciente.  \n\nBENEFICIOS:\nRegenera mientras dormís. Atenúa manchas, líneas de expresión y cicatrices. Nutre en profundidad y sella la humedad. Despiertas con la piel más firme y elástica.\n\nUSO:.Crema de Día. \n Noche la pomada sobre la piel luego de la limpieza con agua micelar.;aplicar  en pequeñas cantidades hasta su total absorcion según tu preferencia.",
-    "precio": "consultar",
+    "precio": "19.800",
     "badge": "",
     "imagenURL": "https://res.cloudinary.com/ditz4ufas/image/upload/v1786676054/ser-natural/lyntjpfwywyavtgisnmu.jpg",
     "imagenes": [
@@ -100,9 +100,14 @@
       }
     ],
     "extra": {},
-    "presentaciones": [],
+    "presentaciones": [
+      {
+        "nombre": "5 grs 30grs",
+        "precio": 0
+      }
+    ],
     "createdAt": "2026-08-14T02:54:19.119Z",
-    "updatedAt": "2026-08-14T02:54:19.119Z"
+    "updatedAt": "2026-08-20T14:55:43.195Z"
   },
   {
     "id": "p_1786673706744",
