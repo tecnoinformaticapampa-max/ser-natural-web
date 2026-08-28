@@ -1833,20 +1833,6 @@
   }
 
   // ── FORM HELPERS ─────────────────────────────────────────────
-  window.previewImage = (input) => {
-    const file = input.files[0]; if (!file) return;
-    if (file.size > 5*1024*1024) { showToast('Máx 5MB', true); input.value = ''; return; }
-    selectedFile = file;
-    const r = new FileReader();
-    r.onload = e => {
-      const p = document.getElementById('img-preview');
-      p.src = e.target.result; p.style.display = 'block';
-      document.getElementById('upload-icon').style.display = 'none';
-      document.getElementById('upload-text').style.display = 'none';
-    };
-    r.readAsDataURL(file);
-  };
-
   window.setPricePill = (val) => {
     pricePill = val;
     document.getElementById('pill-consultar').classList.toggle('active', val === 'consultar');
@@ -1869,8 +1855,6 @@
     setPricePill('consultar'); setBadge('');
     const prev = document.getElementById('img-preview');
     if (prev) { prev.src = ''; prev.style.display = 'none'; }
-    document.getElementById('upload-icon').style.display = 'block';
-    document.getElementById('upload-text').style.display = 'block';
     const fi = document.getElementById('f-img'); if (fi) fi.value = '';
     currentPres = []; renderPresList();
     prodImagenes = []; pendingFiles = []; pendingDeletes = []; renderMultiImgGrid();
