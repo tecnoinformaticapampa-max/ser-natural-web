@@ -1,6 +1,6 @@
-// SerNatural Service Worker v1
-const CACHE    = 'sernatural-v1';
-const PRECACHE = ['/', '/index.html', '/manifest.json'];
+// SerNatural Service Worker v2 — network-first para HTML
+const CACHE    = 'sernatural-v2';
+const PRECACHE = ['/manifest.json'];
 
 self.addEventListener('install', e => {
   e.waitUntil(
@@ -21,26 +21,46 @@ self.addEventListener('activate', e => {
 self.addEventListener('fetch', e => {
   const url = new URL(e.request.url);
 
-  // No cachear llamadas al Worker API ni a Cloudinary
+  // No cachear llamadas al Worker API, Cloudinary o GitHub
   if (url.hostname.includes('workers.dev') ||
       url.hostname.includes('cloudinary.com') ||
       url.hostname.includes('api.github.com')) {
     return;
   }
 
-  // Cache-first para assets estáticos
-  if (e.request.method === 'GET') {
+  if (e.request.method !== 'GET') return;
+
+  const isHTML = e.request.mode === 'navigate' ||
+                 e.request.destination === 'document' ||
+                 url.pathname === '/' ||
+                 url.pathname.endsWith('.html');
+
+  if (isHTML) {
+    // Network-first: siempre intenta traer la version mas nueva.
+    // Solo usa cache si el usuario esta sin conexion.
     e.respondWith(
-      caches.match(e.request).then(cached => {
-        if (cached) return cached;
-        return fetch(e.request).then(res => {
-          if (res.ok && e.request.url.startsWith(self.location.origin)) {
-            const clone = res.clone();
-            caches.open(CACHE).then(c => c.put(e.request, clone));
-          }
+      fetch(e.request, { cache: 'no-store' })
+        .then(res => {
+          const clone = res.clone();
+          caches.open(CACHE).then(c => c.put(e.request, clone));
           return res;
-        }).catch(() => caches.match('/index.html'));
-      })
+        })
+        .catch(() => caches.match(e.request).then(cached => cached || caches.match('/index.html')))
     );
+    return;
   }
+
+  // Cache-first para el resto de assets estaticos (no HTML)
+  e.respondWith(
+    caches.match(e.request).then(cached => {
+      if (cached) return cached;
+      return fetch(e.request).then(res => {
+        if (res.ok && e.request.url.startsWith(self.location.origin)) {
+          const clone = res.clone();
+          caches.open(CACHE).then(c => c.put(e.request, clone));
+        }
+        return res;
+      });
+    })
+  );
 });

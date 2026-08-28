@@ -1156,14 +1156,10 @@
       ? allProducts.slice()
       : allProducts.filter(p => p.categoria === activeFilter);
 
-    // 2. Filtrar por busqueda
+    // 2. Filtrar por busqueda — solo en el titulo del producto
     if (searchQuery) {
       const q = searchQuery.toLowerCase();
-      filtered = filtered.filter(p =>
-        (p.nombre || '').toLowerCase().includes(q) ||
-        (p.descripcion || '').toLowerCase().includes(q) ||
-        (p.categoria || '').toLowerCase().includes(q)
-      );
+      filtered = filtered.filter(p => (p.nombre || '').toLowerCase().includes(q));
     }
 
     // 3. Ordenar

@@ -786,7 +786,9 @@
   // Multi-imagen
   let prodImagenes   = []; // [{ url, main }]
   let pendingFiles   = []; // archivos a subir al guardar
+  let pendingDeletes = []; // URLs de Cloudinary a borrar recién al guardar exitosamente
   const MAX_IMGS     = 5;
+  const MAX_FILE_MB  = 8;
   let siteConfig = { categorias:[], etiquetas:[], camposExtra:[], logoUrl:'' }, configSHA = null;
   let galleryData = { inicio:[], proceso:[], final:[] }, galFileSHA = null;
   let activeGalleryTab = 'inicio', galSelectedFile = null;
@@ -1137,11 +1139,14 @@
     const btn = document.getElementById('logo-btn-save');
     btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Guardando…';
     try {
-      if (siteConfig.logoUrl) {
-        await apiFetch(WORKER_URL + '/image', { method:'DELETE', headers:ah(), body:JSON.stringify({ url:siteConfig.logoUrl }) }).catch(() => {});
-      }
-      siteConfig.logoUrl = await uploadToCloudinary(logoSelectedFile);
+      const oldLogoUrl = siteConfig.logoUrl;
+      const toSend = await compressImage(logoSelectedFile);
+      siteConfig.logoUrl = await uploadToCloudinary(toSend);
       await saveConfig();
+      // Recién ahora que el nuevo logo se subió y guardó con éxito, borramos el viejo
+      if (oldLogoUrl && oldLogoUrl !== siteConfig.logoUrl) {
+        apiFetch(WORKER_URL + '/image', { method:'DELETE', headers:ah(), body:JSON.stringify({ url:oldLogoUrl }) }).catch(() => {});
+      }
       renderLogoPreview();
       showToast('✅ Logo actualizado');
     } catch(e) { showToast('Error: ' + e.message, true); }
@@ -1318,12 +1323,38 @@
     const btn = document.getElementById('btn-save');
     btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Guardando…';
     try {
-      // Subir imágenes pendientes a Cloudinary
-      for (const pf of pendingFiles) {
-        const url = await uploadToCloudinary(pf.file);
-        if (prodImagenes[pf.idx]) prodImagenes[pf.idx].url = url;
+      // Subir imágenes pendientes a Cloudinary — EN PARALELO, con compresión previa.
+      // Si alguna falla, se corta todo el guardado: nunca se persiste un producto
+      // con fotos a medio subir (evita las "imágenes rotas" en la web pública).
+      if (pendingFiles.length) {
+        btn.innerHTML = '<span class="spinner"></span>Subiendo ' + pendingFiles.length + ' foto' + (pendingFiles.length > 1 ? 's' : '') + '…';
+        const results = await Promise.allSettled(
+          pendingFiles.map(async pf => {
+            const toSend = await compressImage(pf.file);
+            const url = await uploadToCloudinary(toSend, true);
+            return { uid: pf.uid, url };
+          })
+        );
+        const failed = [];
+        results.forEach((r, i) => {
+          if (r.status === 'fulfilled') {
+            const target = prodImagenes.find(pi => pi._uid === r.value.uid);
+            if (target) target.url = r.value.url;
+          } else {
+            failed.push(pendingFiles[i]);
+          }
+        });
+        if (failed.length) {
+          // Dejamos solo las que fallaron en pendingFiles para poder reintentar
+          pendingFiles = failed;
+          throw new Error(
+            failed.length + ' foto' + (failed.length > 1 ? 's no se pudieron subir' : ' no se pudo subir') +
+            '. Revisá tu conexión y volvé a intentar — el producto todavía no se guardó.'
+          );
+        }
+        pendingFiles = [];
       }
-      pendingFiles = [];
+      btn.innerHTML = '<span class="spinner"></span>Guardando…';
       // imagenURL = imagen principal (compatibilidad)
       const mainImg = prodImagenes.find(i => i.main) || prodImagenes[0];
       const imagenURL = mainImg ? mainImg.url : (editingOldImg || '');
@@ -1354,7 +1385,16 @@
         updated = [{ id:'p_'+Date.now(), nombre, categoria:cat, descripcion:desc, precio, badge:badgeVal, imagenURL, imagenes, extra, presentaciones, createdAt:now, updatedAt:now }, ...products];
         showToast('✅ Producto agregado');
       }
-      await saveToWorker(updated); renderList(); updateStats(); resetForm();
+      await saveToWorker(updated);
+      // Recién ahora que el producto se guardó con éxito, borramos de Cloudinary
+      // las fotos que el usuario quitó del grid durante esta edición.
+      if (pendingDeletes.length) {
+        pendingDeletes.forEach(url => {
+          apiFetch(WORKER_URL + '/image', { method:'DELETE', headers:ah(), body:JSON.stringify({ url }) }).catch(() => {});
+        });
+        pendingDeletes = [];
+      }
+      renderList(); updateStats(); resetForm();
     } catch(e) { showToast('Error: ' + e.message, true); }
     finally { btn.disabled = false; btn.innerHTML = editingId ? 'Actualizar producto' : 'Guardar producto'; }
   };
@@ -1411,7 +1451,9 @@
       // Compatibilidad con productos de una sola foto
       prodImagenes = [{ url: p.imagenURL, main: true }];
     }
-    pendingFiles = [];
+    prodImagenes.forEach((img, i) => { img._uid = img._uid || ('img_existing_' + i); });
+    pendingFiles   = [];
+    pendingDeletes = [];
     renderMultiImgGrid();
     document.getElementById('form-title').textContent   = '✏️ Editando: ' + p.nombre;
     document.getElementById('btn-save').textContent     = 'Actualizar producto';
@@ -1463,8 +1505,42 @@
     });
   }
 
+  // ── COMPRESIÓN DE IMAGEN (reduce fallos en conexiones débiles) ──
+  function compressImage(file, maxSide, quality) {
+    maxSide = maxSide || 1600; quality = quality || 0.82;
+    return new Promise((resolve) => {
+      // Si no es imagen o es muy chica, no tocar
+      if (!file.type.startsWith('image/') || file.size < 350000) { resolve(file); return; }
+      const img = new Image();
+      const reader = new FileReader();
+      reader.onload = e => {
+        img.onload = () => {
+          let w = img.width, h = img.height;
+          if (w > maxSide || h > maxSide) {
+            if (w > h) { h = Math.round(h * maxSide / w); w = maxSide; }
+            else       { w = Math.round(w * maxSide / h); h = maxSide; }
+          }
+          const canvas = document.createElement('canvas');
+          canvas.width = w; canvas.height = h;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, w, h);
+          canvas.toBlob(blob => {
+            if (!blob) { resolve(file); return; }
+            const compressed = new File([blob], file.name.replace(/\.[^.]+$/, '.jpg'), { type: 'image/jpeg' });
+            // Solo usar la versión comprimida si realmente pesa menos
+            resolve(compressed.size < file.size ? compressed : file);
+          }, 'image/jpeg', quality);
+        };
+        img.onerror = () => resolve(file); // si falla la compresión, subir el original
+        img.src = e.target.result;
+      };
+      reader.onerror = () => resolve(file);
+      reader.readAsDataURL(file);
+    });
+  }
+
   // ── CLOUDINARY ───────────────────────────────────────────────
-  function uploadToCloudinary(file) {
+  function uploadToCloudinary(file, silent) {
     return new Promise((resolve, reject) => {
       const fd = new FormData();
       fd.append('file', file);
@@ -1472,9 +1548,10 @@
       fd.append('folder', 'ser-natural');
       const xhr = new XMLHttpRequest();
       xhr.open('POST', 'https://api.cloudinary.com/v1_1/' + CLOUDINARY_CLOUD + '/image/upload');
-      const wrap = document.getElementById('progress-wrap');
-      const fill = document.getElementById('progress-fill');
-      const lbl  = document.getElementById('progress-label');
+      xhr.timeout = 45000; // 45s — evita que quede colgado en conexiones débiles
+      const wrap = silent ? null : document.getElementById('progress-wrap');
+      const fill = silent ? null : document.getElementById('progress-fill');
+      const lbl  = silent ? null : document.getElementById('progress-label');
       if (wrap) wrap.style.display = 'block';
       xhr.upload.onprogress = e => {
         if (e.lengthComputable && fill && lbl) {
@@ -1487,7 +1564,8 @@
         if (xhr.status === 200) resolve(JSON.parse(xhr.responseText).secure_url);
         else reject(new Error('Error Cloudinary ' + xhr.status));
       };
-      xhr.onerror = () => { if (wrap) wrap.style.display = 'none'; reject(new Error('Error de red')); };
+      xhr.onerror   = () => { if (wrap) wrap.style.display = 'none'; reject(new Error('Error de red')); };
+      xhr.ontimeout = () => { if (wrap) wrap.style.display = 'none'; reject(new Error('Tiempo de espera agotado — conexión lenta')); };
       xhr.send(fd);
     });
   }
@@ -1553,7 +1631,7 @@
     const btn = document.getElementById('gal-btn-save');
     btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Guardando…';
     try {
-      const url = await uploadToCloudinary(galSelectedFile);
+      const url = await uploadToCloudinary(await compressImage(galSelectedFile));
       galleryData[activeGalleryTab].push({ url, caption, addedAt: new Date().toISOString() });
       await saveGalleryWorker(); renderGalleryAdmin(activeGalleryTab); galResetForm();
       showToast('✅ Foto agregada');
@@ -1643,7 +1721,7 @@
     btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Guardando…';
     try {
       let fotoUrl = '';
-      if (revSelectedFile) fotoUrl = await uploadToCloudinary(revSelectedFile);
+      if (revSelectedFile) fotoUrl = await uploadToCloudinary(await compressImage(revSelectedFile));
       reviewsData.opiniones.push({ nombre, texto, stars: parseInt(stars), loc, fotoUrl, addedAt: new Date().toISOString() });
       await saveReviews(); renderOpiniones(); revResetForm(); showToast('✅ Opinión guardada');
     } catch(e) { showToast('Error: ' + e.message, true); }
@@ -1709,7 +1787,7 @@
     const btn = document.getElementById('cli-btn-save');
     btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Guardando…';
     try {
-      const url = await uploadToCloudinary(cliSelectedFile);
+      const url = await uploadToCloudinary(await compressImage(cliSelectedFile));
       reviewsData.clientes.push({ url, nombre, addedAt: new Date().toISOString() });
       await saveReviews(); renderClientes(); cliResetForm(); showToast('✅ Foto guardada');
     } catch(e) { showToast('Error: ' + e.message, true); }
@@ -1795,7 +1873,7 @@
     document.getElementById('upload-text').style.display = 'block';
     const fi = document.getElementById('f-img'); if (fi) fi.value = '';
     currentPres = []; renderPresList();
-    prodImagenes = []; pendingFiles = []; renderMultiImgGrid();
+    prodImagenes = []; pendingFiles = []; pendingDeletes = []; renderMultiImgGrid();
     document.getElementById('form-title').textContent   = '➕ Agregar producto';
     document.getElementById('btn-save').textContent     = 'Guardar producto';
     document.getElementById('btn-cancel').style.display = 'none';
@@ -1837,10 +1915,11 @@
         e.stopPropagation();
         const i = Number(this.dataset.idx);
         const img = prodImagenes[i];
-        // Si ya tiene URL en Cloudinary, borrarla
-        if (img.url) {
-          apiFetch(WORKER_URL + '/image', { method:'DELETE', headers:ah(), body:JSON.stringify({ url:img.url }) }).catch(() => {});
-        }
+        // Si ya tenía URL en Cloudinary, se borra recién cuando se GUARDE el producto
+        // (no ahora) — así cancelar la edición no deja referencias rotas.
+        if (img.url) pendingDeletes.push(img.url);
+        // Si la foto todavía no se había subido, sacarla también de pendingFiles
+        pendingFiles = pendingFiles.filter(pf => pf.uid !== img._uid);
         prodImagenes.splice(i, 1);
         // Si se eliminó la principal, el primero pasa a ser principal
         if (img.main && prodImagenes.length) prodImagenes[0].main = true;
@@ -1863,11 +1942,18 @@
       fileInput.addEventListener('change', function() {
         const files = Array.from(this.files).slice(0, MAX_IMGS - prodImagenes.length);
         files.forEach(file => {
+          if (!file.type.startsWith('image/')) {
+            showToast('"' + file.name + '" no es una imagen válida.', true); return;
+          }
+          if (file.size > MAX_FILE_MB * 1024 * 1024) {
+            showToast('"' + file.name + '" pesa más de ' + MAX_FILE_MB + 'MB. Elegí una foto más liviana.', true); return;
+          }
           const reader = new FileReader();
           reader.onload = e => {
             const isFirst = prodImagenes.length === 0;
-            prodImagenes.push({ url: null, preview: e.target.result, file, main: isFirst });
-            pendingFiles.push({ file, idx: prodImagenes.length - 1 });
+            const uid = 'img_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8);
+            prodImagenes.push({ _uid: uid, url: null, preview: e.target.result, file, main: isFirst });
+            pendingFiles.push({ file, uid });
             renderMultiImgGrid();
           };
           reader.readAsDataURL(file);
@@ -2101,9 +2187,12 @@
     const upDiv = document.getElementById('lb-tpl-uploading');
     if (upDiv) upDiv.style.display = 'block';
     try {
-      const url = await uploadToCloudinary(fileEl.files[0]);
+      const toSend = await compressImage(fileEl.files[0], 2000, 0.88);
+      const url = await uploadToCloudinary(toSend);
       if (!siteConfig.plantillasExtra) siteConfig.plantillasExtra = [];
+      let oldTplUrl = null;
       if (lbReplaceIdx !== null) {
+        oldTplUrl = siteConfig.plantillasExtra[lbReplaceIdx] ? siteConfig.plantillasExtra[lbReplaceIdx].url : null;
         siteConfig.plantillasExtra[lbReplaceIdx] = { name, url };
         showToast('✅ Plantilla reemplazada');
       } else {
@@ -2112,6 +2201,10 @@
         showToast('✅ Plantilla agregada');
       }
       await saveConfig();
+      // Recién ahora borramos la plantilla anterior de Cloudinary (si hubo reemplazo)
+      if (oldTplUrl && oldTplUrl !== url) {
+        apiFetch(WORKER_URL + '/image', { method:'DELETE', headers:ah(), body:JSON.stringify({ url:oldTplUrl }) }).catch(() => {});
+      }
       lbReplaceIdx = null;
       document.getElementById('lb-tpl-modal').style.display = 'none';
       lbRenderThumbs();
@@ -2215,10 +2308,14 @@
   };
 
   window.lbClearCustomLogo = async function() {
+    const urlToDelete = siteConfig.logoEtiquetaUrl;
     lbState.customLogoDataUrl = null;
     lbState.logoSrc = 'site';
     siteConfig.logoEtiquetaUrl = '';
     try { await saveConfig(); } catch(e) {}
+    if (urlToDelete) {
+      apiFetch(WORKER_URL + '/image', { method:'DELETE', headers:ah(), body:JSON.stringify({ url:urlToDelete }) }).catch(() => {});
+    }
     const fi = document.getElementById('lb-logo-file'); if (fi) fi.value = '';
     const ct = document.getElementById('lb-logo-custom-thumb'); if (ct) { ct.src = ''; ct.style.display = 'none'; }
     const ce = document.getElementById('lb-logo-custom-empty'); if (ce) ce.style.display = 'block';
@@ -2244,13 +2341,19 @@
         if (uploading) uploading.style.display = 'block';
         if (btnWrap)   btnWrap.style.display   = 'none';
         try {
-          const url = await uploadToCloudinary(file);
+          const oldLogoEtiqueta = siteConfig.logoEtiquetaUrl;
+          const toSend = await compressImage(file);
+          const url = await uploadToCloudinary(toSend);
           // Guardar en config y en memoria
           lbState.customLogoDataUrl = url;
           lbState.logoSrc = 'custom';
           delete lbImgCache[url];
           siteConfig.logoEtiquetaUrl = url;
           await saveConfig();
+          // Recién ahora borramos el logo alternativo anterior de Cloudinary
+          if (oldLogoEtiqueta && oldLogoEtiqueta !== url) {
+            apiFetch(WORKER_URL + '/image', { method:'DELETE', headers:ah(), body:JSON.stringify({ url:oldLogoEtiqueta }) }).catch(() => {});
+          }
           // Mostrar thumbnail del logo alternativo
           const ct  = document.getElementById('lb-logo-custom-thumb');
           const ce  = document.getElementById('lb-logo-custom-empty');
