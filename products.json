@@ -52,11 +52,11 @@
     "descripcion": "Dale! Acá tenés solo *Descripción + Beneficios* de la Crema de Caléndula, bien cortito para catálogo 💛\n\n---\n\n*CREMA DE CALÉNDULA*\n\nCrema reparadora con extracto de caléndula y aceite de almendras. Calma, cicatriza hidrata y regenera pieles sensibles.\n\nBENEFICIOS:\nCalma irritaciones y rojeces. Regenera y cicatriza. Hidrata en profundidad. Antiinflamatoria natural. Ideal para piel sensible, atópica, rosácea.",
     "precio": "consultar",
     "badge": "",
-    "imagenURL": "https://res.cloudinary.com/ditz4ufas/image/upload/v1786678567/ser-natural/ttxyfdtxr9flrapa3bno.jpg",
+    "imagenURL": "https://res.cloudinary.com/ditz4ufas/image/upload/v1786678570/ser-natural/voab4ijsnawd9vsk2ubp.heic",
     "imagenes": [
       {
         "url": "https://res.cloudinary.com/ditz4ufas/image/upload/v1786678567/ser-natural/ttxyfdtxr9flrapa3bno.jpg",
-        "main": true
+        "main": false
       },
       {
         "url": "https://res.cloudinary.com/ditz4ufas/image/upload/v1786678568/ser-natural/dqurhsqw2mlnvrzzc1wf.jpg",
@@ -64,18 +64,26 @@
       },
       {
         "url": "https://res.cloudinary.com/ditz4ufas/image/upload/v1786678570/ser-natural/voab4ijsnawd9vsk2ubp.heic",
+        "main": true
+      },
+      {
+        "url": "https://res.cloudinary.com/ditz4ufas/image/upload/v1787925334/ser-natural/neusbrfd4ydxks4syzkt.jpg",
+        "main": false
+      },
+      {
+        "url": "https://res.cloudinary.com/ditz4ufas/image/upload/v1787925336/ser-natural/ixcpzikm8puz3wsca5cy.jpg",
         "main": false
       }
     ],
     "extra": {},
     "presentaciones": [
       {
-        "nombre": "30grs y 7grs",
+        "nombre": "30grs",
         "precio": 18000
       }
     ],
     "createdAt": "2026-08-14T03:36:12.897Z",
-    "updatedAt": "2026-08-14T03:36:12.897Z"
+    "updatedAt": "2026-08-28T13:55:37.238Z"
   },
   {
     "id": "p_1786676059136",
