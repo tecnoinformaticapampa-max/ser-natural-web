@@ -11,12 +11,16 @@
       {
         "url": "https://res.cloudinary.com/ditz4ufas/image/upload/v1787611455/ser-natural/ygttifrdkyqjrhnzts1h.png",
         "main": true
+      },
+      {
+        "url": "https://res.cloudinary.com/ditz4ufas/image/upload/v1788999734/ser-natural/jeiwskhuexaqvlssxh35.jpg",
+        "main": false
       }
     ],
     "extra": {},
     "presentaciones": [],
     "createdAt": "2026-08-18T07:58:31.986Z",
-    "updatedAt": "2026-08-28T22:04:41.172Z"
+    "updatedAt": "2026-09-10T00:22:15.046Z"
   },
   {
     "id": "p_1787020904058",
