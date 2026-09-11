@@ -132,9 +132,14 @@
       }
     ],
     "extra": {},
-    "presentaciones": [],
+    "presentaciones": [
+      {
+        "nombre": "20grs y 30 grs",
+        "precio": 0
+      }
+    ],
     "createdAt": "2026-08-14T02:54:19.119Z",
-    "updatedAt": "2026-08-28T22:54:35.664Z"
+    "updatedAt": "2026-09-11T13:12:06.402Z"
   },
   {
     "id": "p_1786673706744",
