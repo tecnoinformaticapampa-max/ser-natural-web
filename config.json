@@ -17,7 +17,12 @@
       "label": "Higiene Personal"
     }
   ],
-  "etiquetas": [],
+  "etiquetas": [
+    {
+      "id": "jabon-de-lavanda",
+      "label": "JABON DE LAVANDA"
+    }
+  ],
   "camposExtra": [],
   "logoUrl": "https://res.cloudinary.com/ditz4ufas/image/upload/v1787957134/ser-natural/ngknuoprxzu2sfx51cvr.png",
   "envioGratisMin": 180000,
