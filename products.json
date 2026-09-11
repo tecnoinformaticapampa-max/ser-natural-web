@@ -58,7 +58,7 @@
     "nombre": "CREMA DE CALÉNDULA",
     "categoria": "cosmetica",
     "descripcion": "Dale! Acá tenés solo *Descripción + Beneficios* de la Crema de Caléndula, bien cortito para catálogo 💛\n\n---\n\n*CREMA DE CALÉNDULA*\n\nCrema reparadora con extracto de caléndula y aceite de almendras. Calma, cicatriza hidrata y regenera pieles sensibles.\n\nBENEFICIOS:\nCalma irritaciones y rojeces. Regenera y cicatriza. Hidrata en profundidad. Antiinflamatoria natural. Ideal para piel sensible, atópica, rosácea.",
-    "precio": "consultar",
+    "precio": "$21500",
     "badge": "",
     "imagenURL": "https://res.cloudinary.com/ditz4ufas/image/upload/v1786678568/ser-natural/dqurhsqw2mlnvrzzc1wf.jpg",
     "imagenes": [
@@ -87,7 +87,7 @@
       }
     ],
     "createdAt": "2026-08-14T03:36:12.897Z",
-    "updatedAt": "2026-08-28T22:49:03.159Z"
+    "updatedAt": "2026-09-11T13:08:33.629Z"
   },
   {
     "id": "p_1786676059136",
