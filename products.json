@@ -129,13 +129,13 @@
     "extra": {},
     "presentaciones": [
       {
-        "nombre": "60grs",
+        "nombre": "60grs y 30grs",
         "precio": 16000,
         "stock": 21
       }
     ],
     "createdAt": "2026-08-14T02:15:06.736Z",
-    "updatedAt": "2026-08-14T02:15:06.736Z"
+    "updatedAt": "2026-09-11T13:05:38.485Z"
   },
   {
     "id": "p_1786667334370",
