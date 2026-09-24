@@ -146,7 +146,7 @@
     "nombre": "DESODORANTE 100%NATURAL 🌿",
     "categoria": "higiene-personal",
     "descripcion": "Desodorante en crema natural que neutraliza el olor por 24hs sin bloquear la transpiración. Con ricinoleato de zinc, ;arcilla caolín, aceite de coco, manteca de cacao y karité. Enriquecido con aceites esenciales de Tea Tree y Naranja.\nBENEFICIOS : \n- Elimina el mal olor de forma natural\n- Absorbe humedad y cuida piel sensible  \n- Nutre, calma y desintoxica las axilas\n- Aroma fresco cítrico-herbal\n- Sin aluminio, sin alcohol.\nMODO DE USO:\nAplicar una pequeña cantidad en axilas limpias y secas hasta su total absorción.\n\n*Fórmula:* 100% Natural • Vegano •Apto todo tipo de piel.",
-    "precio": "18000",
+    "precio": "18600",
     "badge": "",
     "imagenURL": "https://res.cloudinary.com/ditz4ufas/image/upload/v1786673704/ser-natural/ohpr5iichprznkulfp3j.jpg",
     "imagenes": [
@@ -160,15 +160,9 @@
       }
     ],
     "extra": {},
-    "presentaciones": [
-      {
-        "nombre": "60grs y 30grs",
-        "precio": 16000,
-        "stock": 21
-      }
-    ],
+    "presentaciones": [],
     "createdAt": "2026-08-14T02:15:06.736Z",
-    "updatedAt": "2026-09-11T13:05:38.485Z"
+    "updatedAt": "2026-09-24T03:00:13.985Z"
   },
   {
     "id": "p_1786667334370",
