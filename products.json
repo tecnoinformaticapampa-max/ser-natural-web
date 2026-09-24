@@ -160,9 +160,14 @@
       }
     ],
     "extra": {},
-    "presentaciones": [],
+    "presentaciones": [
+      {
+        "nombre": "60grs y 40grs",
+        "precio": 16000
+      }
+    ],
     "createdAt": "2026-08-14T02:15:06.736Z",
-    "updatedAt": "2026-09-24T03:00:13.985Z"
+    "updatedAt": "2026-09-24T03:02:00.403Z"
   },
   {
     "id": "p_1786667334370",
